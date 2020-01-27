@@ -1,0 +1,32 @@
+Spritesheet Details:
+
+Dimensions: 64 x 62
+All sprite animations start @ X=0. 
+Start Y is multiple of 64 (1px padding above and below):
+* Spellcast: 7 frames
+	- Back:	startY=0
+	- Left: startY=64
+	- Frnt:	startY=128
+	- Rght:	startY=192
+* Thrust: 8 frames
+	- Back:	startY=256
+	- Left: startY=320
+	- Frnt:	startY=384
+	- Rght:	startY=448
+* Walk: 9 frames
+	- Back:	startY=512
+	- Left: startY=576
+	- Frnt:	startY=640
+	- Rght:	startY=704
+* Slash: 6 frames
+	- Back:	startY=768
+	- Left: startY=832
+	- Frnt:	startY=896
+	- Rght:	startY=960
+* Shoot: 13 frames
+	- Back:	startY=1024
+	- Left: startY=1088
+	- Frnt:	startY=1152
+	- Rght:	startY=1216
+* Hurt: 6 frames
+	- Frnt:	startY=1280
