@@ -30,3 +30,9 @@ Start Y is multiple of 64 (1px padding above and below):
 	- Rght:	startY=1216
 * Hurt: 6 frames
 	- Frnt:	startY=1280
+
+* Idle: 2 frames (using the first two frames of spellcast)
+	- Back:	startY=0
+	- Left: startY=64
+	- Frnt:	startY=128
+	- Rght:	startY=192

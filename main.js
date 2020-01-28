@@ -72,55 +72,55 @@ function SkeletonDagger(game, spritesheet) {
     // this.facing = "down";
     this.state = "walkDown";
 
-    this.testAnimation = new Animation(spritesheet, 0, 386, 64, 62, 512, 0.5, 8, true, 1);
+    this.animation = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
 }
 
 SkeletonDagger.prototype = new Entity();
 SkeletonDagger.prototype.constructor = SkeletonDagger;
 
-SkeletonDagger.prototype.setupAnimations = function (spriteSheet) {
-    let returnedAnimations = [];
-    let directions = ["Up", "Left", "Down", "Right"];
-    let type;
-    let stX = 0;
-    let stY = 0;
-    let width = 64;
-    let height = 62;
-    let sheetWidth;
-    let duration = 0.5;
-    let numFrames;
-    let loop = true;
-    let scale = 1;
+// SkeletonDagger.prototype.setupAnimations = function (spriteSheet) {
+//     let returnedAnimations = [];
+//     let directions = ["Up", "Left", "Down", "Right"];
+//     let type;
+//     let stX = 0;
+//     let stY = 0;
+//     let width = 64;
+//     let height = 62;
+//     let sheetWidth;
+//     let duration = 0.5;
+//     let numFrames;
+//     let loop = true;
+//     let scale = 1;
 
-    //Add Spellcast animations:
-    type = "spell";
-    numFrames = 7;
-    sheetWidth = width * numFrames;
-    for (let i = 0; i < 4; i++) {
-        returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
-        stY += 64;
-    }
+//     //Add Spellcast animations:
+//     type = "spell";
+//     numFrames = 7;
+//     sheetWidth = width * numFrames;
+//     for (let i = 0; i < 4; i++) {
+//         returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
+//         stY += 64;
+//     }
 
-    //Add thrust animations:
-    type = "thrust";
-    numFrames = 8;
-    sheetWidth = width * numFrames;
-    for (let i = 0; i < 4; i++) {
-        returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
-        stY += 64;
-    }
+//     //Add thrust animations:
+//     type = "thrust";
+//     numFrames = 8;
+//     sheetWidth = width * numFrames;
+//     for (let i = 0; i < 4; i++) {
+//         returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
+//         stY += 64;
+//     }
 
-    //Add thrust animations:
-    type = "walk";
-    numFrames = 9;
-    sheetWidth = width * numFrames;
-    for (let i = 0; i < 4; i++) {
-        returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
-        stY += 64;
-    }
+//     //Add thrust animations:
+//     type = "walk";
+//     numFrames = 9;
+//     sheetWidth = width * numFrames;
+//     for (let i = 0; i < 4; i++) {
+//         returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
+//         stY += 64;
+//     }
 
-    return returnedAnimations;
-};
+//     return returnedAnimations;
+// };
 
 SkeletonDagger.prototype.update = function () {
     let changeX = false;
@@ -130,26 +130,48 @@ SkeletonDagger.prototype.update = function () {
         case 'idle':
             this.state = 'idle';
             this.speed = 0;
+            
             break;
         case 'w':
             changeY = true;
             this.state = 'walkUp';
             this.speed = -200;
+            this.animation.frames = 9;
+            this.animation.sheetWidth = 9;
+            this.animation.startY = 512;
+            this.animation.frameDuration = 0.15;
+            this.animation.totalTime = this.animation.frameDuration * 9;
             break;
         case 'a':
             changeX = true;
             this.state = 'walkLeft';
             this.speed = -200;
+            this.animation.frames = 9;
+            this.animation.sheetWidth = 9;
+            this.animation.startY = 576;
+            this.animation.frameDuration = 0.15;
+            this.animation.totalTime = this.animation.frameDuration * 9;
             break;
         case 's':
             changeY = true;
             this.state = 'walkDown';
             this.speed = 200;
+            this.animation.frames = 9;
+            this.animation.sheetWidth = 9;
+            this.animation.startY = 640;
+            this.animation.frameDuration = 0.15;
+            this.animation.totalTime = this.animation.frameDuration * 9;
             break;
         case 'd':
             changeX = true;
             this.state = 'walkRight';
             this.speed = 200;
+            this.animation.frames = 9;
+            this.animation.sheetWidth = 9;
+            this.animation.startY = 704;
+            this.animation.frameDuration = 0.15;
+            this.animation.totalTime = this.animation.frameDuration * 9;
+            console.log("frames" + this.animation.currentFrame())
             break;
     }
 
@@ -178,7 +200,7 @@ SkeletonDagger.prototype.draw = function () {
     // console.log(this.state.toString());
     // this.animations[this.state.toString()].drawFrame(this, this.ctx, this.x, this.y);
 
-    this.testAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+    this.animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
     Entity.prototype.draw.call(this);
 }
 
