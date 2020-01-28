@@ -61,6 +61,7 @@ Background.prototype.draw = function () {
 Background.prototype.update = function () {
 };
 
+
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
     // this.animations = this.setupAnimations(spritesheet);
@@ -130,7 +131,11 @@ SkeletonDagger.prototype.update = function () {
         case 'idle':
             this.state = 'idle';
             this.speed = 0;
-            
+            this.animation.frames = 2;
+            this.animation.sheetWidth = 9;
+            this.animation.startY = 128;
+            this.animation.frameDuration = 0.6;
+            this.animation.totalTime = this.animation.frameDuration * 2;
             break;
         case 'w':
             changeY = true;
@@ -207,12 +212,17 @@ SkeletonDagger.prototype.draw = function () {
 //! ******** Retrieve Assets & Start Game ******** */
 ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
 ASSET_MANAGER.queueDownload("./res/character/skeleton_dagger.png");
+ASSET_MANAGER.queueDownload("./res/audio/megalovania.mp3");
 
 ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
-
+    
     var gameEngine = new GameEngine();
+
+    console.log('starting audio')
+
+
     gameEngine.init(ctx);
     gameEngine.start();
     gameEngine.startInput();
@@ -221,3 +231,11 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEntity(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/proto_map.jpg")));
     gameEngine.addEntity(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
 });
+
+//bgm plays when spacebar
+//need to fix later for more optimability but it works ¯\_(ツ)_/¯
+document.addEventListener('keydown', function(e) {
+    if(e.keyCode == 32) {
+        document.getElementById('audio').play();
+    }
+})

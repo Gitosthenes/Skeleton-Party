@@ -87,6 +87,11 @@ GameEngine.prototype.startInput = function () {
                 console.log('Key press: ' + e.key);
                 break;
 
+            case 'f':
+                that.userInput = 'f';
+                console.log("Key press: " + e.key);
+                break;
+
             default:
                 console.log('Invalid user input.');
                 break;
