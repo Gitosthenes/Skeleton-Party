@@ -21,15 +21,15 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y) {
     if (this.isDone()) {
         if (this.loop) this.elapsedTime = 0;
     }
-    // var frame = this.currentFrame();
-    // var xindex = 0;
-    // var yindex = 0;
-    // var xindex = frame % this.sheetWidth;
-    // var yindex = Math.floor(frame / this.sheetWidth);
+    var frame = this.currentFrame();
+    var xindex = 0;
+    var yindex = 0;
+    var xindex = frame % this.sheetWidth;
+    var yindex = Math.floor(frame / this.sheetWidth);
 
     ctx.drawImage(this.spriteSheet, 
-        this.startX + (this.currentFrame() * this.frameWidth),
-        this.startY, 
+        xindex * this.frameWidth + this.startX,
+        yindex * this.frameHeight + this.startY, 
         this.frameWidth, 
         this.frameHeight,
         x, y,
@@ -178,7 +178,7 @@ SkeletonDagger.prototype.draw = function () {
     // console.log(this.state.toString());
     // this.animations[this.state.toString()].drawFrame(this, this.ctx, this.x, this.y);
 
-    this.testAnimation.drawFrame(this, this.ctx, this.x, this.y);
+    this.testAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
     Entity.prototype.draw.call(this);
 }
 
