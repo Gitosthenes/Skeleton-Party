@@ -54,13 +54,14 @@ GameEngine.prototype.start = function () {
         that.loop();
         requestAnimFrame(gameLoop, that.ctx.canvas);
     })();
-};
+}
 
 /**
  * Adds event listeners to the engine that will listen for key and mouse events, allowing the GameEngine
  * to receive user input and react accordingly.
  */
 GameEngine.prototype.startInput = function () {
+    console.log('Starting User Input');
     const that = this;
 
     /* Key Press Listeners */
@@ -116,10 +117,8 @@ GameEngine.prototype.startInput = function () {
                 console.log('Key released: ' + e.key);
                 break;
         }
-    }, false)
-
+    }, false);
 };
-
 
 /**
  * Adds an entity to the GameEngine's list of entities.
@@ -154,6 +153,12 @@ GameEngine.prototype.update = function () {
         entity.update();
     }
 };
+
+GameEngine.prototype.loop = function () {
+    this.clockTick = this.timer.tick();
+    this.update();
+    this.draw();
+}
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~ TIMER FUNCTIONS ~~~ */
@@ -214,3 +219,30 @@ function Entity(game, x, y) {
  */
 Entity.prototype.update = function () {
 };
+
+Entity.prototype.draw = function (ctx) {
+    if (this.game.showOutlines && this.radius) {
+        this.game.ctx.beginPath();
+        this.game.ctx.strokeStyle = "green";
+        this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        this.game.ctx.stroke();
+        this.game.ctx.closePath();
+    }
+}
+
+Entity.prototype.rotateAndCache = function (image, angle) {
+    var offscreenCanvas = document.createElement('canvas');
+    var size = Math.max(image.width, image.height);
+    offscreenCanvas.width = size;
+    offscreenCanvas.height = size;
+    var offscreenCtx = offscreenCanvas.getContext('2d');
+    offscreenCtx.save();
+    offscreenCtx.translate(size / 2, size / 2);
+    offscreenCtx.rotate(angle);
+    offscreenCtx.translate(0, 0);
+    offscreenCtx.drawImage(image, -(image.width / 2), -(image.height / 2));
+    offscreenCtx.restore();
+    //offscreenCtx.strokeStyle = "red";
+    //offscreenCtx.strokeRect(0,0,size,size);
+    return offscreenCanvas;
+}
