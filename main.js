@@ -129,11 +129,14 @@ SkeletonDagger.prototype.update = function () {
     // console.log(this.game.userInput);
     switch (this.game.userInput) {
         case 'idle':
-            this.state = 'idle';
             this.speed = 0;
             this.animation.frames = 2;
             this.animation.sheetWidth = 9;
-            this.animation.startY = 128;
+            if(this.state == 'walkUp') this.animation.startY = 0;
+            else if(this.state == 'walkLeft') this.animation.startY = 64;
+            else if(this.state == 'walkDown') this.animation.startY = 128;
+            else if(this.state == 'walkRight') this.animation.startY = 192;
+            else this.animation.startY = 0;
             this.animation.frameDuration = 0.6;
             this.animation.totalTime = this.animation.frameDuration * 2;
             break;
@@ -177,6 +180,17 @@ SkeletonDagger.prototype.update = function () {
             this.animation.frameDuration = 0.15;
             this.animation.totalTime = this.animation.frameDuration * 9;
             console.log("frames" + this.animation.currentFrame())
+            break;
+        case 'j':
+            this.animation.frames = 6;
+            this.animation.sheetWidth = 6;
+            if(this.state == 'walkUp') this.animation.startY = 768;
+            else if(this.state == 'walkLeft') this.animation.startY = 832;
+            else if(this.state == 'walkDown') this.animation.startY = 896;
+            else if(this.state == 'walkRight') this.animation.startY = 960;
+            else this.animation.startY = 896;
+            this.animation.frameDuration = 0.15;
+            this.animation.totalTime = this.animation.frameDuration * this.animation.frames;
             break;
     }
 
@@ -237,5 +251,6 @@ ASSET_MANAGER.downloadAll(function () {
 document.addEventListener('keydown', function(e) {
     if(e.keyCode == 32) {
         document.getElementById('audio').play();
+        document.getElementById('audio').volume = 0.5
     }
 })

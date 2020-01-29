@@ -92,6 +92,11 @@ GameEngine.prototype.startInput = function () {
                 console.log("Key press: " + e.key);
                 break;
 
+            case 'j':
+                that.userInput = 'j';
+                console.log("Key press: " + e.key);
+                break;
+                
             default:
                 console.log('Invalid user input.');
                 break;
@@ -118,6 +123,11 @@ GameEngine.prototype.startInput = function () {
                 break;
 
             case 'd':   // Right
+                that.userInput = 'idle';
+                console.log('Key released: ' + e.key);
+                break;
+
+            case 'j':
                 that.userInput = 'idle';
                 console.log('Key released: ' + e.key);
                 break;
