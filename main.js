@@ -52,6 +52,7 @@ function Background(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
+    this.titleScreenComp = true;
 };
 
 Background.prototype.draw = function () {
@@ -59,19 +60,31 @@ Background.prototype.draw = function () {
 };
 
 Background.prototype.update = function () {
+    switch(this.game.userInput) {
+        case ' ':
+            if(this.titleScreenComp) {
+                this.spritesheet = ASSET_MANAGER.getAsset("./res/map/proto_map.jpg");
+                document.getElementById('audio').play();
+                document.getElementById('audio').volume = 0.5
+                this.titleScreenComp = false;
+            }
+            
+            break;
+    }
 };
 
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
     // this.animations = this.setupAnimations(spritesheet);
-    this.x = 50;
+    this.x = -230;
     this.y = 50;
     this.speed = 0;
     this.game = game;
     this.ctx = game.ctx;
     // this.facing = "down";
     this.state = "walkDown";
+    this.titleScreenComp = true;
 
     this.animation = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
 }
@@ -192,6 +205,12 @@ SkeletonDagger.prototype.update = function () {
             this.animation.frameDuration = 0.15;
             this.animation.totalTime = this.animation.frameDuration * this.animation.frames;
             break;
+        case ' ':
+            if(this.titleScreenComp) {
+                this.x = 50;
+            }
+            
+            break;
     }
 
     if (changeX) {
@@ -227,6 +246,7 @@ SkeletonDagger.prototype.draw = function () {
 ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
 ASSET_MANAGER.queueDownload("./res/character/skeleton_dagger.png");
 ASSET_MANAGER.queueDownload("./res/audio/megalovania.mp3");
+ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
 
 ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
@@ -242,15 +262,14 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.startInput();
 
     //TODO define SkeletonDagger
-    gameEngine.addEntity(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/proto_map.jpg")));
+    gameEngine.addEntity(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
     gameEngine.addEntity(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
 });
 
 //bgm plays when spacebar
 //need to fix later for more optimability but it works ¯\_(ツ)_/¯
-document.addEventListener('keydown', function(e) {
-    if(e.keyCode == 32) {
-        document.getElementById('audio').play();
-        document.getElementById('audio').volume = 0.5
-    }
-})
+// document.addEventListener('keydown', function(e) {
+//     if(e.keyCode == 32) {
+        
+//     }
+// })
