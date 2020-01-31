@@ -107,9 +107,6 @@ function SkeletonAnimationInit(spritesheet) {
   return animations;
 }
 
-SkeletonDagger.prototype = new Entity();
-SkeletonDagger.prototype.constructor = SkeletonDagger;
-
 SkeletonDagger.prototype.update = function () {
     let changeX = false;
     let changeY = false;
