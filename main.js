@@ -72,18 +72,19 @@ Background.prototype.update = function () {
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
+    entityAnimationInit(this, spritesheet);
     this.x = 50;
     this.y = 50;
     this.speed = 0;
     this.game = game;
     this.ctx = game.ctx;
+    this.direction = 'down';
     this.state = "walkDown";
     this.titleScreenComp = true;
-    this.animations = SkeletonAnimationInit(spritesheet);
     this.currAnimation = this.animations['idleDown'];
 }
 
-function SkeletonAnimationInit(spritesheet) {
+function entityAnimationInit(entity, spritesheet) {
   let animations = [];
 
   /* Idle animations. */
@@ -98,13 +99,13 @@ function SkeletonAnimationInit(spritesheet) {
   animations['walkLeft'] = new Animation(spritesheet, 0, 576, 64, 62, 9, 0.15, 9, true, 1);
   animations['walkRight'] = new Animation(spritesheet, 0, 704, 64, 62, 9, 0.15, 9, true, 1);
 
-  /* Dagger attack animations. */
-  animations['daggerUp'] = new Animation(spritesheet, 0, 768, 64, 62, 6, 0.075, 6, true, 1);
-  animations['daggerDown'] = new Animation(spritesheet, 0, 896, 64, 62, 6, 0.075, 6, true, 1);
-  animations['daggerLeft'] = new Animation(spritesheet, 0, 832, 64, 62, 6, 0.075, 6, true, 1);
-  animations['daggerRight'] = new Animation(spritesheet, 0, 960, 64, 62, 6, 0.075, 6, true, 1);
+  /* Attack animations. */
+  animations['attackUp'] = new Animation(spritesheet, 0, 768, 64, 62, 6, 0.075, 6, true, 1);
+  animations['attackDown'] = new Animation(spritesheet, 0, 896, 64, 62, 6, 0.075, 6, true, 1);
+  animations['attackLeft'] = new Animation(spritesheet, 0, 832, 64, 62, 6, 0.075, 6, true, 1);
+  animations['attackRight'] = new Animation(spritesheet, 0, 960, 64, 62, 6, 0.075, 6, true, 1);
 
-  return animations;
+  entity.animations = animations;
 }
 
 SkeletonDagger.prototype.update = function () {
@@ -114,53 +115,53 @@ SkeletonDagger.prototype.update = function () {
         let key = this.game.userInput[i];
         switch (key) {
             case 'idle':
-                if (this.state === 'walkUp') this.currAnimation = this.animations['idleUp'];
-                else if (this.state === 'walkDown') this.currAnimation = this.animations['idleDown'];
-                else if (this.state === 'walkLeft') this.currAnimation = this.animations['idleLeft'];
-                else if (this.state === 'walkRight') this.currAnimation = this.animations['idleRight'];
+                if (this.direction === 'up') this.currAnimation = this.animations['idleUp'];
+                else if (this.direction === 'down') this.currAnimation = this.animations['idleDown'];
+                else if (this.direction === 'left') this.currAnimation = this.animations['idleLeft'];
+                else if (this.direction === 'right') this.currAnimation = this.animations['idleRight'];
                 break;
 
             case 'w':
                 changeY = true;
-                this.state = 'walkUp';
+                this.direction = 'up';
                 this.speed = -200;
                 this.currAnimation = this.animations['walkUp'];
                 break;
 
             case 'a':
                 changeX = true;
-                this.state = 'walkLeft';
+                this.direction = 'left';
                 this.speed = -200;
                 this.currAnimation = this.animations['walkLeft'];
                 break;
 
             case 's':
                 changeY = true;
-                this.state = 'walkDown';
+                this.direction = 'down';
                 this.speed = 200;
                 this.currAnimation = this.animations['walkDown'];
                 break;
 
             case 'd':
                 changeX = true;
-                this.state = 'walkRight';
+                this.direction = 'right';
                 this.speed = 200;
                 this.currAnimation = this.animations['walkRight'];
                 break;
 
             case 'j':
-                if(this.state === 'walkUp') this.currAnimation = this.animations['daggerUp'];
-                else if(this.state === 'walkDown') this.currAnimation = this.animations['daggerDown'];
-                else if(this.state === 'walkLeft') this.currAnimation = this.animations['daggerLeft'];
-                else if(this.state === 'walkRight') this.currAnimation = this.animations['daggerRight'];
+                if (this.direction === 'up') this.currAnimation = this.animations['attackUp'];
+                else if (this.direction === 'down') this.currAnimation = this.animations['attackDown'];
+                else if (this.direction === 'left') this.currAnimation = this.animations['attackLeft'];
+                else if (this.direction === 'right') this.currAnimation = this.animations['attackRight'];
                 break;
 
             case ' ':
-                if(this.titleScreenComp) {
+                if (this.titleScreenComp) {
                     this.x = 50;
                 }
                 break;
-    }
+        }
 
     }
 
