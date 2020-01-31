@@ -21,16 +21,15 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y) {
     if (this.isDone()) {
         if (this.loop) this.elapsedTime = 0;
     }
-    var frame = this.currentFrame();
-    var xindex = 0;
-    var yindex = 0;
-    var xindex = frame % this.sheetWidth;
-    var yindex = Math.floor(frame / this.sheetWidth);
 
-    ctx.drawImage(this.spriteSheet, 
+    let frame = this.currentFrame();
+    let xindex = frame % this.sheetWidth;
+    let yindex = Math.floor(frame / this.sheetWidth);
+
+    ctx.drawImage(this.spriteSheet,
         xindex * this.frameWidth + this.startX,
-        yindex * this.frameHeight + this.startY, 
-        this.frameWidth, 
+        yindex * this.frameHeight + this.startY,
+        this.frameWidth,
         this.frameHeight,
         x, y,
         this.frameWidth * this.scale,
@@ -60,157 +59,110 @@ Background.prototype.draw = function () {
 };
 
 Background.prototype.update = function () {
-    switch(this.game.userInput) {
-        case ' ':
-            if(this.titleScreenComp) {
-                this.spritesheet = ASSET_MANAGER.getAsset("./res/map/proto_map.jpg");
-                document.getElementById('audio').play();
-                document.getElementById('audio').volume = 0.5
-                this.titleScreenComp = false;
-            }
-            
-            break;
+    if (this.game.userInput.includes(' ')) {
+        if(this.titleScreenComp) {
+            this.spritesheet = ASSET_MANAGER.getAsset("./res/map/proto_map.jpg");
+            document.getElementById('audio').play();
+            document.getElementById('audio').volume = 0.5;
+            this.titleScreenComp = false;
+        }
     }
 };
 
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
-    // this.animations = this.setupAnimations(spritesheet);
-    this.x = -230;
+    entityAnimationInit(this, spritesheet);
+    this.x = 50;
     this.y = 50;
     this.speed = 0;
     this.game = game;
     this.ctx = game.ctx;
-    // this.facing = "down";
+    this.direction = 'down';
     this.state = "walkDown";
     this.titleScreenComp = true;
-
-    this.animation = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
+    this.currAnimation = this.animations['idleDown'];
 }
 
-SkeletonDagger.prototype = new Entity();
-SkeletonDagger.prototype.constructor = SkeletonDagger;
+function entityAnimationInit(entity, spritesheet) {
+  let animations = [];
 
-// SkeletonDagger.prototype.setupAnimations = function (spriteSheet) {
-//     let returnedAnimations = [];
-//     let directions = ["Up", "Left", "Down", "Right"];
-//     let type;
-//     let stX = 0;
-//     let stY = 0;
-//     let width = 64;
-//     let height = 62;
-//     let sheetWidth;
-//     let duration = 0.5;
-//     let numFrames;
-//     let loop = true;
-//     let scale = 1;
+  /* Idle animations. */
+  animations['idleUp'] = new Animation(spritesheet, 0, 0, 64, 62, 512, 0.6, 2, true, 1);
+  animations['idleDown'] = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
+  animations['idleLeft'] = new Animation(spritesheet, 0, 64, 64, 62, 512, 0.6, 2, true, 1);
+  animations['idleRight'] = new Animation(spritesheet, 0, 192, 64, 62, 512, 0.6, 2, true, 1);
 
-//     //Add Spellcast animations:
-//     type = "spell";
-//     numFrames = 7;
-//     sheetWidth = width * numFrames;
-//     for (let i = 0; i < 4; i++) {
-//         returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
-//         stY += 64;
-//     }
+  /* Walking animations. */
+  animations['walkUp'] = new Animation(spritesheet, 0, 512, 64, 62, 9, 0.15, 9, true, 1);
+  animations['walkDown'] = new Animation(spritesheet, 0, 640, 64, 62, 9, 0.15, 9, true, 1);
+  animations['walkLeft'] = new Animation(spritesheet, 0, 576, 64, 62, 9, 0.15, 9, true, 1);
+  animations['walkRight'] = new Animation(spritesheet, 0, 704, 64, 62, 9, 0.15, 9, true, 1);
 
-//     //Add thrust animations:
-//     type = "thrust";
-//     numFrames = 8;
-//     sheetWidth = width * numFrames;
-//     for (let i = 0; i < 4; i++) {
-//         returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
-//         stY += 64;
-//     }
+  /* Attack animations. */
+  animations['attackUp'] = new Animation(spritesheet, 0, 768, 64, 62, 6, 0.075, 6, true, 1);
+  animations['attackDown'] = new Animation(spritesheet, 0, 896, 64, 62, 6, 0.075, 6, true, 1);
+  animations['attackLeft'] = new Animation(spritesheet, 0, 832, 64, 62, 6, 0.075, 6, true, 1);
+  animations['attackRight'] = new Animation(spritesheet, 0, 960, 64, 62, 6, 0.075, 6, true, 1);
 
-//     //Add thrust animations:
-//     type = "walk";
-//     numFrames = 9;
-//     sheetWidth = width * numFrames;
-//     for (let i = 0; i < 4; i++) {
-//         returnedAnimations[type + directions[i]] = new Animation(spriteSheet, stX, stY, width, height, sheetWidth, duration, numFrames, loop, scale);
-//         stY += 64;
-//     }
-
-//     return returnedAnimations;
-// };
+  entity.animations = animations;
+}
 
 SkeletonDagger.prototype.update = function () {
     let changeX = false;
     let changeY = false;
-    // console.log(this.game.userInput);
-    switch (this.game.userInput) {
-        case 'idle':
-            this.speed = 0;
-            this.animation.frames = 2;
-            this.animation.sheetWidth = 9;
-            if(this.state == 'walkUp') this.animation.startY = 0;
-            else if(this.state == 'walkLeft') this.animation.startY = 64;
-            else if(this.state == 'walkDown') this.animation.startY = 128;
-            else if(this.state == 'walkRight') this.animation.startY = 192;
-            else this.animation.startY = 0;
-            this.animation.frameDuration = 0.6;
-            this.animation.totalTime = this.animation.frameDuration * 2;
-            break;
-        case 'w':
-            changeY = true;
-            this.state = 'walkUp';
-            this.speed = -200;
-            this.animation.frames = 9;
-            this.animation.sheetWidth = 9;
-            this.animation.startY = 512;
-            this.animation.frameDuration = 0.15;
-            this.animation.totalTime = this.animation.frameDuration * 9;
-            break;
-        case 'a':
-            changeX = true;
-            this.state = 'walkLeft';
-            this.speed = -200;
-            this.animation.frames = 9;
-            this.animation.sheetWidth = 9;
-            this.animation.startY = 576;
-            this.animation.frameDuration = 0.15;
-            this.animation.totalTime = this.animation.frameDuration * 9;
-            break;
-        case 's':
-            changeY = true;
-            this.state = 'walkDown';
-            this.speed = 200;
-            this.animation.frames = 9;
-            this.animation.sheetWidth = 9;
-            this.animation.startY = 640;
-            this.animation.frameDuration = 0.15;
-            this.animation.totalTime = this.animation.frameDuration * 9;
-            break;
-        case 'd':
-            changeX = true;
-            this.state = 'walkRight';
-            this.speed = 200;
-            this.animation.frames = 9;
-            this.animation.sheetWidth = 9;
-            this.animation.startY = 704;
-            this.animation.frameDuration = 0.15;
-            this.animation.totalTime = this.animation.frameDuration * 9;
-            console.log("frames" + this.animation.currentFrame())
-            break;
-        case 'j':
-            this.animation.frames = 6;
-            this.animation.sheetWidth = 6;
-            if(this.state == 'walkUp') this.animation.startY = 768;
-            else if(this.state == 'walkLeft') this.animation.startY = 832;
-            else if(this.state == 'walkDown') this.animation.startY = 896;
-            else if(this.state == 'walkRight') this.animation.startY = 960;
-            else this.animation.startY = 896;
-            this.animation.frameDuration = 0.15;
-            this.animation.totalTime = this.animation.frameDuration * this.animation.frames;
-            break;
-        case ' ':
-            if(this.titleScreenComp) {
-                this.x = 50;
-            }
-            
-            break;
+    for (let i = 0; i < this.game.userInput.length; i++) {
+        let key = this.game.userInput[i];
+        switch (key) {
+            case 'idle':
+                if (this.direction === 'up') this.currAnimation = this.animations['idleUp'];
+                else if (this.direction === 'down') this.currAnimation = this.animations['idleDown'];
+                else if (this.direction === 'left') this.currAnimation = this.animations['idleLeft'];
+                else if (this.direction === 'right') this.currAnimation = this.animations['idleRight'];
+                break;
+
+            case 'w':
+                changeY = true;
+                this.direction = 'up';
+                this.speed = -200;
+                this.currAnimation = this.animations['walkUp'];
+                break;
+
+            case 'a':
+                changeX = true;
+                this.direction = 'left';
+                this.speed = -200;
+                this.currAnimation = this.animations['walkLeft'];
+                break;
+
+            case 's':
+                changeY = true;
+                this.direction = 'down';
+                this.speed = 200;
+                this.currAnimation = this.animations['walkDown'];
+                break;
+
+            case 'd':
+                changeX = true;
+                this.direction = 'right';
+                this.speed = 200;
+                this.currAnimation = this.animations['walkRight'];
+                break;
+
+            case 'j':
+                if (this.direction === 'up') this.currAnimation = this.animations['attackUp'];
+                else if (this.direction === 'down') this.currAnimation = this.animations['attackDown'];
+                else if (this.direction === 'left') this.currAnimation = this.animations['attackLeft'];
+                else if (this.direction === 'right') this.currAnimation = this.animations['attackRight'];
+                break;
+
+            case ' ':
+                if (this.titleScreenComp) {
+                    this.x = 50;
+                }
+                break;
+        }
+
     }
 
     if (changeX) {
@@ -232,15 +184,12 @@ SkeletonDagger.prototype.update = function () {
     }
 
     Entity.prototype.update.call(this);
-}
+};
 
 SkeletonDagger.prototype.draw = function () {
-    // console.log(this.state.toString());
-    // this.animations[this.state.toString()].drawFrame(this, this.ctx, this.x, this.y);
-
-    this.animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+    this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
     Entity.prototype.draw.call(this);
-}
+};
 
 //! ******** Retrieve Assets & Start Game ******** */
 ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
@@ -251,25 +200,15 @@ ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
 ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
-    
+
     var gameEngine = new GameEngine();
 
-    console.log('starting audio')
-
+    console.log('starting audio');
 
     gameEngine.init(ctx);
     gameEngine.start();
     gameEngine.startInput();
 
-    //TODO define SkeletonDagger
     gameEngine.addEntity(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
     gameEngine.addEntity(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
 });
-
-//bgm plays when spacebar
-//need to fix later for more optimability but it works ¯\_(ツ)_/¯
-// document.addEventListener('keydown', function(e) {
-//     if(e.keyCode == 32) {
-        
-//     }
-// })
