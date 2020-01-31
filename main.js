@@ -73,7 +73,7 @@ Background.prototype.update = function () {
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
     entityAnimationInit(this, spritesheet);
-    this.x = 50;
+    this.x = -250;
     this.y = 50;
     this.speed = 0;
     this.game = game;
