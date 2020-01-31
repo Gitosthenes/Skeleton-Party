@@ -27,7 +27,8 @@ function GameEngine() {
     this.ctx = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
-    this.userInput = null;  // TODO: Only allows for one input at a time, should be reworked into a list.
+    this.userInput = [];  // TODO: Only allows for one input at a time, should be reworked into a list.
+
 }
 
 /**
@@ -39,7 +40,6 @@ GameEngine.prototype.init = function (ctx) {
     this.ctx = ctx;
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
-    this.userInput = 'idle';
     this.timer = new Timer();
     console.log('game initialized');
 };
@@ -62,49 +62,63 @@ GameEngine.prototype.start = function () {
  */
 GameEngine.prototype.startInput = function () {
     console.log('Starting User Input');
-    const that = this;
+    let that = this;
+
+    let checkPressInput = function (key) {
+        if (!that.userInput.includes(key)) {
+            that.userInput.push(key);
+            console.log('Added ' + key + ' to input.');
+        }
+    };
+
+    let checkReleaseInput = function (key) {
+        if (that.userInput.includes(key)) {
+            that.userInput.pop(key);
+            console.log('Removed ' + key + ' from input.');
+        }
+    };
 
     /* Key Press Listeners */
     this.ctx.canvas.addEventListener("keydown", function (e) {
         switch (e.key) {
             case 'w':   // Up
-                that.userInput = 'w';
+                checkPressInput('w');
                 console.log('Key press: ' + e.key);
                 break;
 
             case 's':   // Down
-                that.userInput = 's';
+                checkPressInput('s');
                 console.log('Key press: ' + e.key);
                 break;
 
             case 'a':   // Left
-                that.userInput = 'a';
+                checkPressInput('a');
                 console.log('Key press: ' + e.key);
                 break;
 
             case 'd':   // Right
-                that.userInput = 'd';
+                checkPressInput('d');
                 console.log('Key press: ' + e.key);
                 break;
 
-            case 'f':
-                that.userInput = 'f';
+            case 'j':
+                checkPressInput('j');
                 console.log("Key press: " + e.key);
                 break;
 
-            case 'j':
-                that.userInput = 'j';
-                console.log("Key press: " + e.key);
+            case 'm':
+                checkPressInput('m');
+                console.log('Key press: ' + e.key);
                 break;
 
             case ' ':
-                that.userInput = ' ';
+                checkPressInput(' ');
                 console.log("Key press: " + e.key);
                 break;
+
             default:
                 console.log('Invalid user input.');
                 break;
-
         }
     }, true);
 
@@ -112,32 +126,37 @@ GameEngine.prototype.startInput = function () {
     this.ctx.canvas.addEventListener("keyup", function (e) {
         switch (e.key) {
             case 'w':   // Up
-                that.userInput = 'idle';
+                checkReleaseInput(e.key);
                 console.log('Key released: ' + e.key);
                 break;
 
             case 's':   // Down
-                that.userInput = 'idle';
+                checkReleaseInput(e.key);
                 console.log('Key released: ' + e.key);
                 break;
 
             case 'a':   // Left
-                that.userInput = 'idle';
+                checkReleaseInput(e.key);
                 console.log('Key released: ' + e.key);
                 break;
 
             case 'd':   // Right
-                that.userInput = 'idle';
+                checkReleaseInput(e.key);
                 console.log('Key released: ' + e.key);
                 break;
 
             case 'j':
-                that.userInput = 'idle';
+                checkReleaseInput(e.key);
                 console.log('Key released: ' + e.key);
                 break;
 
+            case 'm':
+                checkReleaseInput(e.key);
+                console.log('Key press: ' + e.key);
+                break;
+
             case ' ':
-                that.userInput = 'idle';
+                checkReleaseInput(e.key);
                 console.log('Key released: ' + e.key);
                 break;
         }
@@ -178,6 +197,9 @@ GameEngine.prototype.update = function () {
     }
 };
 
+/**
+ * Main game loop for the engine. Perpetually calls for entities to update and draw.
+ */
 GameEngine.prototype.loop = function () {
     this.clockTick = this.timer.tick();
     this.update();
