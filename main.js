@@ -261,11 +261,71 @@ SkeletonDagger.prototype.draw = function () {
     Entity.prototype.draw.call(this);
 };
 
+function MaleKnightSpear(game,spritesheet) {
+    //this.ani = new entityAnimationInit(this, spritesheet);
+    this.x = -100;
+    this.y = 80;
+    this.speed = 0;
+    this.game = game;
+    this.ctx = game.ctx;
+    this.direction = 'down';
+    this.state = "walkDown";
+    this.titleScreenComp = true;
+    this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
+}
+
+MaleKnightSpear.prototype.update = function() {
+    let key = this.game.userInput[0];
+    switch (key) {
+        case ' ':
+            this.x = 650;
+            break;
+    }
+    Entity.prototype.update.call(this);
+}
+
+MaleKnightSpear.prototype.draw = function() {
+    this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+    Entity.prototype.draw.call(this);
+}
+
+function MaleKnightMace(game,spritesheet) {
+    this.x = -100;
+    this.y = 80;
+    this.speed = 0;
+    this.game = game;
+    this.ctx = game.ctx;
+    this.direction = 'down';
+    this.state = "walkDown";
+    this.titleScreenComp = true;
+    this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
+}
+
+MaleKnightMace.prototype.update = function() {
+    let key = this.game.userInput[0];
+    switch (key) {
+        case ' ':
+            this.x = 690;
+            break;
+    }
+    Entity.prototype.update.call(this);
+}
+
+MaleKnightMace.prototype.draw = function() {
+    this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+    Entity.prototype.draw.call(this);
+}
+
+
 //! ******** Retrieve Assets & Start Game ******** */
 ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
 ASSET_MANAGER.queueDownload("./res/character/skeleton_dagger.png");
 ASSET_MANAGER.queueDownload("./res/audio/megalovania.mp3");
 ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
+ASSET_MANAGER.queueDownload("./res/character/male_knight_spear.png");
+ASSET_MANAGER.queueDownload("./res/character/male_knight_mace.png");
+
+
 
 ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
@@ -280,5 +340,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.startInput();
 
     gameEngine.addEntity(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
+    gameEngine.addEntity(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
+    gameEngine.addEntity(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
     gameEngine.addEntity(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
 });
