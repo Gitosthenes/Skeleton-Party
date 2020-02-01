@@ -75,9 +75,6 @@ GameEngine.prototype.startInput = function () {
         if (that.userInput.includes(key)) {
             that.userInput.pop(key);
             console.log('Removed ' + key + ' from input.');
-            if (that.userInput.length === 0) {
-                that.userInput.push('idle');
-            }
         }
     };
 
