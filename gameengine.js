@@ -73,7 +73,8 @@ GameEngine.prototype.startInput = function () {
 
     let checkReleaseInput = function (key) {
         if (that.userInput.includes(key)) {
-            that.userInput.pop(key);
+            let index = that.userInput.indexOf(key);
+            if (index !== -1) that.userInput.splice(index, 1);
             console.log('Removed ' + key + ' from input.');
         }
     };
