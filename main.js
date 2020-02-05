@@ -1,4 +1,4 @@
-var ASSET_MANAGER = new AssetManager();
+let ASSET_MANAGER = new AssetManager();
 
 //! ******** Animation Definition ******** */
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale) {
@@ -81,7 +81,6 @@ function SkeletonDagger(game, spritesheet) {
     this.game = game;
     this.ctx = game.ctx;
     this.direction = 'down';
-    this.state = "walkDown";
     this.isBusy = false;
     this.titleScreenComp = true;
     this.currAnimation = this.animations['idleDown'];
@@ -111,132 +110,10 @@ function entityAnimationInit(entity, spritesheet) {
   entity.animations = animations;
 }
 
-function updateEntitySpeed(entity, xVal, yVal) {
-    entity.xSpeed = xVal;
-    entity.ySpeed = yVal;
-}
-
 SkeletonDagger.prototype.update = function () {
-    let changeX = false;
-    let changeY = false;
-    let key = this.game.userInput[0];
-    if (this.state === 'attacking') {
-        if (this.currAnimation.elapsedTime === 0) {
-            this.isBusy = false;
-        }
-    }
-
-    if (!this.isBusy) {
-        switch (key) {
-            case undefined:    // No input.
-                updateEntitySpeed(this, 0, 0);
-                this.state = 'idle';
-                if (this.direction === 'up') this.currAnimation = this.animations['idleUp'];
-                else if (this.direction === 'down') this.currAnimation = this.animations['idleDown'];
-                else if (this.direction === 'left') this.currAnimation = this.animations['idleLeft'];
-                else if (this.direction === 'right') this.currAnimation = this.animations['idleRight'];
-                break;
-
-            case 'j':   // Attack input.
-                this.state = 'attacking';
-                this.isBusy = true;
-                if (this.direction === 'up') this.currAnimation = this.animations['attackUp'];
-                else if (this.direction === 'down') this.currAnimation = this.animations['attackDown'];
-                else if (this.direction === 'left') this.currAnimation = this.animations['attackLeft'];
-                else if (this.direction === 'right') this.currAnimation = this.animations['attackRight'];
-                break;
-
-            case 'w':   // Up input.
-                this.state = 'moving';
-                this.direction = 'up';
-                if (this.game.userInput.includes('s')) {    // Up - Down case.
-                    updateEntitySpeed(this, 0, 0);
-                    this.currAnimation = this.animations['idleUp'];
-                } else if (this.game.userInput.includes('a')) {   // Up - Left case.
-                    updateEntitySpeed(this, -this.baseSpeed, -this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkUp'];
-                } else if (this.game.userInput.includes('d')) {   // Up - Right case.
-                    updateEntitySpeed(this, this.baseSpeed, -this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkUp'];
-                } else {  // Up case.
-                    updateEntitySpeed(this, 0, -this.baseSpeed);
-                    changeY = true;
-                    this.currAnimation = this.animations['walkUp'];
-                }
-                break;
-
-            case 's':   // Down input.
-                this.state = 'moving';
-                this.direction = 'down';
-                if (this.game.userInput.includes('w')) {    // Down - Up case.
-                    updateEntitySpeed(this, 0, 0);
-                    this.currAnimation = this.animations['idleDown'];
-                } else if (this.game.userInput.includes('a')) {   // Down - Left case.
-                    updateEntitySpeed(this, -this.baseSpeed, this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkDown'];
-                } else if (this.game.userInput.includes('d')) {   // Down - Right case.
-                    updateEntitySpeed(this, this.baseSpeed, this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkDown'];
-                } else {  // Down case.
-                    updateEntitySpeed(this, 0, this.baseSpeed);
-                    changeY = true;
-                    this.currAnimation = this.animations['walkDown'];
-                }
-                break;
-
-            case 'a':   // Left input.
-                this.state = 'moving';
-                this.direction = 'left';
-                if (this.game.userInput.includes('w')) {    // Left - Up case.
-                    updateEntitySpeed(this, -this.baseSpeed, -this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkLeft'];
-                } else if (this.game.userInput.includes('s')) {   // Left - Down case.
-                    updateEntitySpeed(this, -this.baseSpeed, this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkLeft'];
-                } else if (this.game.userInput.includes('d')) {   // Left - Right case
-                    updateEntitySpeed(this, 0, 0);
-                    this.currAnimation = this.animations['idleLeft'];
-                } else {  // Left case.
-                    updateEntitySpeed(this, -this.baseSpeed, 0);
-                    changeX = true;
-                    this.currAnimation = this.animations['walkLeft'];
-                }
-                break;
-
-            case 'd':   // Right input.
-                this.state = 'moving';
-                this.direction = 'right';
-                if (this.game.userInput.includes('w')) {    // Right - Up case.
-                    updateEntitySpeed(this, this.baseSpeed, -this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkRight'];
-                } else if (this.game.userInput.includes('s')) {   // Right - Down case.
-                    updateEntitySpeed(this, this.baseSpeed, this.baseSpeed);
-                    changeX = changeY = true;
-                    this.currAnimation = this.animations['walkRight'];
-                } else if (this.game.userInput.includes('a')) {   // Right - Left case.
-                    updateEntitySpeed(this, 0, 0);
-                    this.currAnimation = this.animations['idleRight'];
-                } else {  // Right case.
-                    updateEntitySpeed(this, this.baseSpeed, 0);
-                    changeX = true;
-                    this.currAnimation = this.animations['walkRight'];
-                }
-                break;
-
-            case ' ':   // Debug input.
-                if (this.titleScreenComp) {
-                    this.x = 50;
-                }
-                break;
-        }
-    }
+    let posUpdate = handleInput(this);
+    let changeX = posUpdate[0];
+    let changeY = posUpdate[1];
 
     if (changeX) {
         this.x += this.game.clockTick * this.xSpeed;
