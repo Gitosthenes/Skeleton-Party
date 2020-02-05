@@ -14,7 +14,10 @@ function handleInput(entity) {
         }
     }
 
+    // TODO: Add diagonal checking for attacks.
+    // TODO: E.g.: if (entity.game.userInput.includes('j') { setBattleState(entity, 'Dir'); }
     if (!entity.isBusy) {   // If the entity isn't busy, update their state based on input received.
+        let input = entity.game.userInput;
         switch (key) {
             case undefined:    // No input.
                 if (entity.direction === 'up') setIdleState(entity, 'Up');
@@ -34,9 +37,9 @@ function handleInput(entity) {
                 if (entity.game.userInput.includes('s')) {    // Up - Down case.
                     setIdleState(entity, 'Up');
                 } else if (entity.game.userInput.includes('a')) {   // Up - Left case.
-                    setMovementState(entity, 'Up', -spd, -spd);
+                    setDiagonalState(entity, 'Up', -spd, -spd);
                 } else if (entity.game.userInput.includes('d')) {   // Up - Right case.
-                    setMovementState(entity, 'Up', spd, -spd);
+                    setDiagonalState(entity, 'Up', spd, -spd);
                 } else if (entity.game.userInput.includes('j')) {     // Up - Attack case.
                     setBattleState(entity, 'Up');
                 } else {  // Up case.
@@ -48,9 +51,9 @@ function handleInput(entity) {
                 if (entity.game.userInput.includes('w')) {    // Down - Up case.
                     setIdleState(entity, 'Down');
                 } else if (entity.game.userInput.includes('a')) {   // Down - Left case.
-                    setMovementState(entity, 'Down', -spd, spd);
+                    setDiagonalState(entity, 'Down', -spd, spd);
                 } else if (entity.game.userInput.includes('d')) {   // Down - Right case.
-                    setMovementState(entity, 'Down', spd, spd);
+                    setDiagonalState(entity, 'Down', spd, spd);
                 } else if (entity.game.userInput.includes('j')) {     // Down - Attack case.
                     setBattleState(entity, 'Down');
                 } else {  // Down case.
@@ -60,9 +63,9 @@ function handleInput(entity) {
 
             case 'a':   // Left input.
                 if (entity.game.userInput.includes('w')) {    // Left - Up case.
-                    setMovementState(entity, 'Left', -spd, -spd);
+                    setDiagonalState(entity, 'Left', -spd, -spd);
                 } else if (entity.game.userInput.includes('s')) {   // Left - Down case.
-                    setMovementState(entity, 'Left', -spd, spd);
+                    setDiagonalState(entity, 'Left', -spd, spd);
                 } else if (entity.game.userInput.includes('d')) {   // Left - Right case
                     setIdleState(entity, 'Left');
                 } else if (entity.game.userInput.includes('j')) {     // Left - Attack case.
@@ -74,9 +77,9 @@ function handleInput(entity) {
 
             case 'd':   // Right input.
                 if (entity.game.userInput.includes('w')) {    // Right - Up case.
-                    setMovementState(entity, 'Right', spd, -spd);
+                    setDiagonalState(entity, 'Right', spd, -spd);
                 } else if (entity.game.userInput.includes('s')) {   // Right - Down case.
-                    setMovementState(entity, 'Right', spd, spd);
+                    setDiagonalState(entity, 'Right', spd, spd);
                 } else if (entity.game.userInput.includes('a')) {   // Right - Left case.
                     setIdleState(entity, 'Right');
                 } else if (entity.game.userInput.includes('j')) {     // Right - Attack case.
@@ -154,4 +157,12 @@ function setMovementState(entity, direction, xVal, yVal) {
     updateEntitySpeed(entity, xVal, yVal);
     entity.direction = direction.toLowerCase();
     entity.currAnimation = entity.animations[animationName];
+}
+
+function setDiagonalState(entity, direction, xSpd, ySpd) {
+    if (entity.game.userInput.includes('j')) {
+        setBattleState(entity, direction);
+    } else {
+        setMovementState(entity, direction, xSpd, ySpd)
+    }
 }
