@@ -3,132 +3,86 @@
  * direction, animation, and position.
  *
  * @param entity The game entity to be updated from user input.
- * @returns {boolean[]} A boolean array containing values for whether or not the X or Y positions have been changed.
  */
 function handleInput(entity) {
-    let changeX = false;
-    let changeY = false;
-    let key = entity.game.userInput[0];
+    let spd = entity.baseSpeed;
+    let key = entity.game.userInput[0]; // Get the first value in the userInput array.
 
-    if (entity.isBusy) {
+    if (entity.isBusy) {    // If the entity is in a busy state, don't interrupt their animation.
         if (entity.currAnimation.elapsedTime === 0) {
             entity.isBusy = false;
         }
     }
 
-    if (!entity.isBusy) {
+    if (!entity.isBusy) {   // If the entity isn't busy, update their state based on input received.
         switch (key) {
             case undefined:    // No input.
-                updateEntitySpeed(entity, 0, 0);
-                if (entity.direction === 'up') entity.currAnimation = entity.animations['idleUp'];
-                else if (entity.direction === 'down') entity.currAnimation = entity.animations['idleDown'];
-                else if (entity.direction === 'left') entity.currAnimation = entity.animations['idleLeft'];
-                else if (entity.direction === 'right') entity.currAnimation = entity.animations['idleRight'];
+                if (entity.direction === 'up') setIdleState(entity, 'Up');
+                else if (entity.direction === 'down') setIdleState(entity, 'Down');
+                else if (entity.direction === 'left') setIdleState(entity, 'Left');
+                else if (entity.direction === 'right') setIdleState(entity, 'Right');
                 break;
 
             case 'j':   // Attack input.
-                entity.isBusy = true;
-                if (entity.direction === 'up') entity.currAnimation = entity.animations['attackUp'];
-                else if (entity.direction === 'down') entity.currAnimation = entity.animations['attackDown'];
-                else if (entity.direction === 'left') entity.currAnimation = entity.animations['attackLeft'];
-                else if (entity.direction === 'right') entity.currAnimation = entity.animations['attackRight'];
+                if (entity.direction === 'up') setBattleState(entity, 'Up');
+                else if (entity.direction === 'down') setBattleState(entity, 'Down');
+                else if (entity.direction === 'left') setBattleState(entity, 'Left');
+                else if (entity.direction === 'right') setBattleState(entity, 'Right');
                 break;
 
             case 'w':   // Up input.
-                entity.direction = 'up';
                 if (entity.game.userInput.includes('s')) {    // Up - Down case.
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['idleUp'];
+                    setIdleState(entity, 'Up');
                 } else if (entity.game.userInput.includes('a')) {   // Up - Left case.
-                    updateEntitySpeed(entity, -entity.baseSpeed, -entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkUp'];
+                    setMovementState(entity, 'Up', -spd, -spd);
                 } else if (entity.game.userInput.includes('d')) {   // Up - Right case.
-                    updateEntitySpeed(entity, entity.baseSpeed, -entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkUp'];
+                    setMovementState(entity, 'Up', spd, -spd);
                 } else if (entity.game.userInput.includes('j')) {     // Up - Attack case.
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['attackUp'];
-                    entity.isBusy = true;
+                    setBattleState(entity, 'Up');
                 } else {  // Up case.
-                    updateEntitySpeed(entity, 0, -entity.baseSpeed);
-                    changeY = true;
-                    entity.currAnimation = entity.animations['walkUp'];
+                    setMovementState(entity, 'Up', 0, -spd);
                 }
                 break;
 
             case 's':   // Down input.
-                entity.direction = 'down';
                 if (entity.game.userInput.includes('w')) {    // Down - Up case.
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['idleDown'];
+                    setIdleState(entity, 'Down');
                 } else if (entity.game.userInput.includes('a')) {   // Down - Left case.
-                    updateEntitySpeed(entity, -entity.baseSpeed, entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkDown'];
+                    setMovementState(entity, 'Down', -spd, spd);
                 } else if (entity.game.userInput.includes('d')) {   // Down - Right case.
-                    updateEntitySpeed(entity, entity.baseSpeed, entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkDown'];
+                    setMovementState(entity, 'Down', spd, spd);
                 } else if (entity.game.userInput.includes('j')) {     // Down - Attack case.
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['attackDown'];
-                    entity.isBusy = true;
-                }
-                else {  // Down case.
-                    updateEntitySpeed(entity, 0, entity.baseSpeed);
-                    changeY = true;
-                    entity.currAnimation = entity.animations['walkDown'];
+                    setBattleState(entity, 'Down');
+                } else {  // Down case.
+                    setMovementState(entity, 'Down', 0, spd);
                 }
                 break;
 
             case 'a':   // Left input.
-                entity.direction = 'left';
                 if (entity.game.userInput.includes('w')) {    // Left - Up case.
-                    updateEntitySpeed(entity, -entity.baseSpeed, -entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkLeft'];
+                    setMovementState(entity, 'Left', -spd, -spd);
                 } else if (entity.game.userInput.includes('s')) {   // Left - Down case.
-                    updateEntitySpeed(entity, -entity.baseSpeed, entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkLeft'];
+                    setMovementState(entity, 'Left', -spd, spd);
                 } else if (entity.game.userInput.includes('d')) {   // Left - Right case
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['idleLeft'];
+                    setIdleState(entity, 'Left');
                 } else if (entity.game.userInput.includes('j')) {     // Left - Attack case.
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['attackLeft'];
-                    entity.isBusy = true;
-                }
-                else {  // Left case.
-                    updateEntitySpeed(entity, -entity.baseSpeed, 0);
-                    changeX = true;
-                    entity.currAnimation = entity.animations['walkLeft'];
+                    setBattleState(entity, 'Left');
+                } else {  // Left case.
+                    setMovementState(entity, 'Left', -spd, 0);
                 }
                 break;
 
             case 'd':   // Right input.
-                entity.direction = 'right';
                 if (entity.game.userInput.includes('w')) {    // Right - Up case.
-                    updateEntitySpeed(entity, entity.baseSpeed, -entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkRight'];
+                    setMovementState(entity, 'Right', spd, -spd);
                 } else if (entity.game.userInput.includes('s')) {   // Right - Down case.
-                    updateEntitySpeed(entity, entity.baseSpeed, entity.baseSpeed);
-                    changeX = changeY = true;
-                    entity.currAnimation = entity.animations['walkRight'];
+                    setMovementState(entity, 'Right', spd, spd);
                 } else if (entity.game.userInput.includes('a')) {   // Right - Left case.
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['idleRight'];
+                    setIdleState(entity, 'Right');
                 } else if (entity.game.userInput.includes('j')) {     // Right - Attack case.
-                    updateEntitySpeed(entity, 0, 0);
-                    entity.currAnimation = entity.animations['attackRight'];
-                    entity.isBusy = true;
+                    setBattleState(entity, 'Right');
                 } else {  // Right case.
-                    updateEntitySpeed(entity, entity.baseSpeed, 0);
-                    changeX = true;
-                    entity.currAnimation = entity.animations['walkRight'];
+                    setMovementState(entity, 'Right', spd, 0);
                 }
                 break;
 
@@ -139,7 +93,6 @@ function handleInput(entity) {
                 break;
         }
     }
-    return [changeX, changeY];
 }
 
 /**
@@ -152,4 +105,53 @@ function handleInput(entity) {
 function updateEntitySpeed(entity, xVal, yVal) {
     entity.xSpeed = xVal;
     entity.ySpeed = yVal;
+}
+
+/**
+ * Updates the entity into it's battle state by changing it's speed, animation, and busy state.
+ *
+ * @param entity The entity to set into battle state.
+ * @param direction The direction to set the entity to.
+ */
+function setBattleState(entity, direction) {
+    let animationName = 'attack' + direction;
+    updateEntitySpeed(entity, 0, 0);
+    entity.direction = direction.toLowerCase();
+    entity.currAnimation = entity.animations[animationName];
+    entity.isBusy = true;
+    console.log(entity.currAnimation);
+}
+
+/**
+ * Updates the entity into it's idle state by changing it's speed and animation.
+ *
+ * @param entity The entity to set into idle state.
+ * @param direction The direction to set the entity to.
+ */
+function setIdleState(entity, direction) {
+    let animationName = 'idle' + direction;
+    updateEntitySpeed(entity, 0, 0);
+    entity.direction = direction.toLowerCase();
+    entity.currAnimation = entity.animations[animationName];
+}
+
+/**
+ * Updates the entity into it's movement state by changing it's speed and animation.
+ *
+ * @param entity The entity to set into movement state.
+ * @param direction The direction to set the entity to.
+ * @param xVal The new value for the horizontal speed.
+ * @param yVal The new value for the vertical speed.
+ */
+function setMovementState(entity, direction, xVal, yVal) {
+    let animationName = 'walk' + direction;
+    if (xVal !== 0) {
+        entity.changeX = true;
+    }
+    if (yVal !== 0) {
+        entity.changeY = true;
+    }
+    updateEntitySpeed(entity, xVal, yVal);
+    entity.direction = direction.toLowerCase();
+    entity.currAnimation = entity.animations[animationName];
 }
