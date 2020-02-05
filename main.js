@@ -78,6 +78,8 @@ function SkeletonDagger(game, spritesheet) {
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.baseSpeed = 200;
+    this.changeX = false;
+    this.changeY = false;
     this.game = game;
     this.ctx = game.ctx;
     this.direction = 'down';
@@ -111,14 +113,12 @@ function entityAnimationInit(entity, spritesheet) {
 }
 
 SkeletonDagger.prototype.update = function () {
-    let posUpdate = handleInput(this);
-    let changeX = posUpdate[0];
-    let changeY = posUpdate[1];
+    handleInput(this);
 
-    if (changeX) {
+    if (this.changeX) {
         this.x += this.game.clockTick * this.xSpeed;
     }
-    if (changeY) {
+    if (this.changeY) {
         this.y += this.game.clockTick * this.ySpeed;
     }
 
@@ -132,6 +132,7 @@ SkeletonDagger.prototype.update = function () {
         this.y = 1088;
     }
 
+    this.changeX = this.changeY = false;
     Entity.prototype.update.call(this);
 };
 
