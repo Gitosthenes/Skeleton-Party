@@ -24,6 +24,7 @@ window.requestAnimFrame = (function () {
  */
 function GameEngine() {
     this.entities = [];
+    this.volumeToggle = null;
     this.ctx = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
@@ -162,6 +163,28 @@ GameEngine.prototype.startInput = function () {
                 break;
         }
     }, false);
+
+    /* Mouse Listeners*/
+    this.ctx.canvas.addEventListener('mouseup', function (e) {
+        //volume icon bounds
+        let top_left = 15;
+        let bot_right = 45;
+        if (e.clientX > top_left 
+            && e.clientX < bot_right 
+            && e.clientY > top_left 
+            && e.clientY < bot_right) {
+                that.volumeToggle.flipVolume();
+        }
+    }, false);
+};
+
+/**
+ * Attaches volume toggle object to game engine.
+ * 
+ * @param volumeToggle the volume toggle object to attach.
+ */
+GameEngine.prototype.setVolumeToggle = function (volumeToggle) {
+    this.volumeToggle = volumeToggle;
 };
 
 /**
