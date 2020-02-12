@@ -14,8 +14,6 @@ function handleInput(entity) {
         }
     }
 
-    // TODO: Add diagonal checking for attacks.
-    // TODO: E.g.: if (entity.game.userInput.includes('j') { setBattleState(entity, 'Dir'); }
     if (!entity.isBusy) {   // If the entity isn't busy, update their state based on input received.
         let input = entity.game.userInput;
         switch (key) {
@@ -159,6 +157,15 @@ function setMovementState(entity, direction, xVal, yVal) {
     entity.currAnimation = entity.animations[animationName];
 }
 
+/**
+ * Handles a diagonal movement state by an entity by checking for attack and movement inputs and
+ * changing the entity's speed and animation appropriately.
+ *
+ * @param entity The entity to set into a new state.
+ * @param direction The direction to set the entity to.
+ * @param xSpd The new value for the horizontal speed.
+ * @param ySpd The new value for the vertical speed.
+ */
 function setDiagonalState(entity, direction, xSpd, ySpd) {
     if (entity.game.userInput.includes('j')) {
         setBattleState(entity, direction);

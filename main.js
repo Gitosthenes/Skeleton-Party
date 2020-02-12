@@ -86,6 +86,7 @@ function SkeletonDagger(game, spritesheet) {
     this.isBusy = false;
     this.titleScreenComp = true;
     this.currAnimation = this.animations['idleDown'];
+    this.hitbox = new Hitbox(this.x, this.y, 62, 64);
 }
 
 function entityAnimationInit(entity, spritesheet) {
@@ -114,6 +115,8 @@ function entityAnimationInit(entity, spritesheet) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
+    checkForCollisions(this);
+
 
     if (this.changeX) {
         this.x += this.game.clockTick * this.xSpeed;
@@ -138,6 +141,7 @@ SkeletonDagger.prototype.update = function () {
 
 SkeletonDagger.prototype.draw = function () {
     this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+    drawDebugHitbox(this);
     Entity.prototype.draw.call(this);
 };
 
