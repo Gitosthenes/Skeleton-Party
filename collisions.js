@@ -32,9 +32,9 @@ function checkForCollisions(entity) {
 
     // TODO: Change game engine to distinguish between npc entities and obstacle/game world entities.
     // Check against all other entities for collision against them.
-    for (let i = 0; i < entity.game.entities.length; i++) {
-        let otherEntity = entity.game.entities[i];
-        if (this.hasCollided(this, otherEntity)) {
+    for (let i = 0; i < entity.game.enemies.length; i++) {
+        let otherEntity = entity.game.enemies[i];
+        if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
             // TODO: Handle the collision between player and enemy entity.
             console.log('Collision detected!');
         }
@@ -49,10 +49,12 @@ function checkForCollisions(entity) {
  * @returns {boolean}
  */
 function hasCollided(a, b) {
-    return (a.x < b.x + b.width     //
-        && a.x + a.width > b.x
-        && a.y < b.y + b.height
-        && a.y + a.height > b.y);
+    if (a.hitbox !== undefined && b.hitbox !== undefined) {
+        return (a.hitbox.x < b.hitbox.x + b.hitbox.width
+            && a.hitbox.x + a.hitbox.width > b.hitbox.x
+            && a.hitbox.y < b.hitbox.y + b.hitbox.height
+            && a.hitbox.y + a.hitbox.height > b.hitbox.y);
+    }
 }
 
 /**
@@ -61,7 +63,23 @@ function hasCollided(a, b) {
  * @param entity The entity to draw the hitbox for.
  */
 function drawDebugHitbox(entity) {
-    entity.ctx.lineWidth = 6;
-    entity.ctx.strokeStyle = 'green';
-    entity.ctx.rect(entity.hitbox.x, entity.hitbox.y, entity.hitbox.width, entity.hitbox.height);
+    let canvas = document.getElementById('gameWorld');
+    let ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 3;
+    ctx.rect(entity.hitbox.x, entity.hitbox.y, entity.hitbox.width, entity.hitbox.height);
+    ctx.stroke();
+    ctx.closePath();
+}
+
+/**
+ * Updates an entity's hitbox to match their current location in the game. Should be called
+ * after updating an entity's position during their update function.
+ *
+ * @param entity The entity to have their hitbox adjusted.
+ */
+function updateHitbox(entity) {
+    entity.hitbox.x = entity.x;
+    entity.hitbox.y = entity.y;
 }

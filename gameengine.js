@@ -24,12 +24,15 @@ window.requestAnimFrame = (function () {
  */
 function GameEngine() {
     this.entities = [];
+    this.player = null;
+    this.background = null;
+    this.enemies = [];
+    this.terrain = [];
     this.volumeToggle = null;
     this.ctx = null;
     this.surfaceWidth = null;
     this.surfaceHeight = null;
-    this.userInput = [];  // TODO: Only allows for one input at a time, should be reworked into a list.
-
+    this.userInput = [];
 }
 
 /**
@@ -68,7 +71,6 @@ GameEngine.prototype.startInput = function () {
     let checkPressInput = function (key) {
         if (!that.userInput.includes(key)) {
             that.userInput.push(key);
-            console.log('Added ' + key + ' to input.');
         }
     };
 
@@ -76,7 +78,6 @@ GameEngine.prototype.startInput = function () {
         if (that.userInput.includes(key)) {
             let index = that.userInput.indexOf(key);
             if (index !== -1) that.userInput.splice(index, 1);
-            console.log('Removed ' + key + ' from input.');
         }
     };
 
@@ -85,41 +86,33 @@ GameEngine.prototype.startInput = function () {
         switch (e.key) {
             case 'w':   // Up
                 checkPressInput('w');
-                console.log('Key press: ' + e.key);
                 break;
 
             case 's':   // Down
                 checkPressInput('s');
-                console.log('Key press: ' + e.key);
                 break;
 
             case 'a':   // Left
                 checkPressInput('a');
-                console.log('Key press: ' + e.key);
                 break;
 
             case 'd':   // Right
                 checkPressInput('d');
-                console.log('Key press: ' + e.key);
                 break;
 
             case 'j':
                 checkPressInput('j');
-                console.log("Key press: " + e.key);
                 break;
 
             case 'm':
                 checkPressInput('m');
-                console.log('Key press: ' + e.key);
                 break;
 
             case ' ':
                 checkPressInput(' ');
-                console.log("Key press: " + e.key);
                 break;
 
             default:
-                console.log('Invalid user input.');
                 break;
         }
     }, true);
@@ -129,37 +122,30 @@ GameEngine.prototype.startInput = function () {
         switch (e.key) {
             case 'w':   // Up
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
                 break;
 
             case 's':   // Down
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
                 break;
 
             case 'a':   // Left
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
                 break;
 
             case 'd':   // Right
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
                 break;
 
             case 'j':
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
                 break;
 
             case 'm':
                 checkReleaseInput(e.key);
-                console.log('Key press: ' + e.key);
                 break;
 
             case ' ':
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
                 break;
         }
     }, false);
@@ -169,9 +155,9 @@ GameEngine.prototype.startInput = function () {
         //volume icon bounds
         let top_left = 15;
         let bot_right = 45;
-        if (e.clientX > top_left 
-            && e.clientX < bot_right 
-            && e.clientY > top_left 
+        if (e.clientX > top_left
+            && e.clientX < bot_right
+            && e.clientY > top_left
             && e.clientY < bot_right) {
                 that.volumeToggle.flipVolume();
         }
@@ -180,7 +166,7 @@ GameEngine.prototype.startInput = function () {
 
 /**
  * Attaches volume toggle object to game engine.
- * 
+ *
  * @param volumeToggle the volume toggle object to attach.
  */
 GameEngine.prototype.setVolumeToggle = function (volumeToggle) {
@@ -196,14 +182,35 @@ GameEngine.prototype.addEntity = function (entity) {
     this.entities.push(entity);
 };
 
+GameEngine.prototype.addEnemy = function (entity) {
+    this.enemies.push(entity);
+};
+
+GameEngine.prototype.addTerrain = function (entity) {
+    this.terrain.push(entity);
+};
+
+GameEngine.prototype.setBackground = function (entity) {
+    this.background = entity;
+};
+
+GameEngine.prototype.setPlayer = function (entity) {
+    this.player = entity;
+};
+
 /**
  * Clears the canvas and redraws all entities. Called after all entities have updated themselves.
  */
 GameEngine.prototype.draw = function () {
     this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
     this.ctx.save();
-    for (var i = 0; i < this.entities.length; i++) {
-        this.entities[i].draw(this.ctx);
+    this.background.draw(this.ctx);    // Draw background.
+    this.player.draw(this.ctx);             // Draw player.
+    for (let i = 0; i < this.enemies.length; i++) {     // Draw all enemies.
+        this.enemies[i].draw(this.ctx);
+    }
+    for (let i = 0; i < this.terrain.length; i++) {     // Draw all terrain entities.
+        this.terrain[i].draw(this.ctx);
     }
     this.ctx.restore();
 };
@@ -212,12 +219,16 @@ GameEngine.prototype.draw = function () {
  * Updates the entity count and requests that all entities update themselves based on the next game tick.
  */
 GameEngine.prototype.update = function () {
-    var entitiesCount = this.entities.length;
-
-    for (var i = 0; i < entitiesCount; i++) {
-        var entity = this.entities[i];
-
-        entity.update();
+    this.player.update();
+    this.background.update();
+    for (let i = 0; i < this.enemies.length; i++) {
+        this.enemies[i].update();
+    }
+    for (let i = 0; i < this.terrain.length; i++) {
+        this.terrain[i].update();
+    }
+    for (let i = 0; i < this.entities.length; i++) {
+        this.entities[i].update();
     }
 };
 
@@ -298,6 +309,7 @@ Entity.prototype.draw = function (ctx) {
         this.game.ctx.stroke();
         this.game.ctx.closePath();
     }
+    drawDebugHitbox(this);
 }
 
 Entity.prototype.rotateAndCache = function (image, angle) {
