@@ -91,7 +91,8 @@ function handleInput(entity) {
 
             case ' ':   // Debug input.
                 if (entity.titleScreenComp) {
-                    entity.x = 50;
+                    entity.x = 450;
+                    entity.y = 325;
                 }
                 break;
         }
