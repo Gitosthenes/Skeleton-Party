@@ -42,14 +42,14 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.timer = new Timer();
-    console.log('game initialized');
+    //console.log('game initialized');
 };
 
 /**
  * Kicks off the main loop that the engine runs on. Called after initialization.
  */
 GameEngine.prototype.start = function () {
-    console.log("starting game");
+    //console.log("starting game");
     var that = this;
     (function gameLoop() {
         that.loop();
@@ -62,13 +62,13 @@ GameEngine.prototype.start = function () {
  * to receive user input and react accordingly.
  */
 GameEngine.prototype.startInput = function () {
-    console.log('Starting User Input');
+    //console.log('Starting User Input');
     let that = this;
 
     let checkPressInput = function (key) {
         if (!that.userInput.includes(key)) {
             that.userInput.push(key);
-            console.log('Added ' + key + ' to input.');
+            ////console.log('Added ' + key + ' to input.');
         }
     };
 
@@ -76,7 +76,7 @@ GameEngine.prototype.startInput = function () {
         if (that.userInput.includes(key)) {
             let index = that.userInput.indexOf(key);
             if (index !== -1) that.userInput.splice(index, 1);
-            console.log('Removed ' + key + ' from input.');
+            ////console.log('Removed ' + key + ' from input.');
         }
     };
 
@@ -85,41 +85,41 @@ GameEngine.prototype.startInput = function () {
         switch (e.key) {
             case 'w':   // Up
                 checkPressInput('w');
-                console.log('Key press: ' + e.key);
+                ////console.log('Key press: ' + e.key);
                 break;
 
             case 's':   // Down
                 checkPressInput('s');
-                console.log('Key press: ' + e.key);
+                ////console.log('Key press: ' + e.key);
                 break;
 
             case 'a':   // Left
                 checkPressInput('a');
-                console.log('Key press: ' + e.key);
+                //console.log('Key press: ' + e.key);
                 break;
 
             case 'd':   // Right
                 checkPressInput('d');
-                console.log('Key press: ' + e.key);
+                //console.log('Key press: ' + e.key);
                 break;
 
             case 'j':
                 checkPressInput('j');
-                console.log("Key press: " + e.key);
+                //console.log("Key press: " + e.key);
                 break;
 
             case 'm':
                 checkPressInput('m');
-                console.log('Key press: ' + e.key);
+                //console.log('Key press: ' + e.key);
                 break;
 
             case ' ':
                 checkPressInput(' ');
-                console.log("Key press: " + e.key);
+                //console.log("Key press: " + e.key);
                 break;
 
             default:
-                console.log('Invalid user input.');
+                //console.log('Invalid user input.');
                 break;
         }
     }, true);
@@ -129,37 +129,37 @@ GameEngine.prototype.startInput = function () {
         switch (e.key) {
             case 'w':   // Up
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
+                //console.log('Key released: ' + e.key);
                 break;
 
             case 's':   // Down
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
+                //console.log('Key released: ' + e.key);
                 break;
 
             case 'a':   // Left
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
+                //console.log('Key released: ' + e.key);
                 break;
 
             case 'd':   // Right
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
+                //console.log('Key released: ' + e.key);
                 break;
 
             case 'j':
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
+                //console.log('Key released: ' + e.key);
                 break;
 
             case 'm':
                 checkReleaseInput(e.key);
-                console.log('Key press: ' + e.key);
+                //console.log('Key press: ' + e.key);
                 break;
 
             case ' ':
                 checkReleaseInput(e.key);
-                console.log('Key released: ' + e.key);
+                //console.log('Key released: ' + e.key);
                 break;
         }
     }, false);
