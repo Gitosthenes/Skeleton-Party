@@ -242,7 +242,10 @@ MaleKnightSpear.prototype.update = function() {
             this.x = 650;
             break;
     }
-    if(this.titleScreenComp) {
+    //TODO: make the integers into variables to make it work when they are moving by themselves.
+    //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
+    //player.
+    if(!ON_TITLESCREEN) {
         this.x = 650 - playerX;
         this.y = 80 - playerY;
     }
@@ -275,7 +278,10 @@ MaleKnightMace.prototype.update = function() {
             this.x = 690;
             break;
     }
-    if(this.titleScreenComp) {
+    //TODO: make the integers into variables to make it work when they are moving by themselves.
+    //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
+    //player.
+    if(!ON_TITLESCREEN) {
         this.x = 690 - playerX;
         this.y = 80 - playerY;
     }
