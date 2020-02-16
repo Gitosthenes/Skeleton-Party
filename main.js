@@ -91,8 +91,8 @@ Background.prototype.update = function () {
     if(!ON_TITLESCREEN) {
         this.x = bgX - playerX;
         this.y = bgY - playerY;
-        // bgX = this.x;
-        // bgY = this.y;
+        //bgX = this.x;
+        //bgY = this.y;
         // Entity.prototype.update.call(this);
         console.log("Background X = " + this.x + " Background Y = " + this.y);
         console.log("Player X " + playerX + " player Y " + playerY);
@@ -242,6 +242,13 @@ MaleKnightSpear.prototype.update = function() {
             this.x = 650;
             break;
     }
+    //TODO: make the integers into variables to make it work when they are moving by themselves.
+    //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
+    //player.
+    if(!ON_TITLESCREEN) {
+        this.x = 650 - playerX;
+        this.y = 80 - playerY;
+    }
     updateHitbox(this);
     Entity.prototype.update.call(this);
 }
@@ -271,6 +278,14 @@ MaleKnightMace.prototype.update = function() {
             this.x = 690;
             break;
     }
+    //TODO: make the integers into variables to make it work when they are moving by themselves.
+    //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
+    //player.
+    if(!ON_TITLESCREEN) {
+        this.x = 690 - playerX;
+        this.y = 80 - playerY;
+    }
+    console.log("Mace X " + this.x + " Y " + this.y);
     Entity.prototype.update.call(this);
 }
 
