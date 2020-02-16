@@ -45,14 +45,14 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.timer = new Timer();
-    console.log('game initialized');
+    //console.log('game initialized');
 };
 
 /**
  * Kicks off the main loop that the engine runs on. Called after initialization.
  */
 GameEngine.prototype.start = function () {
-    console.log("starting game");
+    //console.log("starting game");
     var that = this;
     (function gameLoop() {
         that.loop();
@@ -65,7 +65,7 @@ GameEngine.prototype.start = function () {
  * to receive user input and react accordingly.
  */
 GameEngine.prototype.startInput = function () {
-    console.log('Starting User Input');
+    //console.log('Starting User Input');
     let that = this;
 
     let checkPressInput = function (key) {
@@ -110,9 +110,6 @@ GameEngine.prototype.startInput = function () {
 
             case ' ':
                 checkPressInput(' ');
-                break;
-
-            default:
                 break;
         }
     }, true);

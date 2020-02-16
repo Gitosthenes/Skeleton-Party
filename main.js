@@ -1,6 +1,15 @@
 let ASSET_MANAGER = new AssetManager();
 let ON_TITLESCREEN = true;
 
+//For scrolling
+//storing both the canvas's coordinates and the player coordinates
+let bgX = 0;
+let bgY = 0;
+let playerX = -250;
+let playerY = 50;
+let playerXSpeed = 0;
+let playerYSpeed = 0;
+
 function IsOnTitleScreen() { return ON_TITLESCREEN; }
 
 //! ******** Animation Definition ******** */
@@ -55,26 +64,41 @@ Animation.prototype.isDone = function () {
 
 //! ******** Background Definition ******** */
 function Background(game, spritesheet) {
-    this.x = 0;
-    this.y = 0;
+    this.x = bgX;
+    this.y = bgY;
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
+    this.radius = 200;
 };
 
 Background.prototype.draw = function () {
-    this.ctx.drawImage(this.spritesheet, this.x, this.y);
+    if(ON_TITLESCREEN) this.ctx.drawImage(this.spritesheet, this.x, this.y);
+    else this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
 };
 
 Background.prototype.update = function () {
     if (this.game.userInput.includes(' ')) {
         if(IsOnTitleScreen()) {
-            this.spritesheet = ASSET_MANAGER.getAsset("./res/map/proto_map.jpg");
+            this.spritesheet = ASSET_MANAGER.getAsset("./res/map/Floor1.png");
             document.getElementById('audio').play();
             document.getElementById('audio').volume = 0.5;
             ON_TITLESCREEN = false;
         }
     }
+
+    //this is the scrolling
+    if(!ON_TITLESCREEN) {
+        this.x = bgX - playerX;
+        this.y = bgY - playerY;
+        // bgX = this.x;
+        // bgY = this.y;
+        // Entity.prototype.update.call(this);
+        console.log("Background X = " + this.x + " Background Y = " + this.y);
+        console.log("Player X " + playerX + " player Y " + playerY);
+    }
+    
+
 };
 
 //! ******** Volume Toggle Definition ******** */
@@ -122,8 +146,8 @@ VolumeToggle.prototype.flipVolume = function () {
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
     entityAnimationInit(this, spritesheet);
-    this.x = -250;
-    this.y = 50;
+    this.x = playerX;
+    this.y = playerY;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.baseSpeed = 200;
@@ -189,6 +213,9 @@ SkeletonDagger.prototype.update = function () {
     }
 
     this.changeX = this.changeY = false;
+    playerX = this.x;
+    playerXSpeed = this.xSpeed;
+    playerY = this.y;
     Entity.prototype.update.call(this);
 };
 
@@ -259,6 +286,7 @@ MaleKnightMace.prototype.draw = function() {
 // Background images
 ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
 ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
+ASSET_MANAGER.queueDownload("./res/map/Floor1.png")
 // Character sprites
 ASSET_MANAGER.queueDownload("./res/character/skeleton_dagger.png");
 ASSET_MANAGER.queueDownload("./res/character/male_knight_spear.png");

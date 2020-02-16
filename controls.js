@@ -122,7 +122,7 @@ function setBattleState(entity, direction) {
     entity.direction = direction.toLowerCase();
     entity.currAnimation = entity.animations[animationName];
     entity.isBusy = true;
-    console.log(entity.currAnimation);
+    //console.log(entity.currAnimation);
 }
 
 /**
