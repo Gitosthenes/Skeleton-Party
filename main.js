@@ -5,8 +5,8 @@ let ON_TITLESCREEN = true;
 //storing both the canvas's coordinates and the player coordinates
 let bgX = 0;
 let bgY = 0;
-let playerX = -250;
-let playerY = 50;
+let playerX = 0;
+let playerY = 0;
 let playerXSpeed = 0;
 let playerYSpeed = 0;
 
@@ -146,8 +146,8 @@ VolumeToggle.prototype.flipVolume = function () {
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
     entityAnimationInit(this, spritesheet);
-    this.x = playerX;
-    this.y = playerY;
+    this.x = -250;
+    this.y = -50;
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.baseSpeed = 200;
@@ -191,10 +191,10 @@ SkeletonDagger.prototype.update = function () {
     handleInput(this);
 
     if (this.changeX) {
-        this.x += this.game.clockTick * this.xSpeed;
+        playerX += this.game.clockTick * this.xSpeed;
     }
     if (this.changeY) {
-        this.y += this.game.clockTick * this.ySpeed;
+        playerY += this.game.clockTick * this.ySpeed;
     }
 
     updatePlayerHitbox(this);
@@ -213,9 +213,7 @@ SkeletonDagger.prototype.update = function () {
     }
 
     this.changeX = this.changeY = false;
-    playerX = this.x;
-    playerXSpeed = this.xSpeed;
-    playerY = this.y;
+    
     Entity.prototype.update.call(this);
 };
 
