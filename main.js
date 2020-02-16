@@ -46,6 +46,12 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y) {
         x, y,
         this.frameWidth * this.scale,
         this.frameHeight * this.scale);
+
+    if (this.hitbox !== undefined) {
+        ctx.strokeStyle = 'blue';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
+    }
 }
 
 Animation.prototype.currentFrame = function () {
@@ -112,9 +118,9 @@ VolumeToggle.prototype.update = function () {};
  */
 VolumeToggle.prototype.draw = function () {
     if (!IsOnTitleScreen()) {
-        if (this.state == 'on') {
+        if (this.state === 'on') {
             this.ctx.drawImage(this.spritesheet, 48, 0, 47 ,47, 5, 5, 30, 30);
-        } else if (this.state == 'off') {
+        } else if (this.state === 'off') {
             this.ctx.drawImage(this.spritesheet, 0, 0, 47 ,47, 5, 5, 30, 30);
         }
     }
@@ -153,8 +159,8 @@ function SkeletonDagger(game, spritesheet) {
     this.isBusy = false;
     this.titleScreenComp = true;
     this.currAnimation = this.animations['idleDown'];
-    this.hitbox = new Hitbox(this.x, this.y, 62, 64);
-    this.radius = 100;
+    this.hitbox = new Hitbox(this.x, this.y, 50, 32);
+    this.invincibilityFrames = 0;
 }
 
 function entityAnimationInit(entity, spritesheet) {
@@ -183,8 +189,6 @@ function entityAnimationInit(entity, spritesheet) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
-    checkForCollisions(this);
-
 
     if (this.changeX) {
         this.x += this.game.clockTick * this.xSpeed;
@@ -192,6 +196,11 @@ SkeletonDagger.prototype.update = function () {
     if (this.changeY) {
         this.y += this.game.clockTick * this.ySpeed;
     }
+
+    updatePlayerHitbox(this);
+    drawDebugHitbox(this);
+    checkForCollisions(this);
+    updateInvincibilityFrames(this);
 
     if (this.x > 1024) {
         this.x = -64
@@ -212,13 +221,11 @@ SkeletonDagger.prototype.update = function () {
 
 SkeletonDagger.prototype.draw = function () {
     this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-    drawDebugHitbox(this);
     Entity.prototype.draw.call(this);
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    //this.ani = new entityAnimationInit(this, spritesheet);
-    this.x = -100;
+    this.x = -200;
     this.y = 80;
     this.speed = 0;
     this.game = game;
@@ -227,6 +234,7 @@ function MaleKnightSpear(game,spritesheet) {
     this.state = "walkDown";
     this.titleScreenComp = true;
     this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
+    this.hitbox = new Hitbox(this.x, this.y, 62, 64);
 }
 
 MaleKnightSpear.prototype.update = function() {
@@ -236,6 +244,7 @@ MaleKnightSpear.prototype.update = function() {
             this.x = 650;
             break;
     }
+    updateHitbox(this);
     Entity.prototype.update.call(this);
 }
 
@@ -245,7 +254,7 @@ MaleKnightSpear.prototype.draw = function() {
 }
 
 function MaleKnightMace(game,spritesheet) {
-    this.x = -100;
+    this.x = -200;
     this.y = 80;
     this.speed = 0;
     this.game = game;
@@ -254,6 +263,7 @@ function MaleKnightMace(game,spritesheet) {
     this.state = "walkDown";
     this.titleScreenComp = true;
     this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
+    this.hitbox = new Hitbox(this.x, this.y, 62, 44);
 }
 
 MaleKnightMace.prototype.update = function() {
@@ -288,21 +298,21 @@ ASSET_MANAGER.queueDownload("./res/audio/volume_bgOFF.png");
 
 
 ASSET_MANAGER.downloadAll(function () {
-    var canvas = document.getElementById('gameWorld');
-    var ctx = canvas.getContext('2d');
+    let canvas = document.getElementById('gameWorld');
+    let ctx = canvas.getContext('2d');
 
-    var gameEngine = new GameEngine();
+    let gameEngine = new GameEngine();
 
     gameEngine.init(ctx);
-    gameEngine.start();
     gameEngine.startInput();
 
-    gameEngine.addEntity(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
-    gameEngine.addEntity(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
-    gameEngine.addEntity(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
-    gameEngine.addEntity(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
-
+    gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
+    gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
+    gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
+    gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));
     gameEngine.setVolumeToggle(volumeToggle);
     gameEngine.addEntity(volumeToggle);
+
+    gameEngine.start();
 });
