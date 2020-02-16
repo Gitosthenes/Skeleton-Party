@@ -135,7 +135,8 @@ function SkeletonDagger(game, spritesheet) {
     this.isBusy = false;
     this.titleScreenComp = true;
     this.currAnimation = this.animations['idleDown'];
-    this.hitbox = new Hitbox(this.x, this.y, 62, 64);
+    this.hitbox = new Hitbox(this.x, this.y, 50, 32);
+    this.invincibilityFrames = 0;
 }
 
 function entityAnimationInit(entity, spritesheet) {
@@ -172,9 +173,10 @@ SkeletonDagger.prototype.update = function () {
         this.y += this.game.clockTick * this.ySpeed;
     }
 
-    updateHitbox(this);
+    updatePlayerHitbox(this);
     drawDebugHitbox(this);
     checkForCollisions(this);
+    updateInvincibilityFrames(this);
 
     if (this.x > 1024) {
         this.x = -64
@@ -234,7 +236,7 @@ function MaleKnightMace(game,spritesheet) {
     this.state = "walkDown";
     this.titleScreenComp = true;
     this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
-    this.hitbox = new Hitbox(this.x, this.y, 62, 64);
+    this.hitbox = new Hitbox(this.x, this.y, 62, 44);
 }
 
 MaleKnightMace.prototype.update = function() {
@@ -280,7 +282,6 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
     gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
     gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
-
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));
     gameEngine.setVolumeToggle(volumeToggle);
     gameEngine.addEntity(volumeToggle);

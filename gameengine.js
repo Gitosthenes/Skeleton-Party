@@ -206,6 +206,7 @@ GameEngine.prototype.draw = function () {
     this.ctx.save();
     this.background.draw(this.ctx);    // Draw background.
     this.player.draw(this.ctx);             // Draw player.
+    this.volumeToggle.draw(this.ctx);
     for (let i = 0; i < this.enemies.length; i++) {     // Draw all enemies.
         this.enemies[i].draw(this.ctx);
     }
@@ -221,6 +222,7 @@ GameEngine.prototype.draw = function () {
 GameEngine.prototype.update = function () {
     this.player.update();
     this.background.update();
+    this.volumeToggle.update();
     for (let i = 0; i < this.enemies.length; i++) {
         this.enemies[i].update();
     }
@@ -302,29 +304,5 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    if (this.game.showOutlines && this.radius) {
-        this.game.ctx.beginPath();
-        this.game.ctx.strokeStyle = "green";
-        this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        this.game.ctx.stroke();
-        this.game.ctx.closePath();
-    }
     drawDebugHitbox(this);
-}
-
-Entity.prototype.rotateAndCache = function (image, angle) {
-    var offscreenCanvas = document.createElement('canvas');
-    var size = Math.max(image.width, image.height);
-    offscreenCanvas.width = size;
-    offscreenCanvas.height = size;
-    var offscreenCtx = offscreenCanvas.getContext('2d');
-    offscreenCtx.save();
-    offscreenCtx.translate(size / 2, size / 2);
-    offscreenCtx.rotate(angle);
-    offscreenCtx.translate(0, 0);
-    offscreenCtx.drawImage(image, -(image.width / 2), -(image.height / 2));
-    offscreenCtx.restore();
-    //offscreenCtx.strokeStyle = "red";
-    //offscreenCtx.strokeRect(0,0,size,size);
-    return offscreenCanvas;
-}
+};

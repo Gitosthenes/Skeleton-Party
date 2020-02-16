@@ -9,7 +9,9 @@ function handleInput(entity) {
     let key = entity.game.userInput[0]; // Get the first value in the userInput array.
 
     if (entity.isBusy) {    // If the entity is in a busy state, don't interrupt their animation.
-        if (entity.currAnimation.elapsedTime === 0) {
+        if (entity.invincibilityFrames > 0) {
+            entity.changeX = entity.changeY = true;
+        } else if (entity.currAnimation.elapsedTime === 0) {
             entity.isBusy = false;
         }
     }
