@@ -8,16 +8,18 @@ function handleInput(entity) {
     let spd = entity.baseSpeed;
     let key = entity.game.userInput[0]; // Get the first value in the userInput array.
 
-    if (entity.isBusy) {    // If the entity is in a busy state, don't interrupt their animation.
+    if (entity.isRecoiling) {    // If the entity is in a busy state, don't interrupt their animation.
         if (entity.invincibilityFrames > 0) {
             entity.changeX = entity.changeY = true;
-        } else if (entity.currAnimation.elapsedTime === 0) {
-            entity.isBusy = false;
+        }
+    }
+    if (entity.isAttacking) {
+        if (entity.currAnimation.elapsedTime === 0) {
+            entity.isAttacking = false;
         }
     }
 
-    if (!entity.isBusy) {   // If the entity isn't busy, update their state based on input received.
-        let input = entity.game.userInput;
+    if (!entity.isAttacking && !entity.isRecoiling) {   // If the entity isn't busy, update their state based on input received.
         switch (key) {
             case undefined:    // No input.
                 if (entity.direction === 'up') setIdleState(entity, 'Up');
@@ -122,8 +124,7 @@ function setBattleState(entity, direction) {
     updateEntitySpeed(entity, 0, 0);
     entity.direction = direction.toLowerCase();
     entity.currAnimation = entity.animations[animationName];
-    entity.isBusy = true;
-    //console.log(entity.currAnimation);
+    entity.isAttacking = true;
 }
 
 /**

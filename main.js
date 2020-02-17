@@ -91,13 +91,8 @@ Background.prototype.update = function () {
     if(!ON_TITLESCREEN) {
         this.x = bgX - playerX;
         this.y = bgY - playerY;
-        //bgX = this.x;
-        //bgY = this.y;
-        // Entity.prototype.update.call(this);
-        console.log("Background X = " + this.x + " Background Y = " + this.y);
-        console.log("Player X " + playerX + " player Y " + playerY);
     }
-    
+
 
 };
 
@@ -156,7 +151,8 @@ function SkeletonDagger(game, spritesheet) {
     this.game = game;
     this.ctx = game.ctx;
     this.direction = 'down';
-    this.isBusy = false;
+    this.isAttacking = false;
+    this.isRecoiling = false;
     this.titleScreenComp = true;
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 50, 32);
@@ -213,7 +209,7 @@ SkeletonDagger.prototype.update = function () {
     }
 
     this.changeX = this.changeY = false;
-    
+
     Entity.prototype.update.call(this);
 };
 
@@ -285,14 +281,13 @@ MaleKnightMace.prototype.update = function() {
         this.x = 690 - playerX;
         this.y = 80 - playerY;
     }
-    console.log("Mace X " + this.x + " Y " + this.y);
     Entity.prototype.update.call(this);
-}
+};
 
 MaleKnightMace.prototype.draw = function() {
     this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
     Entity.prototype.draw.call(this);
-}
+};
 
 
 //! ******** QUEUE ASSET DOWNLOAD ******** */

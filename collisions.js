@@ -102,7 +102,7 @@ function directionOfCollision(a, b) {
  * @param them The entity doing the colliding.
  */
 function handleEnemyCollision(you, them) {
-    you.isBusy = true;
+    you.isRecoiling = true;
     you.invincibilityFrames = 6;
     let dirOfCollision = directionOfCollision(you, them);
 
@@ -137,7 +137,7 @@ function updateInvincibilityFrames(entity) {
     } else {
         entity.xSpeed = 0;
         entity.ySpeed = 0;
-        entity.isBusy = false;
+        entity.isRecoiling = false;
     }
 }
 

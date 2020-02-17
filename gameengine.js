@@ -159,6 +159,13 @@ GameEngine.prototype.startInput = function () {
                 that.volumeToggle.flipVolume();
         }
     }, false);
+
+    this.ctx.canvas.addEventListener('mousedown', function (e) {
+        const rect = that.ctx.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        console.log("x: " + x + " y: " + y);
+    });
 };
 
 /**
