@@ -69,8 +69,7 @@ function Background(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
-    this.radius = 200;
-};
+}
 
 Background.prototype.draw = function () {
     if(ON_TITLESCREEN) this.ctx.drawImage(this.spritesheet, this.x, this.y);
@@ -89,11 +88,23 @@ Background.prototype.update = function () {
 
     //this is the scrolling
     if(!ON_TITLESCREEN) {
-        this.x = bgX - playerX;
-        this.y = bgY - playerY;
+        // Bounds checking for the x axis.
+        if (bgX - playerX > 0) {
+            this.x = 0;
+        } else if (bgX - playerX < -1050) {
+            this.x = -1050
+        } else {
+            this.x = bgX - playerX;
+        }
+        // Bounds checking for the y axis.
+        if (bgY - playerY > 0) {
+            this.y = 0;
+        } else if (bgY - playerY < -1285) {
+            this.y = -1285;
+        } else {
+            this.y = bgY - playerY;
+        }
     }
-
-
 };
 
 //! ******** Volume Toggle Definition ******** */

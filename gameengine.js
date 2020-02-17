@@ -164,7 +164,21 @@ GameEngine.prototype.startInput = function () {
         const rect = that.ctx.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        console.log("x: " + x + " y: " + y);
+        let adjX = x + (x - that.background.x);
+        let adjY = y + (y - that.background.y);
+        if (x > that.player.hitbox.x) {
+            adjX = x + (x - that.background.x);
+        } else {
+            adjX = x - (x - that.background.x);
+        }
+        if (y > that.player.hitbox.y) {
+            adjY = y + (y - that.background.y);
+        } else {
+            adjY = y - (y - that.background.y);
+        }
+
+
+        console.log("x: " + adjX + " y: " + adjY);
     });
 };
 
