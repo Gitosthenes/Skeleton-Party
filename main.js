@@ -186,10 +186,10 @@ function entityAnimationInit(entity, spritesheet) {
   animations['walkRight'] = new Animation(spritesheet, 0, 704, 64, 62, 9, 0.15, 9, true, 1);
 
   /* Attack animations. */
-  animations['attackUp'] = new Animation(spritesheet, 0, 768, 64, 62, 6, 0.05, 6, true, 1);
-  animations['attackDown'] = new Animation(spritesheet, 0, 896, 64, 62, 6, 0.05, 6, true, 1);
-  animations['attackLeft'] = new Animation(spritesheet, 0, 832, 64, 62, 6, 0.05, 6, true, 1);
-  animations['attackRight'] = new Animation(spritesheet, 0, 960, 64, 62, 6, 0.05, 6, true, 1);
+  animations['attackUp'] = new Animation(spritesheet, 62, 1411, 189, 121, 6, 0.05, 6, true, 1);
+  animations['attackDown'] = new Animation(spritesheet, 64, 1790, 189, 121, 6, 0.05, 6, true, 1);
+  animations['attackLeft'] = new Animation(spritesheet, 66, 1603, 189, 121, 6, 0.05, 6, true, 1);
+  animations['attackRight'] = new Animation(spritesheet, 66, 1985, 189, 121, 6, 0.05, 6, true, 1);
 
   entity.animations = animations;
 }
@@ -203,6 +203,7 @@ SkeletonDagger.prototype.update = function () {
     if (this.changeY) {
         playerY += this.game.clockTick * this.ySpeed;
     }
+    
 
     updatePlayerHitbox(this);
     drawDebugHitbox(this);
@@ -307,7 +308,7 @@ ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
 ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
 ASSET_MANAGER.queueDownload("./res/map/Floor1.png")
 // Character sprites
-ASSET_MANAGER.queueDownload("./res/character/skeleton_dagger.png");
+ASSET_MANAGER.queueDownload("./res/character/skeleton_sword.png");
 ASSET_MANAGER.queueDownload("./res/character/male_knight_spear.png");
 ASSET_MANAGER.queueDownload("./res/character/male_knight_mace.png");
 // Audio assets
@@ -328,7 +329,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
     gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
     gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
-    gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_dagger.png")));
+    gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png")));
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));
     gameEngine.setVolumeToggle(volumeToggle);
     gameEngine.addEntity(volumeToggle);
