@@ -1,14 +1,17 @@
 let ASSET_MANAGER = new AssetManager();
 let ON_TITLESCREEN = true;
 
+
 //For scrolling
 //storing both the canvas's coordinates and the player coordinates
 let bgX = 0;
 let bgY = 0;
 let playerX = 0;
 let playerY = 0;
-let playerXSpeed = 0;
-let playerYSpeed = 0;
+let boundHitLeft = false;
+let boundHitRight = false;
+let boundHitUp = false;
+let boundHitDown = false;
 
 function IsOnTitleScreen() { return ON_TITLESCREEN; }
 
@@ -87,21 +90,32 @@ Background.prototype.update = function () {
     }
 
     //this is the scrolling
+    //background coordinates for debug
+    // console.log("x = " + this.x);
+    // console.log("y = " + this.y);
     if(!ON_TITLESCREEN) {
         // Bounds checking for the x axis.
-        if (bgX - playerX > 0) {
-            this.x = 0;
-        } else if (bgX - playerX < -1050) {
-            this.x = -1050
+        if (bgX - playerX > 454) {
+            this.x = 454;
+            boundHitLeft = true;
+        } else if (bgX - playerX < -1496) {
+            this.x = -1496
+            boundHitRight = true;
         } else {
+            boundHitLeft = false;
+            boundHitRight = false;
             this.x = bgX - playerX;
         }
         // Bounds checking for the y axis.
-        if (bgY - playerY > 0) {
-            this.y = 0;
-        } else if (bgY - playerY < -1285) {
-            this.y = -1285;
+        if (bgY - playerY > 323) {
+            this.y = 323;
+            boundHitUp = true;
+        } else if (bgY - playerY < -1579) {
+            this.y = -1579;
+            boundHitDown = true;
         } else {
+            boundHitUp = false;
+            boundHitDown = false;
             this.y = bgY - playerY;
         }
     }
@@ -196,12 +210,18 @@ function entityAnimationInit(entity, spritesheet) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
-
+    // player coordinates for debug
+    // console.log("playerX = " + playerX);
+    // console.log("playerY = "  + playerY);
     if (this.changeX) {
         playerX += this.game.clockTick * this.xSpeed;
+        if(boundHitLeft) playerX = -454;
+        if(boundHitRight) playerX = 1496;
     }
     if (this.changeY) {
         playerY += this.game.clockTick * this.ySpeed;
+        if(boundHitUp) playerY = -323;
+        if(boundHitDown) playerY = 1579;
     }
     
 
@@ -210,15 +230,15 @@ SkeletonDagger.prototype.update = function () {
     checkForCollisions(this);
     updateInvincibilityFrames(this);
 
-    if (this.x > 1024) {
-        this.x = -64
-    } else if (this.x < -64) {
-        this.x = 1024;
-    } else if (this.y > 1088) {
-        this.y = 0;
-    } else if (this.y < 0) {
-        this.y = 1088;
-    }
+    // if (this.x > 1024) {
+    //     this.x = -64
+    // } else if (this.x < -64) {
+    //     this.x = 1024;
+    // } else if (this.y > 1088) {
+    //     this.y = 0;
+    // } else if (this.y < 0) {
+    //     this.y = 1088;
+    // }
 
     this.changeX = this.changeY = false;
 
