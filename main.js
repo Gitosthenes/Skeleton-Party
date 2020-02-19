@@ -179,10 +179,9 @@ SkeletonDagger.prototype.update = function () {
     // let that = this;
     handleInput(this);
 
-    //If attacking, activate hurtbox
+    //If attacking, activate hurtbox; Otherwise disable it
     if(this.isAttacking && this.currAnimation.elapsedTime == 0) activateHurtbox(this);
     if(!this.isAttacking) this.hurtbox.isActive = false;
-
 
     // player coordinates for debug
     // console.log("playerX = " + playerX);
@@ -197,10 +196,8 @@ SkeletonDagger.prototype.update = function () {
         if(boundHitUp) playerY = -323;
         if(boundHitDown) playerY = 1579;
     }
-    
 
     updatePlayerHitbox(this);
-    // drawDebugHitbox(this);
     checkForCollisions(this);
     updateInvincibilityFrames(this);
 
@@ -231,6 +228,8 @@ function MaleKnightSpear(game,spritesheet) {
     this.speed = 0;
     this.game = game;
     this.ctx = game.ctx;
+    this.isAttacking = false; //TODO AI logic to use this later
+    this.isRecoiling = false;
     this.direction = 'down';
     this.state = "walkDown";
     this.titleScreenComp = true;
@@ -248,11 +247,13 @@ MaleKnightSpear.prototype.update = function() {
     //TODO: make the integers into variables to make it work when they are moving by themselves.
     //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
     //player.
+    //!!!  Doesn't this only work if the enemy isn't moving? If the enemy was also moving, the base numbers (650 & 80) would need to be updated as they did.
     if(!ON_TITLESCREEN) {
         this.x = 650 - playerX;
         this.y = 80 - playerY;
     }
     updateHitbox(this);
+    updateInvincibilityFrames(this);
     Entity.prototype.update.call(this);
 }
 

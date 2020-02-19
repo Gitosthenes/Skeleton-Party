@@ -41,12 +41,13 @@ function checkForCollisions(entity) {
     // Check directions that the entity is moving for if they have reached level boundaries.
 
     // TODO: Change game engine to distinguish between npc entities and obstacle/game world entities.
-    // Check against all other entities for collision against them.
+    // Check against all other entities for collision or attacks against them.
     for (let i = 0; i < entity.game.enemies.length; i++) {
         let otherEntity = entity.game.enemies[i];
         if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
-            // TODO: Handle the collision between player and enemy entity.
             handleEnemyCollision(entity, otherEntity);
+        } else if (hasHitEnemy(entity, otherEntity) && entity !== otherEntity) {
+            handleHitCollision(entity, otherEntity);
         }
     }
 }
@@ -59,12 +60,32 @@ function checkForCollisions(entity) {
  * @returns {boolean}
  */
 function hasCollided(a, b) {
-    if (a.hitbox !== undefined && b.hitbox !== undefined) {
-        return (a.hitbox.x < b.hitbox.x + b.hitbox.width
+    let result = false;
+    if (a.hitbox && b.hitbox) {
+        result = a.hitbox.x < b.hitbox.x + b.hitbox.width
             && a.hitbox.x + a.hitbox.width > b.hitbox.x
             && a.hitbox.y < b.hitbox.y + b.hitbox.height
-            && a.hitbox.y + a.hitbox.height > b.hitbox.y);
+            && a.hitbox.y + a.hitbox.height > b.hitbox.y;
     }
+    return result;
+}
+
+/**
+ * Determines whether an entity's active hurtbox has struck an enemy's hitbox
+ * 
+ * @param abuser the entity doing the hitting
+ * @param victim the entity doing the dying
+ */
+function hasHitEnemy(abuser, victim) {
+    let result = false;
+    if(abuser.hurtbox && victim.hitbox && abuser.hurtbox.isActive) {
+        result = abuser.hurtbox.x < victim.hitbox.x + victim.hitbox.width
+            && abuser.hurtbox.x + abuser.hurtbox.width > victim.hitbox.x
+            && abuser.hurtbox.y < victim.hitbox.y + victim.hitbox.height
+            && abuser.hurtbox.y + abuser.hurtbox.height > victim.hitbox.y;
+    }
+    // if(result) console.log(result);
+    return result;
 }
 
 /**
@@ -92,7 +113,7 @@ function directionOfCollision(a, b) {
             collision = (crossWidth >- (crossHeight)) ? 'right' : 'top';
         }
     }
-    return(collision);
+    return collision;
 }
 
 
@@ -127,6 +148,19 @@ function handleEnemyCollision(you, them) {
 }
 
 /**
+ * Logic for when an entity's active hurtbox makes contact with another entity
+ * 
+ * @param abuser the murderer
+ * @param victim the murderee
+ */
+function handleHitCollision(abuser, victim) {
+    victim.isRecoiling = true;
+    victim.invincibilityFrames = 6;
+
+    //TODO damage calculation
+}
+
+/**
  * Reduces the number of invincibility frames an entity has left after being hit by an enemy or
  * puts the entity back to a regular state if the amount of frames left is zero.
  *
@@ -151,7 +185,7 @@ function drawDebugHitbox(entity) {
     let canvas = document.getElementById('gameWorld');
     let ctx = canvas.getContext('2d');
     ctx.beginPath();
-    ctx.strokeStyle = 'green';
+    ctx.strokeStyle = entity.isRecoiling ? 'orange' : 'green';
     ctx.lineWidth = 2;
     ctx.rect(entity.hitbox.x, entity.hitbox.y, entity.hitbox.width, entity.hitbox.height);
     ctx.stroke();
