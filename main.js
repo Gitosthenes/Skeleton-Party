@@ -1,6 +1,6 @@
 let ASSET_MANAGER = new AssetManager();
 let ON_TITLESCREEN = true;
-
+var font = "VT323"
 
 //For scrolling
 //storing both the canvas's coordinates and the player coordinates
@@ -12,6 +12,11 @@ let boundHitLeft = false;
 let boundHitRight = false;
 let boundHitUp = false;
 let boundHitDown = false;
+
+//Character Stats
+let hp = 100;
+let def = 10;
+let atk = 10;
 
 function IsOnTitleScreen() { return ON_TITLESCREEN; }
 
@@ -119,49 +124,9 @@ Background.prototype.update = function () {
             this.y = bgY - playerY;
         }
     }
+    
 };
 
-//! ******** Volume Toggle Definition ******** */
-function VolumeToggle(game, spritesheet) {
-    this.audio = document.getElementById('audio');
-    this.spritesheet = spritesheet;
-    this.ctx = game.ctx;
-    this.state = 'on';
-}
-
-VolumeToggle.prototype.update = function () {};
-
-/**
- * Draws the volume on/off icon depending on state.
- * @see https://webplatform.github.io/docs/concepts/programming/drawing_images_onto_canvas/
- *      for overloaded drawImage() parameters
- */
-VolumeToggle.prototype.draw = function () {
-    if (!IsOnTitleScreen()) {
-        if (this.state === 'on') {
-            this.ctx.drawImage(this.spritesheet, 48, 0, 47 ,47, 5, 5, 30, 30);
-        } else if (this.state === 'off') {
-            this.ctx.drawImage(this.spritesheet, 0, 0, 47 ,47, 5, 5, 30, 30);
-        }
-    }
-};
-
-/**
- * Toggles volume state to ON if not playing; sets it to OFF and restarts audio track if it is playing.
- */
-VolumeToggle.prototype.flipVolume = function () {
-    if(!IsOnTitleScreen()) {
-        let isON = this.state == 'on' ? true : false;
-        if (isON) {
-            this.state = 'off';
-            this.audio.pause();
-            this.audio.currentTime = 0;
-        } else {
-            this.state = 'on'
-            this.audio.play();
-        }
-    }
-}
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
@@ -322,6 +287,113 @@ MaleKnightMace.prototype.draw = function() {
 };
 
 
+//UI stuff below
+function SkeletonHealthUI(game, spritesheet) {
+    this.x = -10;
+    this.y = -20;
+    this.spritesheet = spritesheet;
+    this.game = game;
+    this.ctx = game.ctx;
+    console.log("drawing ui");
+}
+
+SkeletonHealthUI.prototype.draw = function () {
+    if(!IsOnTitleScreen()) {
+        console.log("drawing ui 2")
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 90, 90);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(hp.toString() + " HP", 52, 33);
+    }
+}
+ 
+SkeletonHealthUI.prototype.update = function () {};
+
+function SkeletonDefUI(game, spritesheet) {
+    this.x = 19;
+    this.y = 35;
+    this.spritesheet = spritesheet;
+    this.game = game;
+    this.ctx = game.ctx;
+    console.log("drawing ui");
+}
+
+SkeletonDefUI.prototype.draw = function () {
+    if(!IsOnTitleScreen()) {
+        console.log("drawing ui 2")
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 30, 30);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(def.toString() + " DEF", 52, 56);
+    }
+}
+ 
+SkeletonDefUI.prototype.update = function () {};
+
+function SkeletonAtkUI(game, spritesheet) {
+    this.x = 19;
+    this.y = 65;
+    this.spritesheet = spritesheet;
+    this.game = game;
+    this.ctx = game.ctx;
+    console.log("drawing ui");
+}
+
+SkeletonAtkUI.prototype.draw = function () {
+    if(!IsOnTitleScreen()) {
+        console.log("drawing ui 2")
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 25, 25);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(atk.toString() + " ATK", 52, 82);
+    }
+}
+ 
+SkeletonAtkUI.prototype.update = function () {};
+//! ******** Volume Toggle Definition ******** */
+function VolumeToggle(game, spritesheet) {
+    this.audio = document.getElementById('audio');
+    this.spritesheet = spritesheet;
+    this.ctx = game.ctx;
+    this.state = 'on';
+}
+
+VolumeToggle.prototype.update = function () {};
+
+/**
+ * Draws the volume on/off icon depending on state.
+ * @see https://webplatform.github.io/docs/concepts/programming/drawing_images_onto_canvas/
+ *      for overloaded drawImage() parameters
+ */
+VolumeToggle.prototype.draw = function () {
+    if (!IsOnTitleScreen()) {
+        if (this.state === 'on') {
+            this.ctx.drawImage(this.spritesheet, 48, 0, 47 ,47, 900, 650, 30, 30);
+        } else if (this.state === 'off') {
+            this.ctx.drawImage(this.spritesheet, 0, 0, 47 ,47, 900, 650, 30, 30);
+        }
+    }
+};
+
+/**
+ * Toggles volume state to ON if not playing; sets it to OFF and restarts audio track if it is playing.
+ */
+VolumeToggle.prototype.flipVolume = function () {
+    if(!IsOnTitleScreen()) {
+        let isON = this.state == 'on' ? true : false;
+        if (isON) {
+            this.state = 'off';
+            this.audio.pause();
+            this.audio.currentTime = 0;
+        } else {
+            this.state = 'on'
+            this.audio.play();
+        }
+    }
+}
+
+
+
 //! ******** QUEUE ASSET DOWNLOAD ******** */
 // Background images
 ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
@@ -331,6 +403,9 @@ ASSET_MANAGER.queueDownload("./res/map/Floor1.png")
 ASSET_MANAGER.queueDownload("./res/character/skeleton_sword.png");
 ASSET_MANAGER.queueDownload("./res/character/male_knight_spear.png");
 ASSET_MANAGER.queueDownload("./res/character/male_knight_mace.png");
+ASSET_MANAGER.queueDownload("./res/character/skeleton_life.png");
+ASSET_MANAGER.queueDownload("./res/character/def_ui.png");
+ASSET_MANAGER.queueDownload("./res/character/sword_ui.png");
 // Audio assets
 ASSET_MANAGER.queueDownload("./res/audio/megalovania.mp3");
 ASSET_MANAGER.queueDownload("./res/audio/volume_bgON.png");
@@ -338,6 +413,16 @@ ASSET_MANAGER.queueDownload("./res/audio/volume_bgOFF.png");
 
 
 ASSET_MANAGER.downloadAll(function () {
+    WebFontConfig = {
+        google:{ families: [font] },
+      };
+      (function(){
+        var wf = document.createElement("script");
+        wf.src = "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js";
+        wf.async = 'true';
+        document.head.appendChild(wf);
+      })();
+
     let canvas = document.getElementById('gameWorld');
     let ctx = canvas.getContext('2d');
 
@@ -346,6 +431,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.startInput();
 
+    
     gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
     gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
     gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
@@ -353,6 +439,17 @@ ASSET_MANAGER.downloadAll(function () {
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));
     gameEngine.setVolumeToggle(volumeToggle);
     gameEngine.addEntity(volumeToggle);
+    let healthUI = new SkeletonHealthUI(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_life.png"))
+    gameEngine.setHealthUI(healthUI);
+    gameEngine.addEntity(healthUI);
+    let defUI = new SkeletonDefUI(gameEngine, ASSET_MANAGER.getAsset("./res/character/def_ui.png"));
+    gameEngine.setDefUI(defUI);
+    gameEngine.addEntity(defUI);
+    let atkUI = new SkeletonAtkUI(gameEngine, ASSET_MANAGER.getAsset("./res/character/sword_ui.png"));
+    gameEngine.setAtkUI(atkUI);
+    gameEngine.addEntity(atkUI);
+
+    
 
     gameEngine.start();
 });
