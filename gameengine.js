@@ -33,6 +33,8 @@ function GameEngine() {
     this.healthUI = null;
     this.defUI = null;
     this.atkUI = null;
+    this.enemyUI = null;
+    this.timerUI = null;
     //end ui stuff
     this.ctx = null;
     this.surfaceWidth = null;
@@ -207,6 +209,14 @@ GameEngine.prototype.setDefUI = function (defUI) {
 GameEngine.prototype.setAtkUI = function (atkUI) {
     this.atkUI = atkUI;
 }
+
+GameEngine.prototype.setEnemyUI = function (enemyUI) {
+    this.enemyUI = enemyUI;
+}
+
+GameEngine.prototype.setTimerUI = function (timerUI) {
+    this.timerUI = timerUI;
+}
 /**
  * Adds an entity to the GameEngine's list of entities.
  *
@@ -244,6 +254,8 @@ GameEngine.prototype.draw = function () {
     this.healthUI.draw(this.ctx);
     this.defUI.draw(this.ctx);
     this.atkUI.draw(this.ctx);
+    this.enemyUI.draw(this.ctx);
+    this.timerUI.draw(this.ctx);
     for (let i = 0; i < this.enemies.length; i++) {     // Draw all enemies.
         this.enemies[i].draw(this.ctx);
     }
@@ -263,6 +275,8 @@ GameEngine.prototype.update = function () {
     this.healthUI.update();
     this.defUI.update();
     this.atkUI.update();
+    this.enemyUI.update();
+    this.timerUI.update();
     for (let i = 0; i < this.enemies.length; i++) {
         this.enemies[i].update();
     }
