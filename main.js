@@ -18,6 +18,9 @@ let hp = 100;
 let def = 10;
 let atk = 10;
 
+//time of countdown timer in seconds
+let time = 70;
+
 function IsOnTitleScreen() { return ON_TITLESCREEN; }
 
 //! ******** Animation Definition ******** */
@@ -81,7 +84,15 @@ function Background(game, spritesheet) {
 
 Background.prototype.draw = function () {
     if(ON_TITLESCREEN) this.ctx.drawImage(this.spritesheet, this.x, this.y);
-    else this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
+    else {
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
+        time -= this.game.clockTick;
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        var minutes = Math.floor(time/60);
+        var seconds = time - minutes * 60;
+        this.ctx.fillText(minutes + ":" + seconds.toFixed(0).padStart(2, '0'), 450, 33);
+    }
 };
 
 Background.prototype.update = function () {
@@ -122,8 +133,13 @@ Background.prototype.update = function () {
             boundHitUp = false;
             boundHitDown = false;
             this.y = bgY - playerY;
+            
         }
+        
+        
     }
+
+    
     
 };
 
@@ -304,6 +320,7 @@ SkeletonHealthUI.prototype.draw = function () {
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(hp.toString() + " HP", 52, 33);
+       
     }
 }
  
