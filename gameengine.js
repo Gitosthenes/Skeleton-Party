@@ -330,10 +330,11 @@ Timer.prototype.tick = function () {
  *
  * @constructor
  */
-function Entity(game, x, y) {
+function Entity(game, x, y, type) {
     this.game = game;
     this.x = x;
     this.y = y;
+    this.type = type;
     this.removeFromWorld = false;
 }
 
@@ -345,4 +346,5 @@ Entity.prototype.update = function () {
 
 Entity.prototype.draw = function (ctx) {
     drawDebugHitbox(this);
+    drawDebugHurtbox(this);
 };

@@ -145,7 +145,9 @@ function SkeletonDagger(game, spritesheet) {
     this.isRecoiling = false;
     this.titleScreenComp = true;
     this.currAnimation = this.animations['idleDown'];
-    this.hitbox = new Hitbox(this.x, this.y, 50, 32);
+    this.hitbox = new Hitbox(this.x, this.y, 50, 32, true);
+    this.hurtbox = new Hitbox(0, 0, 0, 0, false);
+
     this.invincibilityFrames = 0;
 }
 
@@ -174,7 +176,14 @@ function entityAnimationInit(entity, spritesheet) {
 }
 
 SkeletonDagger.prototype.update = function () {
+    // let that = this;
     handleInput(this);
+
+    //If attacking, activate hurtbox
+    if(this.isAttacking && this.currAnimation.elapsedTime == 0) activateHurtbox(this);
+    if(!this.isAttacking) this.hurtbox.isActive = false;
+
+
     // player coordinates for debug
     // console.log("playerX = " + playerX);
     // console.log("playerY = "  + playerY);
@@ -191,7 +200,7 @@ SkeletonDagger.prototype.update = function () {
     
 
     updatePlayerHitbox(this);
-    drawDebugHitbox(this);
+    // drawDebugHitbox(this);
     checkForCollisions(this);
     updateInvincibilityFrames(this);
 
@@ -216,6 +225,7 @@ SkeletonDagger.prototype.draw = function () {
 };
 
 function MaleKnightSpear(game,spritesheet) {
+    entityAnimationInit(this, spritesheet);
     this.x = -200;
     this.y = 80;
     this.speed = 0;
@@ -225,7 +235,7 @@ function MaleKnightSpear(game,spritesheet) {
     this.state = "walkDown";
     this.titleScreenComp = true;
     this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
-    this.hitbox = new Hitbox(this.x, this.y, 62, 64);
+    this.hitbox = new Hitbox(this.x, this.y, 62, 64, true);
 }
 
 MaleKnightSpear.prototype.update = function() {
@@ -261,7 +271,7 @@ function MaleKnightMace(game,spritesheet) {
     this.state = "walkDown";
     this.titleScreenComp = true;
     this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
-    this.hitbox = new Hitbox(this.x, this.y, 62, 44);
+    this.hitbox = new Hitbox(this.x, this.y, 62, 44, true);
 }
 
 MaleKnightMace.prototype.update = function() {
@@ -294,12 +304,12 @@ function SkeletonHealthUI(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
-    console.log("drawing ui");
+    // console.log("drawing ui");
 }
 
 SkeletonHealthUI.prototype.draw = function () {
     if(!IsOnTitleScreen()) {
-        console.log("drawing ui 2")
+        // console.log("drawing ui 2")
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 90, 90);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -315,12 +325,12 @@ function SkeletonDefUI(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
-    console.log("drawing ui");
+    // console.log("drawing ui");
 }
 
 SkeletonDefUI.prototype.draw = function () {
     if(!IsOnTitleScreen()) {
-        console.log("drawing ui 2")
+        // console.log("drawing ui 2")
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 30, 30);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -336,12 +346,12 @@ function SkeletonAtkUI(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
-    console.log("drawing ui");
+    // console.log("drawing ui");
 }
 
 SkeletonAtkUI.prototype.draw = function () {
     if(!IsOnTitleScreen()) {
-        console.log("drawing ui 2")
+        // console.log("drawing ui 2")
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 25, 25);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';

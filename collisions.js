@@ -7,7 +7,7 @@
  * @param w The width of the hitbox.
  * @constructor
  */
-function Hitbox(x, y, h, w) {
+function Hitbox(x, y, h, w, isActive) {
     this.x = x;
     this.y = y;
     this.height = h;
@@ -16,6 +16,7 @@ function Hitbox(x, y, h, w) {
     this.bottom = y + h;
     this.left = x;
     this.right = x + w;
+    this.isActive = isActive;
 }
 
 /**
@@ -157,6 +158,19 @@ function drawDebugHitbox(entity) {
     ctx.closePath();
 }
 
+function drawDebugHurtbox(entity) {
+    if(entity.hurtbox && entity.hurtbox.isActive) {
+        let canvas = document.getElementById('gameWorld');
+        let ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.rect(entity.hurtbox.x, entity.hurtbox.y, entity.hurtbox.width, entity.hurtbox.height);
+        ctx.stroke();
+        ctx.closePath();
+    }
+}
+
 /**
  * Updates an entity's hitbox to match their current location in the game. Should be called
  * after updating an entity's position during their update function.
@@ -182,4 +196,105 @@ function updatePlayerHitbox(entity) {
     entity.hitbox.bottom = entity.hitbox.y + entity.hitbox.height;
     entity.hitbox.left = entity.hitbox.x;
     entity.hitbox.right = entity.hitbox.x + entity.hitbox.width;
+}
+
+/**
+ * Activates an entity's hurtbox to be used in collision dettection
+ * 
+ * @param entity the entity whose hurtbox is being activated.
+ */
+function activateHurtbox(entity) {
+    entity.hurtbox.isActive = true;
+    switch(entity.constructor) {
+        //!--------------------------SkeletonDagger--------------------------------
+        case SkeletonDagger:
+            switch(entity.direction) {
+                case 'down':
+                    entity.hurtbox.x = (entity.x - 5);
+                    entity.hurtbox.y = (entity.y + 45);
+                    entity.hurtbox.height = 38;
+                    entity.hurtbox.width = 115;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'up':
+                    entity.hurtbox.x = (entity.x - 5);
+                    entity.hurtbox.y = entity.y;
+                    entity.hurtbox.height = 38;
+                    entity.hurtbox.width = 115;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'left':
+                    entity.hurtbox.x = entity.x - 52;
+                    entity.hurtbox.y = entity.y + 17;
+                    entity.hurtbox.height = 38;
+                    entity.hurtbox.width = 80;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'right':
+                    entity.hurtbox.x = entity.x + 40;
+                    entity.hurtbox.y = entity.y + 17;
+                    entity.hurtbox.height = 38;
+                    entity.hurtbox.width = 80;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+            }
+            break;
+        //!--------------------------MaleKnightSpear--------------------------------
+        case MaleKnightSpear:
+            switch(entity.direction) {
+                case 'down':
+                    entity.hurtbox.x = (entity.x - 5);
+                    entity.hurtbox.y = (entity.y + 45);
+                    entity.hurtbox.height = 38;
+                    entity.hurtbox.width = 115;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                // case 'up':
+                //     entity.hurtbox.x = (entity.x - 5);
+                //     entity.hurtbox.y = entity.y;
+                //     entity.hurtbox.height = 38;
+                //     entity.hurtbox.width = 115;
+                //     entity.hurtbox.top = entity.hurtbox.y;
+                //     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                //     entity.hurtbox.left = entity.hurtbox.x;
+                //     entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                //     break;
+                // case 'left':
+                //     entity.hurtbox.x = entity.x - 52;
+                //     entity.hurtbox.y = entity.y + 17;
+                //     entity.hurtbox.height = 38;
+                //     entity.hurtbox.width = 80;
+                //     entity.hurtbox.top = entity.hurtbox.y;
+                //     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                //     entity.hurtbox.left = entity.hurtbox.x;
+                //     entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                //     break;
+                // case 'right':
+                //     entity.hurtbox.x = entity.x + 40;
+                //     entity.hurtbox.y = entity.y + 17;
+                //     entity.hurtbox.height = 38;
+                //     entity.hurtbox.width = 80;
+                //     entity.hurtbox.top = entity.hurtbox.y;
+                //     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                //     entity.hurtbox.left = entity.hurtbox.x;
+                //     entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                //     break;
+            }
+            break;
+    }
 }
