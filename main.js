@@ -18,6 +18,13 @@ let hp = 100;
 let def = 10;
 let atk = 10;
 
+//time of countdown timer in seconds
+let time = 10;
+
+
+//enemy count
+let enemyCount = 0;
+
 function IsOnTitleScreen() { return ON_TITLESCREEN; }
 
 //! ******** Animation Definition ******** */
@@ -81,7 +88,9 @@ function Background(game, spritesheet) {
 
 Background.prototype.draw = function () {
     if(ON_TITLESCREEN) this.ctx.drawImage(this.spritesheet, this.x, this.y);
-    else this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
+    else {
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
+    }
 };
 
 Background.prototype.update = function () {
@@ -122,8 +131,13 @@ Background.prototype.update = function () {
             boundHitUp = false;
             boundHitDown = false;
             this.y = bgY - playerY;
+            
         }
+        
+        
     }
+
+    
     
 };
 
@@ -315,6 +329,7 @@ SkeletonHealthUI.prototype.draw = function () {
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(hp.toString() + " HP", 52, 33);
+       
     }
 }
  
@@ -326,12 +341,10 @@ function SkeletonDefUI(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
-    // console.log("drawing ui");
 }
 
 SkeletonDefUI.prototype.draw = function () {
     if(!IsOnTitleScreen()) {
-        // console.log("drawing ui 2")
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 30, 30);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -347,12 +360,10 @@ function SkeletonAtkUI(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
-    // console.log("drawing ui");
 }
 
 SkeletonAtkUI.prototype.draw = function () {
     if(!IsOnTitleScreen()) {
-        // console.log("drawing ui 2")
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 25, 25);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -361,6 +372,56 @@ SkeletonAtkUI.prototype.draw = function () {
 }
  
 SkeletonAtkUI.prototype.update = function () {};
+
+function EnemyUI (game, spritesheet) {
+    this.x = 900;
+    this.y = 4;
+    this.spritesheet = spritesheet;
+    this.game = game;
+    this.ctx = game.ctx;
+}
+
+EnemyUI.prototype.draw = function () {
+    if(!IsOnTitleScreen()) {
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 50, 50);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText(enemyCount.toString() + " LEFT", 835, 33);
+    }
+}
+
+EnemyUI.prototype.update = function () {};
+
+function TimerUI (game, spritesheet) {
+    this.x = 400;
+    this.y = 10;
+    this.spritesheet = spritesheet;
+    this.game = game;
+    this.ctx = game.ctx;
+}
+
+TimerUI.prototype.draw = function () {
+    if(!IsOnTitleScreen()) {
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 35, 35);
+        time -= this.game.clockTick;
+        this.ctx.font = "48px " + font;
+        this.ctx.fillStyle = 'white';
+        if (time < 0) {
+            time = 0;
+            this.ctx.fillText("0:00", 450, 40);
+        } else {
+            var minutes = Math.floor(time/60);
+            var seconds = time - minutes * 60;
+            var timer = minutes.toString() + ":" + seconds.toFixed(0).padStart(2, '0')
+            this.ctx.fillText(timer, 450, 40);
+        }
+
+    }
+
+}
+
+TimerUI.prototype.update = function () {
+};
 //! ******** Volume Toggle Definition ******** */
 function VolumeToggle(game, spritesheet) {
     this.audio = document.getElementById('audio');
@@ -417,6 +478,8 @@ ASSET_MANAGER.queueDownload("./res/character/male_knight_mace.png");
 ASSET_MANAGER.queueDownload("./res/character/skeleton_life.png");
 ASSET_MANAGER.queueDownload("./res/character/def_ui.png");
 ASSET_MANAGER.queueDownload("./res/character/sword_ui.png");
+ASSET_MANAGER.queueDownload("./res/character/enemy_ui.png");
+ASSET_MANAGER.queueDownload("./res/character/timer_ui.png");
 // Audio assets
 ASSET_MANAGER.queueDownload("./res/audio/megalovania.mp3");
 ASSET_MANAGER.queueDownload("./res/audio/volume_bgON.png");
@@ -459,8 +522,14 @@ ASSET_MANAGER.downloadAll(function () {
     let atkUI = new SkeletonAtkUI(gameEngine, ASSET_MANAGER.getAsset("./res/character/sword_ui.png"));
     gameEngine.setAtkUI(atkUI);
     gameEngine.addEntity(atkUI);
+    let enemyUI = new EnemyUI(gameEngine, ASSET_MANAGER.getAsset("./res/character/enemy_ui.png"));
+    gameEngine.setEnemyUI(enemyUI);
+    gameEngine.addEntity(enemyUI);
+    let timerUI = new TimerUI(gameEngine, ASSET_MANAGER.getAsset("./res/character/timer_ui.png"));
+    gameEngine.setTimerUI(timerUI);
+    gameEngine.addEntity(timerUI);
 
-    
+    enemyCount = gameEngine.enemies.length;
 
     gameEngine.start();
 });
