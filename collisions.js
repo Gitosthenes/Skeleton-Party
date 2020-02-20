@@ -238,9 +238,14 @@ function drawDebugHurtbox(entity) {
  *
  * @param entity The entity to have their hitbox adjusted.
  */
-function updateHitbox(entity) {
-    entity.hitbox.x = entity.x;
-    entity.hitbox.y = entity.y;
+function updateHitbox(entity, x , y) {
+    if(x && y) {
+        entity.hitbox.x = x;
+        entity.hitbox.y = y;
+    } else {
+        entity.hitbox.x = entity.x;
+        entity.hitbox.y = entity.y;
+    }
 }
 
 /**
