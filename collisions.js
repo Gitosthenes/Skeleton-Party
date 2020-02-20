@@ -50,6 +50,13 @@ function checkForCollisions(entity) {
             handleHitCollision(entity, otherEntity);
         }
     }
+
+    for (let i = 0; i < entity.game.terrain.length; i++) {
+        let terrain = entity.game.terrain[i];
+        if (hasCollided(entity, terrain) && entity !== terrain) {
+            handleTerrainCollision(entity, terrain);
+        }
+    }
 }
 
 /**
@@ -72,7 +79,7 @@ function hasCollided(a, b) {
 
 /**
  * Determines whether an entity's active hurtbox has struck an enemy's hitbox
- * 
+ *
  * @param abuser the entity doing the hitting
  * @param victim the entity doing the dying
  */
@@ -116,6 +123,26 @@ function directionOfCollision(a, b) {
     return collision;
 }
 
+function handleTerrainCollision(entity, terrain) {
+    entity.isRecoiling = true;
+    entity.invincibilityFrames = 2;
+
+    switch (directionOfCollision(entity, terrain)) {
+        case 'top':
+            entity.ySpeed = -entity.baseSpeed;
+            break;
+        case 'bottom':
+            entity.ySpeed = entity.baseSpeed;
+            break;
+        case 'left':
+            entity.xSpeed = -entity.baseSpeed;
+            break;
+        case 'right':
+            entity.xSpeed = entity.baseSpeed;
+            break;
+    }
+}
+
 
 /**
  * Handles the logic behind player and enemy collisions by updating entity state and velocity.
@@ -149,7 +176,7 @@ function handleEnemyCollision(you, them) {
 
 /**
  * Logic for when an entity's active hurtbox makes contact with another entityj
- * 
+ *
  * @param abuser the murderer
  * @param victim the murderee
  */
@@ -237,9 +264,20 @@ function updatePlayerHitbox(entity) {
     entity.hitbox.right = entity.hitbox.x + entity.hitbox.width;
 }
 
+function updateTerrainHitbox(entity, xOffset, yOffset, width, height) {
+    entity.hitbox.x = entity.x + xOffset;
+    entity.hitbox.y = entity.y + yOffset;
+    entity.hitbox.width = width;
+    entity.hitbox.height = height;
+    entity.hitbox.top = entity.hitbox.y;
+    entity.hitbox.bottom = entity.hitbox.y + entity.hitbox.height;
+    entity.hitbox.left = entity.hitbox.x;
+    entity.hitbox.right = entity.hitbox.x + entity.hitbox.width;
+}
+
 /**
  * Activates an entity's hurtbox to be used in collision dettection
- * 
+ *
  * @param entity the entity whose hurtbox is being activated.
  */
 function activateHurtbox(entity) {

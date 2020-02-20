@@ -25,7 +25,7 @@ window.requestAnimFrame = (function () {
 function GameEngine() {
     this.entities = [];
     this.player = null;
-    this.background = null;
+    this.background = undefined;
     this.enemies = [];
     this.terrain = [];
     //begin ui stuff
