@@ -148,7 +148,7 @@ function handleEnemyCollision(you, them) {
 }
 
 /**
- * Logic for when an entity's active hurtbox makes contact with another entity
+ * Logic for when an entity's active hurtbox makes contact with another entityj
  * 
  * @param abuser the murderer
  * @param victim the murderee

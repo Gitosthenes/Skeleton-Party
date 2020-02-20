@@ -91,11 +91,9 @@ function handleInput(entity) {
                 }
                 break;
 
-            case ' ':   // Debug input.
-                if (entity.titleScreenComp) {
-                    entity.x = 450;
-                    entity.y = 325;
-                }
+            case ' ':   // Start game from title screen
+                entity.x = 450;
+                entity.y = 325;
                 break;
         }
     }
