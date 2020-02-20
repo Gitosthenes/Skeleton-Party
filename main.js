@@ -21,11 +21,16 @@ let atk = 10;
 //time of countdown timer in seconds
 let time = 120;
 
-
 //enemy count
 let enemyCount = 0;
 
-function IsOnTitleScreen() { return ON_TITLESCREEN; }
+function distance(a, b) {
+    if(a.x && a.y && b.x && b.y) {
+    let dx = a.x - b.x;
+    let dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+    }
+}
 
 //! ******** Animation Definition ******** */
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale) {
@@ -95,7 +100,7 @@ Background.prototype.draw = function () {
 
 Background.prototype.update = function () {
     if (this.game.userInput.includes(' ')) {
-        if(IsOnTitleScreen()) {
+        if(ON_TITLESCREEN) {
             this.spritesheet = ASSET_MANAGER.getAsset("./res/map/Floor1.png");
             document.getElementById('audio').play();
             document.getElementById('audio').volume = 0.5;
@@ -131,13 +136,8 @@ Background.prototype.update = function () {
             boundHitUp = false;
             boundHitDown = false;
             this.y = bgY - playerY;
-
         }
-
-
     }
-
-
 
 };
 
@@ -157,11 +157,9 @@ function SkeletonDagger(game, spritesheet) {
     this.direction = 'down';
     this.isAttacking = false;
     this.isRecoiling = false;
-    this.titleScreenComp = true;
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 50, 32, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
-
     this.invincibilityFrames = 0;
 }
 
@@ -237,8 +235,10 @@ SkeletonDagger.prototype.draw = function () {
 
 function MaleKnightSpear(game,spritesheet) {
     entityAnimationInit(this, spritesheet);
-    this.x = -200;
+    this.x = 650;
     this.y = 80;
+    this.relX = 650;
+    this.relY = 80;
     this.speed = 0;
     this.game = game;
     this.ctx = game.ctx;
@@ -246,25 +246,25 @@ function MaleKnightSpear(game,spritesheet) {
     this.isRecoiling = false;
     this.direction = 'down';
     this.state = "walkDown";
-    this.titleScreenComp = true;
     this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
     this.hitbox = new Hitbox(this.x, this.y, 62, 64, true);
 }
 
 MaleKnightSpear.prototype.update = function() {
-    let key = this.game.userInput[0];
-    switch (key) {
-        case ' ':
-            this.x = 650;
-            break;
-    }
     //TODO: make the integers into variables to make it work when they are moving by themselves.
     //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
     //player.
-    //!!!  Doesn't this only work if the enemy isn't moving? If the enemy was also moving, the base numbers (650 & 80) would need to be updated as they did.
     if(!ON_TITLESCREEN) {
-        this.x = 650 - playerX;
-        this.y = 80 - playerY;
+        let speedScale = 50; // decrease to increase enemy speed towards player
+        let dist = distance(this, this.game.player);
+        let delta = -65;
+        let difX = (this.x - this.game.player.x)/dist;
+        let difY = (this.y - this.game.player.y)/dist;
+
+        console.log((difX * delta / 4) + " : " + (difY * delta / 4));
+        this.x += difX * delta / speedScale;
+        this.y += difY * delta / speedScale;
+
     }
     updateHitbox(this);
     updateInvincibilityFrames(this);
@@ -272,8 +272,10 @@ MaleKnightSpear.prototype.update = function() {
 }
 
 MaleKnightSpear.prototype.draw = function() {
-    this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-    Entity.prototype.draw.call(this);
+    if(!ON_TITLESCREEN) {
+        this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        Entity.prototype.draw.call(this);
+    }
 }
 
 function MaleKnightMace(game, spritesheet) {
@@ -284,7 +286,6 @@ function MaleKnightMace(game, spritesheet) {
     this.ctx = game.ctx;
     this.direction = 'down';
     this.state = "walkDown";
-    this.titleScreenComp = true;
     this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
     this.hitbox = new Hitbox(this.x, this.y, 62, 44, true);
 }
@@ -323,7 +324,7 @@ function SkeletonHealthUI(game, spritesheet) {
 }
 
 SkeletonHealthUI.prototype.draw = function () {
-    if(!IsOnTitleScreen()) {
+    if(!ON_TITLESCREEN) {
         // console.log("drawing ui 2")
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 90, 90);
         this.ctx.font = "25px " + font;
@@ -344,7 +345,7 @@ function SkeletonDefUI(game, spritesheet) {
 }
 
 SkeletonDefUI.prototype.draw = function () {
-    if(!IsOnTitleScreen()) {
+    if(!ON_TITLESCREEN) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 30, 30);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -363,7 +364,7 @@ function SkeletonAtkUI(game, spritesheet) {
 }
 
 SkeletonAtkUI.prototype.draw = function () {
-    if(!IsOnTitleScreen()) {
+    if(!ON_TITLESCREEN) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 25, 25);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -382,7 +383,7 @@ function EnemyUI (game, spritesheet) {
 }
 
 EnemyUI.prototype.draw = function () {
-    if(!IsOnTitleScreen()) {
+    if(!ON_TITLESCREEN) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 50, 50);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -401,7 +402,7 @@ function TimerUI (game, spritesheet) {
 }
 
 TimerUI.prototype.draw = function () {
-    if(!IsOnTitleScreen()) {
+    if(!ON_TITLESCREEN) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 35, 35);
         time -= this.game.clockTick;
         this.ctx.font = "48px " + font;
@@ -438,7 +439,7 @@ VolumeToggle.prototype.update = function () {};
  *      for overloaded drawImage() parameters
  */
 VolumeToggle.prototype.draw = function () {
-    if (!IsOnTitleScreen()) {
+    if (!ON_TITLESCREEN) {
         if (this.state === 'on') {
             this.ctx.drawImage(this.spritesheet, 48, 0, 47 ,47, 900, 650, 30, 30);
         } else if (this.state === 'off') {
@@ -451,7 +452,7 @@ VolumeToggle.prototype.draw = function () {
  * Toggles volume state to ON if not playing; sets it to OFF and restarts audio track if it is playing.
  */
 VolumeToggle.prototype.flipVolume = function () {
-    if(!IsOnTitleScreen()) {
+    if(!ON_TITLESCREEN) {
         let isON = this.state == 'on' ? true : false;
         if (isON) {
             this.state = 'off';
