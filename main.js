@@ -236,9 +236,9 @@ function MaleKnightSpear(game,spritesheet) {
     entityAnimationInit(this, spritesheet);
     this.x = 650;
     this.y = 80;
-    this.relX = 650;
-    this.relY = 80;
-    this.speed = 0;
+    this.spawnX = 650;
+    this.spwanY = 80;
+    this.speed = 15 ;
     this.game = game;
     this.ctx = game.ctx;
     this.isAttacking = false; //TODO AI logic to use this later
@@ -254,15 +254,32 @@ MaleKnightSpear.prototype.update = function() {
     //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
     //player.
     if(!ON_TITLESCREEN) {
-        let speedScale = 50; // decrease to increase enemy speed towards player
-        let dist = distance(this, this.game.player);
-        let delta = -65;
-        let difX = (this.x - this.game.player.x)/dist;
-        let difY = (this.y - this.game.player.y)/dist;
+        // let speedScale = 50; // decrease to increase enemy speed towards player
+        // let dist = distance(this, this.game.player);
+        // let delta = -65;
+        // let difX = (this.x - this.game.player.x)/dist;
+        // let difY = (this.y - this.game.player.y)/dist;
 
-        console.log((difX * delta / 4) + " : " + (difY * delta / 4));
-        this.x += difX * delta / speedScale;
-        this.y += difY * delta / speedScale;
+        // console.log((difX * delta / 4) + " : " + (difY * delta / 4));
+        // this.x +=ds difX * delta / speedScale;
+        // this.y += difY * delta / speedScale;
+        // this.x = 650
+        this.x = this.spawnX - playerX;
+        this.y = this.spwanY - playerY;
+        let dx = this.spawnX - this.game.player.x;
+        let dy = this.spwanY - this.game.player.y;
+        console.log(dx);
+        console.log(dy);
+        if(dx > 0) {
+            this.x -= this.game.clockTick * this.speed;
+        } else if(dx < 0) {
+            this.x += this.game.clockTick * this.speed;
+        }
+        if(dy > 0) {
+            this.y -= this.game.clockTick * this.speed;
+        } else if(dy < 0) {
+            this.y += this.game.clockTick* this.speed;
+        }
 
     }
     updateHitbox(this);
@@ -296,6 +313,7 @@ MaleKnightMace.prototype.update = function() {
             this.x = 690;
             break;
     }
+    updateHitbox(this);
     //TODO: make the integers into variables to make it work when they are moving by themselves.
     //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
     //player.
