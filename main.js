@@ -32,6 +32,14 @@ function distance(a, b) {
     }
 }
 
+function changePlayerX(val) {
+    playerX += val;
+}
+
+function changePlayerY(val) {
+    playerY += val;
+}
+
 //! ******** Animation Definition ******** */
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale) {
     this.spriteSheet = spriteSheet;
@@ -83,9 +91,12 @@ Animation.prototype.isDone = function () {
 }
 
 //! ******** Background Definition ******** */
-function Background(game, spritesheet) {
+function Background(game, spritesheet, width, height, scale) {
     this.x = bgX;
     this.y = bgY;
+    this.width = width;
+    this.height = height;
+    this.scale = scale;
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
@@ -94,14 +105,14 @@ function Background(game, spritesheet) {
 Background.prototype.draw = function () {
     if(ON_TITLESCREEN) this.ctx.drawImage(this.spritesheet, this.x, this.y);
     else {
-        this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5); // Why? Who knows!
     }
 };
 
 Background.prototype.update = function () {
     if (this.game.userInput.includes(' ')) {
         if(ON_TITLESCREEN) {
-            this.spritesheet = ASSET_MANAGER.getAsset("./res/map/Floor1.png");
+            this.spritesheet = ASSET_MANAGER.getAsset("./res/map/forest.png");
             document.getElementById('audio').play();
             document.getElementById('audio').volume = 0.5;
             ON_TITLESCREEN = false;
@@ -261,7 +272,6 @@ MaleKnightSpear.prototype.update = function() {
         let difX = (this.x - this.game.player.x)/dist;
         let difY = (this.y - this.game.player.y)/dist;
 
-        console.log((difX * delta / 4) + " : " + (difY * delta / 4));
         this.x += difX * delta / speedScale;
         this.y += difY * delta / speedScale;
 
@@ -471,7 +481,8 @@ VolumeToggle.prototype.flipVolume = function () {
 // Background images
 ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
 ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
-ASSET_MANAGER.queueDownload("./res/map/Floor1.png")
+ASSET_MANAGER.queueDownload("./res/map/Floor1.png");
+ASSET_MANAGER.queueDownload("./res/map/forest.png");
 // Character sprites
 ASSET_MANAGER.queueDownload("./res/character/skeleton_sword.png");
 ASSET_MANAGER.queueDownload("./res/character/male_knight_spear.png");
@@ -508,9 +519,10 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.startInput();
 
-    gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
+    gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
     //
     gameEngine.addTerrain(new Rock1(gameEngine, ASSET_MANAGER.getAsset("./res/terrain/Rock1.png")));
+    forestMapGen(gameEngine, ASSET_MANAGER);
     //
     gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
     gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
