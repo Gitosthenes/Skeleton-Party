@@ -237,9 +237,9 @@ function MaleKnightSpear(game,spritesheet) {
     entityAnimationInit(this, spritesheet);
     this.x = 650;
     this.y = 80;
-    this.spawnX = 650;
-    this.spwanY = 80;
-    this.speed = 15 ;
+    this.spawnX = this.x;
+    this.spawnY = this.y;
+    this.speed = 15;
     this.game = game;
     this.ctx = game.ctx;
     this.isAttacking = false; //TODO AI logic to use this later
@@ -265,16 +265,22 @@ MaleKnightSpear.prototype.update = function() {
         // this.x +=ds difX * delta / speedScale;
         // this.y += difY * delta / speedScale;
         // this.x = 650
-        this.x = this.spawnX - playerX;
-        this.y = this.spwanY - playerY;
-        let dx = this.spawnX - this.game.player.x;
-        let dy = this.spwanY - this.game.player.y;
-        console.log(dx);
-        console.log(dy);
+
+        let tempX = this.x;
+        let tempY = this.y;
+        let relX = this.spawnX - playerX;
+        let relY = this.spawnY - playerY;
+        this.x = relX;
+        this.y = relY;
+        let deltaX = tempX - this.x;
+        let deltaY = tempY - this.y;
+        
+        let dx = this.x - this.game.player.x;
+        let dy = this.y - this.game.player.y;
         if(dx > 0) {
-            this.x -= this.game.clockTick * this.speed;
+            this.x -= (this.game.clockTick * this.speed);
         } else if(dx < 0) {
-            this.x += this.game.clockTick * this.speed;
+            this.x += (this.game.clockTick * this.speed);
         }
         if(dy > 0) {
             this.y -= this.game.clockTick * this.speed;
@@ -282,6 +288,8 @@ MaleKnightSpear.prototype.update = function() {
             this.y += this.game.clockTick* this.speed;
         }
 
+        this.spawnX += deltaX;
+        this.spawnY += deltaY;
     }
     updateHitbox(this);
     updateInvincibilityFrames(this);
@@ -321,6 +329,8 @@ MaleKnightMace.prototype.update = function() {
     if(!ON_TITLESCREEN) {
         this.x = 690 - playerX;
         this.y = 80 - playerY;
+
+        console.log(this.x + " : "+ this.y);
     }
     Entity.prototype.update.call(this);
 };
