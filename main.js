@@ -1,6 +1,6 @@
 let ASSET_MANAGER = new AssetManager();
 let ON_TITLESCREEN = true;
-var font = "VT323"
+var font = "VT323";
 
 //For scrolling
 //storing both the canvas's coordinates and the player coordinates
@@ -19,7 +19,7 @@ let def = 10;
 let atk = 10;
 
 //time of countdown timer in seconds
-let time = 10;
+let time = 120;
 
 //enemy count
 let enemyCount = 0;
@@ -138,6 +138,7 @@ Background.prototype.update = function () {
             this.y = bgY - playerY;
         }
     }
+
 };
 
 
@@ -277,7 +278,7 @@ MaleKnightSpear.prototype.draw = function() {
     }
 }
 
-function MaleKnightMace(game,spritesheet) {
+function MaleKnightMace(game, spritesheet) {
     this.x = -200;
     this.y = 80;
     this.speed = 0;
@@ -329,10 +330,10 @@ SkeletonHealthUI.prototype.draw = function () {
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
         this.ctx.fillText(hp.toString() + " HP", 52, 33);
-       
+
     }
 }
- 
+
 SkeletonHealthUI.prototype.update = function () {};
 
 function SkeletonDefUI(game, spritesheet) {
@@ -351,7 +352,7 @@ SkeletonDefUI.prototype.draw = function () {
         this.ctx.fillText(def.toString() + " DEF", 52, 56);
     }
 }
- 
+
 SkeletonDefUI.prototype.update = function () {};
 
 function SkeletonAtkUI(game, spritesheet) {
@@ -370,7 +371,7 @@ SkeletonAtkUI.prototype.draw = function () {
         this.ctx.fillText(atk.toString() + " ATK", 52, 82);
     }
 }
- 
+
 SkeletonAtkUI.prototype.update = function () {};
 
 function EnemyUI (game, spritesheet) {
@@ -484,6 +485,8 @@ ASSET_MANAGER.queueDownload("./res/character/timer_ui.png");
 ASSET_MANAGER.queueDownload("./res/audio/megalovania.mp3");
 ASSET_MANAGER.queueDownload("./res/audio/volume_bgON.png");
 ASSET_MANAGER.queueDownload("./res/audio/volume_bgOFF.png");
+// Terrain assets.
+ASSET_MANAGER.queueDownload("./res/terrain/Rock1.png");
 
 
 ASSET_MANAGER.downloadAll(function () {
@@ -505,8 +508,10 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.startInput();
 
-    
     gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg")));
+    //
+    gameEngine.addTerrain(new Rock1(gameEngine, ASSET_MANAGER.getAsset("./res/terrain/Rock1.png")));
+    //
     gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
     gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
     gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png")));
