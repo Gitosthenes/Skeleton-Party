@@ -237,9 +237,11 @@ function MaleKnightSpear(game,spritesheet) {
     entityAnimationInit(this, spritesheet);
     this.x = 650;
     this.y = 80;
+    this.hitboxOffsetX = 18;
+    this.hitboxOffsetY = 10;
     this.spawnX = this.x;
     this.spawnY = this.y;
-    this.speed = 15;
+    this.speed = 100;
     this.game = game;
     this.ctx = game.ctx;
     this.isAttacking = false; //TODO AI logic to use this later
@@ -247,51 +249,43 @@ function MaleKnightSpear(game,spritesheet) {
     this.direction = 'down';
     this.state = "walkDown";
     this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
-    this.hitbox = new Hitbox(this.x, this.y, 62, 64, true);
+    this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
 }
 
 MaleKnightSpear.prototype.update = function() {
-    //TODO: make the integers into variables to make it work when they are moving by themselves.
-    //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
-    //player.
     if(!ON_TITLESCREEN) {
-        // let speedScale = 50; // decrease to increase enemy speed towards player
-        // let dist = distance(this, this.game.player);
-        // let delta = -65;
-        // let difX = (this.x - this.game.player.x)/dist;
-        // let difY = (this.y - this.game.player.y)/dist;
-
-        // console.log((difX * delta / 4) + " : " + (difY * delta / 4));
-        // this.x +=ds difX * delta / speedScale;
-        // this.y += difY * delta / speedScale;
-        // this.x = 650
-
+        //Update relative distance between enemy and player for scrolling consistency 
+        let safeDist = 63;
         let tempX = this.x;
         let tempY = this.y;
         let relX = this.spawnX - playerX;
         let relY = this.spawnY - playerY;
+        let deltaX;
+        let deltaY;
         this.x = relX;
         this.y = relY;
-        let deltaX = tempX - this.x;
-        let deltaY = tempY - this.y;
-        
-        let dx = this.x - this.game.player.x;
-        let dy = this.y - this.game.player.y;
-        if(dx > 0) {
-            this.x -= (this.game.clockTick * this.speed);
-        } else if(dx < 0) {
-            this.x += (this.game.clockTick * this.speed);
-        }
-        if(dy > 0) {
-            this.y -= this.game.clockTick * this.speed;
-        } else if(dy < 0) {
-            this.y += this.game.clockTick* this.speed;
-        }
+        deltaX = tempX - this.x;
+        deltaY = tempY - this.y;
+        this.spawnX += deltaX / 2;
+        this.spawnY += deltaY / 2;
 
-        this.spawnX += deltaX;
-        this.spawnY += deltaY;
+        //Update distance again to reflect this entity's movement;
+        if(distance(this, this.game.player) > safeDist ) {
+            let dx = this.x - this.game.player.x;
+            let dy = this.y - this.game.player.y;
+            if(dx > 0) {
+                this.x -= (this.game.clockTick * this.speed);
+            } else if(dx < 0) {
+                this.x += (this.game.clockTick * this.speed);
+            }
+            if(dy > 0) {
+                this.y -= this.game.clockTick * this.speed;
+            } else if(dy < 0) {
+                this.y += this.game.clockTick* this.speed;
+            }
+        }
     }
-    updateHitbox(this);
+    updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
     updateInvincibilityFrames(this);
     Entity.prototype.update.call(this);
 }
@@ -330,7 +324,7 @@ MaleKnightMace.prototype.update = function() {
         this.x = 690 - playerX;
         this.y = 80 - playerY;
 
-        console.log(this.x + " : "+ this.y);
+        // console.log(this.x + " : "+ this.y);
     }
     Entity.prototype.update.call(this);
 };
