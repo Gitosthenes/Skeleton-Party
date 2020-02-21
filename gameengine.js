@@ -28,6 +28,7 @@ function GameEngine() {
     this.background = undefined;
     this.enemies = [];
     this.terrain = [];
+    this.drawables = [];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -249,19 +250,28 @@ GameEngine.prototype.draw = function () {
     this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight);
     this.ctx.save();
     this.background.draw(this.ctx);    // Draw background.
-    this.player.draw(this.ctx);             // Draw player.
-    this.volumeToggle.draw(this.ctx);
+
+    this.drawables = [];
+    this.drawables.push(this.player);
+    for (let i = 0; i < this.terrain.length; i++) {     // Draw all terrain entities.
+        //this.terrain[i].draw(this.ctx);
+        this.drawables.push(this.terrain[i]);
+    }
+    for (let i = 0; i < this.enemies.length; i++) {     // Draw all enemies.
+        //this.enemies[i].draw(this.ctx);
+        this.drawables.push(this.enemies[i]);
+    }
+    this.drawables.sort( (a,b) => parseFloat(a.hitbox.y) - parseFloat(b.hitbox.y));
+    for (let i = 0; i < this.drawables.length; i++) {
+        this.drawables[i].draw(this.ctx);
+    }
+
+    this.volumeToggle.draw(this.ctx);   // Start drawing UI elements.a
     this.healthUI.draw(this.ctx);
     this.defUI.draw(this.ctx);
     this.atkUI.draw(this.ctx);
     this.enemyUI.draw(this.ctx);
     this.timerUI.draw(this.ctx);
-    for (let i = 0; i < this.enemies.length; i++) {     // Draw all enemies.
-        this.enemies[i].draw(this.ctx);
-    }
-    for (let i = 0; i < this.terrain.length; i++) {     // Draw all terrain entities.
-        this.terrain[i].draw(this.ctx);
-    }
     this.ctx.restore();
 };
 
@@ -296,6 +306,14 @@ GameEngine.prototype.loop = function () {
     this.update();
     this.draw();
 }
+
+GameEngine.prototype.sortEnities = function () {
+    let sortFunction = function (entityA, entityB) {
+        return entityA.y - entityB.y;
+    }
+
+
+};
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~ TIMER FUNCTIONS ~~~ */
