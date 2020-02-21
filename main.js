@@ -250,7 +250,7 @@ function MaleKnightSpear(game,spritesheet) {
     this.isRecoiling = false;
     this.direction = 'down';
     this.state = "walkDown";
-    this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
+    this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
 }
 

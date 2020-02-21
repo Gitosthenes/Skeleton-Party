@@ -39,6 +39,25 @@ function updateEnemyPositionAndAnimation(enemy) {
 }
 
 function updateEnemyAnimation(enemy, deltaX, deltaY) {
-    // console.log(deltaX + ", " + deltaY);
-    
+    console.log(deltaX + ", " + deltaY);
+    let action, direction;
+    let deltaVariance = 0.25 ;
+    if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
+        action = 'walk';
+        if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY < 0) {//is enemy moving straight up?
+            direction = 'Up';
+        } else if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY > 0) {//is enemy moving straight down?
+            direction = 'Down';
+        } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX < 0) {//is the enemy moving straight left?
+            direction = 'Left';
+        } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX > 0) {// is the enemy moving straight right?
+            direction = 'Right';
+        }
+    }
+
+    // enemy.direction = direction;
+    // enemy.state = action + direction;
+    if(action && direction) {
+        enemy.currAnimation = enemy.animations[action+direction];
+    }
 }
