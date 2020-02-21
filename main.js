@@ -246,16 +246,14 @@ SkeletonDagger.prototype.draw = function () {
 
 function MaleKnightSpear(game,spritesheet) {
     entityAnimationInit(this, spritesheet);
-    this.x = 650;
-    this.y = 80;
+    this.x = this.relativeX = 650;
+    this.y = this.relativeY = 80;
     this.hitboxOffsetX = 18;
     this.hitboxOffsetY = 10;
-    this.spawnX = this.x;
-    this.spawnY = this.y;
     this.speed = 100;
     this.game = game;
     this.ctx = game.ctx;
-    this.isAttacking = false; //TODO AI logic to use this later
+    this.isAttacking = false;
     this.isRecoiling = false;
     this.direction = 'down';
     this.state = "walkDown";
@@ -267,21 +265,19 @@ MaleKnightSpear.prototype.update = function() {
     if(!ON_TITLESCREEN) {
 
         //Update relative distance between enemy and player for scrolling consistency 
+        let deltaX, deltaY;
         let safeDist = 63;
-        let tempX = this.x;
-        let tempY = this.y;
-        let relX = this.spawnX - playerX;
-        let relY = this.spawnY - playerY;
-        let deltaX;
-        let deltaY;
-        this.x = relX;
-        this.y = relY;
-        deltaX = tempX - this.x;
-        deltaY = tempY - this.y;
-        this.spawnX += deltaX / 2;
-        this.spawnY += deltaY / 2;
+        let oldX = this.x;
+        let oldY = this.y;
 
-        //Update distance again to reflect this entity's movement;
+        this.x = this.relativeX - playerX;
+        this.y = this.relativeY - playerY;
+        deltaX = oldX - this.x;
+        deltaY = oldY - this.y;
+        this.relativeX += deltaX / 2;
+        this.relativeY += deltaY / 2;
+
+        //Update distance again to reflect entity's movement;
         if(distance(this, this.game.player) > safeDist ) {
             let dx = this.x - this.game.player.x;
             let dy = this.y - this.game.player.y;
@@ -296,7 +292,6 @@ MaleKnightSpear.prototype.update = function() {
                 this.y += this.game.clockTick* this.speed;
             }
         }
-
     }
     updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
     updateInvincibilityFrames(this);
