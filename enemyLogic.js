@@ -6,7 +6,7 @@ function distance(a, b) {
     }
 }
 
-function updateEnemyPosition(enemy) {
+function updateEnemyPositionAndAnimation(enemy) {
     //Update relative distance between enemy and player for scrolling consistency
     let deltaX, deltaY;
     let oldX = enemy.x;
@@ -34,4 +34,11 @@ function updateEnemyPosition(enemy) {
             enemy.y += enemy.game.clockTick* enemy.speed;
         }
     }
+
+    updateEnemyAnimation(enemy, deltaX, deltaY);
+}
+
+function updateEnemyAnimation(enemy, deltaX, deltaY) {
+    // console.log(deltaX + ", " + deltaY);
+    
 }

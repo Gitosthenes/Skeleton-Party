@@ -91,7 +91,8 @@ GameEngine.prototype.startInput = function () {
 
     /* Key Press Listeners */
     this.ctx.canvas.addEventListener("keydown", function (e) {
-        switch (e.key) {
+        let key = e.key.toLowerCase();
+        switch (key) {
             case 'w':   // Up
                 checkPressInput('w');
                 break;
@@ -124,33 +125,34 @@ GameEngine.prototype.startInput = function () {
 
     /* Key Release Listeners */
     this.ctx.canvas.addEventListener("keyup", function (e) {
-        switch (e.key) {
+        let key = e.key.toLowerCase();
+        switch (key) {
             case 'w':   // Up
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 's':   // Down
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'a':   // Left
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'd':   // Right
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'j':
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'm':
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case ' ':
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
         }
     }, false);
