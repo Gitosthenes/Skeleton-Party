@@ -285,12 +285,12 @@ MaleKnightSpear.prototype.update = function() {
         if(distance(this, this.game.player) > safeDist ) {
             let dx = this.x - this.game.player.x;
             let dy = this.y - this.game.player.y;
-            if(dx > 0) {
+            if(dx > 2) {
                 this.x -= (this.game.clockTick * this.speed);
             } else if(dx < 0) {
                 this.x += (this.game.clockTick * this.speed);
             }
-            if(dy > 0) {
+            if(dy > 2) {
                 this.y -= this.game.clockTick * this.speed;
             } else if(dy < 0) {
                 this.y += this.game.clockTick* this.speed;
