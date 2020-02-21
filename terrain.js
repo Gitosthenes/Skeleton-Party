@@ -25,9 +25,9 @@ Terrain.prototype.draw = function (entity) {
  * @param mapHeight The height of the map.
  */
 function setRandomLocation(entity, mapWidth, mapHeight) {
-    let padding = 20;
-    entity.x = Math.floor(Math.random() * ((mapWidth - padding) - padding + 1)) + padding;
-    entity.y = Math.floor(Math.random() * ((mapHeight - padding) - padding + 1)) + padding;
+    let padding = 40;
+    entity.x = Math.floor(Math.random() * ((mapWidth - padding * 2) - padding + 1)) + padding;
+    entity.y = Math.floor(Math.random() * ((mapHeight - padding * 2) - padding + 1)) + padding;
     entity.spawnX = entity.x;
     entity.spawnY = entity.y;
     console.log('Set terrain to x:' + entity.x + ' y:' + entity.y);
@@ -51,10 +51,84 @@ function Rock1(game, spriteSheet) {
 Rock1.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, 18, 64, 44);
+    updateTerrainHitbox(this, 8, 22, 46, 12);
 };
 
 Rock1.prototype.draw = function () {
     Terrain.prototype.draw(this);
 };
 
+function Rock2(game, spriteSheet) {
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spriteSheet = spriteSheet;
+    this.x = 0;
+    this.y = 0;
+    this.spawnX = 0;
+    this.spawnY = 0;
+    this.width = 32;
+    this.height = 64;
+    Entity.call(game, this.x, this.y, undefined);
+    setRandomLocation(this, 800 * 2.5, 800 * 2.5);
+    this.hitbox = new Hitbox(this.x, this.y, this.height - 18, this.width, true);
+}
+
+Rock2.prototype.update = function () {
+    this.x = this.spawnX - playerX;
+    this.y = this.spawnY - playerY;
+    updateTerrainHitbox(this, 12, 20, 14, 10);
+};
+
+Rock2.prototype.draw = function () {
+    Terrain.prototype.draw(this);
+};
+
+function DirtHole(game, spriteSheet) {
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spriteSheet = spriteSheet;
+    this.x = 0;
+    this.y = 0;
+    this.spawnX = 0;
+    this.spawnY = 0;
+    this.width = 96;
+    this.height = 96;
+    Entity.call(game, this.x, this.y, undefined);
+    setRandomLocation(this, 800 * 2.5, 800 * 2.5);
+    this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
+}
+
+DirtHole.prototype.update = function () {
+    this.x = this.spawnX - playerX;
+    this.y = this.spawnY - playerY;
+    updateTerrainHitbox(this, 16, 14, 68, 38);
+};
+
+DirtHole.prototype.draw = function () {
+    Terrain.prototype.draw(this);
+};
+
+function IvyColumn(game, spriteSheet) {
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spriteSheet = spriteSheet;
+    this.x = 0;
+    this.y = 0;
+    this.spawnX = 0;
+    this.spawnY = 0;
+    this.width = 32;
+    this.height = 128;
+    Entity.call(game, this.x, this.y, undefined);
+    setRandomLocation(this, 800 * 2.5, 800 * 2.5);
+    this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
+}
+
+IvyColumn.prototype.update = function () {
+    this.x = this.spawnX - playerX;
+    this.y = this.spawnY - playerY;
+    updateTerrainHitbox(this, 0, 92, 32, 1);
+};
+
+IvyColumn.prototype.draw = function () {
+    Terrain.prototype.draw(this);
+};

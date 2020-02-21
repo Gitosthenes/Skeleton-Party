@@ -264,7 +264,7 @@ function MaleKnightSpear(game,spritesheet) {
 MaleKnightSpear.prototype.update = function() {
     if(!ON_TITLESCREEN) {
 
-        //Update relative distance between enemy and player for scrolling consistency 
+        //Update relative distance between enemy and player for scrolling consistency
         let deltaX, deltaY;
         let safeDist = 63;
         let oldX = this.x;
@@ -281,12 +281,12 @@ MaleKnightSpear.prototype.update = function() {
         if(distance(this, this.game.player) > safeDist ) {
             let dx = this.x - this.game.player.x;
             let dy = this.y - this.game.player.y;
-            if(dx > 0) {
+            if(dx > 2) {
                 this.x -= (this.game.clockTick * this.speed);
             } else if(dx < 0) {
                 this.x += (this.game.clockTick * this.speed);
             }
-            if(dy > 0) {
+            if(dy > 2) {
                 this.y -= this.game.clockTick * this.speed;
             } else if(dy < 0) {
                 this.y += this.game.clockTick* this.speed;
@@ -518,6 +518,9 @@ ASSET_MANAGER.queueDownload("./res/audio/volume_bgON.png");
 ASSET_MANAGER.queueDownload("./res/audio/volume_bgOFF.png");
 // Terrain assets.
 ASSET_MANAGER.queueDownload("./res/terrain/Rock1.png");
+ASSET_MANAGER.queueDownload("./res/terrain/Rock2.png");
+ASSET_MANAGER.queueDownload("./res/terrain/DirtHole.png");
+ASSET_MANAGER.queueDownload("./res/terrain/IvyColumn.png");
 
 
 ASSET_MANAGER.downloadAll(function () {
