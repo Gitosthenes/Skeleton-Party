@@ -24,14 +24,6 @@ let time = 120;
 //enemy count
 let enemyCount = 0;
 
-function distance(a, b) {
-    if(a.x && a.y && b.x && b.y) {
-    let dx = a.x - b.x;
-    let dy = a.y - b.y;
-    return Math.sqrt(dx * dx + dy * dy);
-    }
-}
-
 function changePlayerX(val) {
     playerX += val;
 }
@@ -250,7 +242,8 @@ function MaleKnightSpear(game,spritesheet) {
     this.y = this.relativeY = 80;
     this.hitboxOffsetX = 18;
     this.hitboxOffsetY = 10;
-    this.speed = 100;
+    this.safeDist = 63;
+    this.speed = 200;
     this.game = game;
     this.ctx = game.ctx;
     this.isAttacking = false;
@@ -264,34 +257,35 @@ function MaleKnightSpear(game,spritesheet) {
 MaleKnightSpear.prototype.update = function() {
     if(!ON_TITLESCREEN) {
 
-        //Update relative distance between enemy and player for scrolling consistency
-        let deltaX, deltaY;
-        let safeDist = 63;
-        let oldX = this.x;
-        let oldY = this.y;
+        updateEnemyPosition(this);
+        // //Update relative distance between enemy and player for scrolling consistency
+        // let deltaX, deltaY;
+        // let safeDist = 63;
+        // let oldX = this.x;
+        // let oldY = this.y;
 
-        this.x = this.relativeX - playerX;
-        this.y = this.relativeY - playerY;
-        deltaX = oldX - this.x;
-        deltaY = oldY - this.y;
-        this.relativeX += deltaX / 2;
-        this.relativeY += deltaY / 2;
+        // this.x = this.relativeX - playerX;
+        // this.y = this.relativeY - playerY;
+        // deltaX = oldX - this.x;
+        // deltaY = oldY - this.y;
+        // this.relativeX += deltaX / 2;
+        // this.relativeY += deltaY / 2;
 
-        //Update distance again to reflect entity's movement;
-        if(distance(this, this.game.player) > safeDist ) {
-            let dx = this.x - this.game.player.x;
-            let dy = this.y - this.game.player.y;
-            if(dx > 2) {
-                this.x -= (this.game.clockTick * this.speed);
-            } else if(dx < 0) {
-                this.x += (this.game.clockTick * this.speed);
-            }
-            if(dy > 2) {
-                this.y -= this.game.clockTick * this.speed;
-            } else if(dy < 0) {
-                this.y += this.game.clockTick* this.speed;
-            }
-        }
+        // //Update distance again to reflect entity's movement;
+        // if(distance(this, this.game.player) > safeDist ) {
+        //     let dx = this.x - this.game.player.x;
+        //     let dy = this.y - this.game.player.y;
+        //     if(dx > 2) {
+        //         this.x -= (this.game.clockTick * this.speed);
+        //     } else if(dx < 0) {
+        //         this.x += (this.game.clockTick * this.speed);
+        //     }
+        //     if(dy > 2) {
+        //         this.y -= this.game.clockTick * this.speed;
+        //     } else if(dy < 0) {
+        //         this.y += this.game.clockTick* this.speed;
+        //     }
+        // }
     }
     updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
     updateInvincibilityFrames(this);
