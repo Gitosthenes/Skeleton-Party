@@ -14,7 +14,7 @@ function forestMapGen(game, assetManager) {
     for (let i = 0; i < 6; i++) {
         game.addTerrain(new DirtHole(game, assetManager.getAsset(dirtHolePath)));
     }
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 9; i++) {
         game.addTerrain(new IvyColumn(game, assetManager.getAsset(ivyColumnPath)));
     }
 }
