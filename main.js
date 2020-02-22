@@ -147,7 +147,7 @@ Background.prototype.update = function () {
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
-    entityAnimationInit(this, spritesheet);
+    entityAnimationInit(this, spritesheet, 1);
     this.x = -250;
     this.y = -50;
     this.xSpeed = 0;
@@ -166,14 +166,8 @@ function SkeletonDagger(game, spritesheet) {
     this.invincibilityFrames = 0;
 }
 
-function entityAnimationInit(entity, spritesheet) {
+function entityAnimationInit(entity, spritesheet, type) {
   let animations = [];
-
-  /* Idle animations. */
-  animations['idleUp'] = new Animation(spritesheet, 0, 0, 64, 62, 512, 0.6, 2, true, 1);
-  animations['idleDown'] = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
-  animations['idleLeft'] = new Animation(spritesheet, 0, 64, 64, 62, 512, 0.6, 2, true, 1);
-  animations['idleRight'] = new Animation(spritesheet, 0, 192, 64, 62, 512, 0.6, 2, true, 1);
 
   /* Walking animations. */
   animations['walkUp'] = new Animation(spritesheet, 0, 512, 64, 62, 9, 0.15, 9, true, 1);
@@ -181,11 +175,30 @@ function entityAnimationInit(entity, spritesheet) {
   animations['walkLeft'] = new Animation(spritesheet, 0, 576, 64, 62, 9, 0.15, 9, true, 1);
   animations['walkRight'] = new Animation(spritesheet, 0, 704, 64, 62, 9, 0.15, 9, true, 1);
 
-  /* Attack animations. */
-  animations['attackUp'] = new Animation(spritesheet, 62, 1411, 189, 121, 6, 0.05, 6, true, 1);
-  animations['attackDown'] = new Animation(spritesheet, 64, 1790, 189, 121, 6, 0.05, 6, true, 1);
-  animations['attackLeft'] = new Animation(spritesheet, 66, 1603, 189, 121, 6, 0.05, 6, true, 1);
-  animations['attackRight'] = new Animation(spritesheet, 66, 1985, 189, 121, 6, 0.05, 6, true, 1);
+  switch(type) {
+      case 1: //For large attack spritesheets with idle
+        /* Idle animations. */
+        animations['idleUp'] = new Animation(spritesheet, 0, 0, 64, 62, 512, 0.6, 2, true, 1);
+        animations['idleDown'] = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
+        animations['idleLeft'] = new Animation(spritesheet, 0, 64, 64, 62, 512, 0.6, 2, true, 1);
+        animations['idleRight'] = new Animation(spritesheet, 0, 192, 64, 62, 512, 0.6, 2, true, 1);
+
+        /* Attack animations. */
+        animations['attackUp'] = new Animation(spritesheet, 62, 1411, 189, 121, 6, 0.05, 6, true, 1);
+        animations['attackDown'] = new Animation(spritesheet, 64, 1790, 189, 121, 6, 0.05, 6, true, 1);
+        animations['attackLeft'] = new Animation(spritesheet, 66, 1603, 189, 121, 6, 0.05, 6, true, 1);
+        animations['attackRight'] = new Animation(spritesheet, 66, 1985, 189, 121, 6, 0.05, 6, true, 1);
+        break;
+
+    case 2: //For small attack spritesheets w/o idle
+        /* Attack animations. */
+        animations['attackUp'] = new Animation(spritesheet, 0, 258, 64, 62, 6, 0.12, 6, true, 1);
+        animations['attackDown'] = new Animation(spritesheet, 0, 387, 64, 62, 6, 0.12, 6, true, 1);
+        animations['attackLeft'] = new Animation(spritesheet, 0, 322, 64, 62, 6, 0.12, 6, true, 1);
+        animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, 0.12, 6, true, 1);
+        break;
+  }
+  
 
   entity.animations = animations;
 }
@@ -237,7 +250,7 @@ SkeletonDagger.prototype.draw = function () {
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    entityAnimationInit(this, spritesheet);
+    entityAnimationInit(this, spritesheet, 2);
     this.x = this.relativeX = 650;
     this.y = this.relativeY = 80;
     this.hitboxOffsetX = 18;
@@ -248,7 +261,7 @@ function MaleKnightSpear(game,spritesheet) {
     this.ctx = game.ctx;
     this.isAttacking = false;
     this.isRecoiling = false;
-    this.direction = 'down';
+    this.direction = 'Down';
     this.state = "walkDown";
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);

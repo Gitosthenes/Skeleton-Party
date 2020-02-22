@@ -53,11 +53,17 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
         } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX > 0) {// is the enemy moving straight right?
             direction = 'Right';
         }
+    } else {//else enemy should be attaking the player
+        action = 'attack';
+        direction = enemy.direction;
     }
 
     // enemy.direction = direction;
     // enemy.state = action + direction;
     if(action && direction) {
+        console.log(action+direction);
+        enemy.direction = direction;
+        enemy.state = action+direction;
         enemy.currAnimation = enemy.animations[action+direction];
     }
 }
