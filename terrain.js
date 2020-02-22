@@ -25,12 +25,31 @@ Terrain.prototype.draw = function (entity) {
  * @param mapHeight The height of the map.
  */
 function setRandomLocation(entity, mapWidth, mapHeight) {
-    let padding = 40;
-    entity.x = Math.floor(Math.random() * ((mapWidth - padding * 2) - padding + 1)) + padding;
-    entity.y = Math.floor(Math.random() * ((mapHeight - padding * 2) - padding + 1)) + padding;
+    let padding = 80;
+    let isColliding = true;
+
+    if (entity.game.terrain.length > 0) {
+        while (isColliding) {
+            entity.x = Math.floor(Math.random() * ((mapWidth - entity.width - padding) - padding + 1)) + padding;
+            entity.y = Math.floor(Math.random() * ((mapHeight - entity.height - padding) - padding + 1)) + padding;
+            for (let i = 0; i < entity.game.terrain.length; i++) {
+                let other = entity.game.terrain[i];
+                isColliding = entity.x < other.x + other.width
+                    && entity.x + entity.width > other.x
+                    && entity.y < other.y + other.height
+                    && entity.y + entity.height > other.y;
+                if (isColliding) {
+                    console.log('Fixing terrain collision');
+                    entity.x = Math.floor(Math.random() * ((mapWidth - entity.width - padding) - padding + 1)) + padding;
+                    entity.y = Math.floor(Math.random() * ((mapHeight - entity.height - padding) - padding + 1)) + padding;
+                }
+
+            }
+        }
+    }
+
     entity.spawnX = entity.x;
     entity.spawnY = entity.y;
-    console.log('Set terrain to x:' + entity.x + ' y:' + entity.y);
 }
 
 function Rock1(game, spriteSheet) {

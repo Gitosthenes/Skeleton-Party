@@ -171,7 +171,7 @@ function SkeletonDagger(game, spritesheet) {
     this.y = -50;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.baseSpeed = 200;
+    this.baseSpeed = 280;
     this.changeX = false;
     this.changeY = false;
     this.game = game;
