@@ -41,27 +41,30 @@ function updateEnemyPositionAndAnimation(enemy) {
 function updateEnemyAnimation(enemy, deltaX, deltaY) {
     let action, direction;
     let deltaVariance = 0.25 ;
-    if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
-        action = 'walk';
-        enemy.isAttacking = false;
-        if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY < 0) {//is enemy moving straight up?
-            direction = 'Up';
-        } else if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY > 0) {//is enemy moving straight down?
-            direction = 'Down';
-        } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX < 0) {//is the enemy moving straight left?
-            direction = 'Left';
-        } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX > 0) {// is the enemy moving straight right?
-            direction = 'Right';
-        }
-    } else {//else enemy should be attaking the player
-        action = 'attack';
-        direction = enemy.direction;
-        enemy.isAttacking = true;
-    }
 
-    if(action && direction) {
-        enemy.direction = direction;
-        enemy.state = action+direction;
-        enemy.currAnimation = enemy.animations[action+direction];
+    if(!enemy.isAttacking || enemy.currAnimation.elapsedTime == 0) {
+        if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
+            action = 'walk';
+            enemy.isAttacking = false;
+            if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY < 0) {//is enemy moving straight up?
+                direction = 'Up';
+            } else if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY > 0) {//is enemy moving straight down?
+                direction = 'Down';
+            } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX < 0) {//is the enemy moving straight left?
+                direction = 'Left';
+            } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX > 0) {// is the enemy moving straight right?
+                direction = 'Right';
+            }
+        } else {//else enemy should be attaking the player
+            action = 'attack';
+            direction = enemy.direction;
+            enemy.isAttacking = true;
+        }
+    
+        if(action && direction) {
+            enemy.direction = direction;
+            enemy.state = action+direction;
+            enemy.currAnimation = enemy.animations[action+direction];
+        }
     }
 }

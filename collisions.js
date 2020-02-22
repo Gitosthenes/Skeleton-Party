@@ -37,19 +37,25 @@ function distance(a, b) {
  *
  * @param entity The entity we are checking collisions for.
  */
-function checkForCollisions(entity) {
-    // Check directions that the entity is moving for if they have reached level boundaries.
+function checkForCollisions(entity) {    
+    let otherEntity;
 
-    // TODO: Change game engine to distinguish between npc entities and obstacle/game world entities.
-    // Check against all other entities for collision or attacks against them.
-    for (let i = 0; i < entity.game.enemies.length; i++) {
-        let otherEntity = entity.game.enemies[i];
-        if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
-            handleEnemyCollision(entity, otherEntity);
-        } else if (hasHitEnemy(entity, otherEntity) && entity !== otherEntity) {
+    if(entity === entity.game.player) {//if entity is player]
+        for (let i = 0; i < entity.game.enemies.length; i++) {
+            otherEntity = entity.game.enemies[i];
+            if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
+                handleEnemyCollision(entity, otherEntity);
+            } else if (hasHitEnemy(entity, otherEntity) && entity !== otherEntity) {
+                handleHitCollision(entity, otherEntity);
+            }
+        }
+    } else {//otherwise entity must be enemy
+        otherEntity = entity.game.player;
+        if (hasHitEnemy(entity, otherEntity)) {
             handleHitCollision(entity, otherEntity);
         }
     }
+
 
     for (let i = 0; i < entity.game.terrain.length; i++) {
         let terrain = entity.game.terrain[i];
@@ -104,11 +110,11 @@ function hasHitEnemy(abuser, victim) {
  * @param b The entity we are checking collision against.
  * @returns {string}
  */
-function directionOfCollision(a, b) {
-    let dx = (a.hitbox.x + a.hitbox.width / 2) - (b.hitbox.x + b.hitbox.width / 2);
-    let dy = (a.hitbox.y + a.hitbox.height / 2) - (b.hitbox.y + b.hitbox.height / 2);
-    let width = (a.hitbox.width + b.hitbox.width) / 2;
-    let height = (a.hitbox.height + b.hitbox.height) / 2;
+function directionOfCollision(hitboxA, hitboxB) {
+    let dx = (hitboxA.x + hitboxA.width / 2) - (hitboxB.x + hitboxB.width / 2);
+    let dy = (hitboxA.y + hitboxA.height / 2) - (hitboxB.y + hitboxB.height / 2);
+    let width = (hitboxA.width + hitboxB.width) / 2;
+    let height = (hitboxA.height + hitboxB.height) / 2;
     let crossWidth = width * dy;
     let crossHeight = height * dx;
     let collision = 'none';
@@ -127,7 +133,7 @@ function handleTerrainCollision(entity, terrain) {
     entity.isRecoiling = true;
     entity.invincibilityFrames = 2;
 
-    switch (directionOfCollision(entity, terrain)) {
+    switch (directionOfCollision(entity.hitbox, terrain.hitbox)) {
         case 'top':
             entity.ySpeed = -entity.baseSpeed;
             break;
@@ -153,7 +159,7 @@ function handleTerrainCollision(entity, terrain) {
 function handleEnemyCollision(you, them) {
     you.isRecoiling = true;
     you.invincibilityFrames = 6;
-    let dirOfCollision = directionOfCollision(you, them);
+    let dirOfCollision = directionOfCollision(you.hitbox, them.hitbox);
 
     switch (dirOfCollision) {
         case 'top':
@@ -183,6 +189,25 @@ function handleEnemyCollision(you, them) {
 function handleHitCollision(abuser, victim) {
     victim.isRecoiling = true;
     victim.invincibilityFrames = 6;
+
+    if(victim === abuser.game.player) {
+        let dirOfCollision = directionOfCollision(victim.hitbox, abuser.hurtbox);
+        switch (dirOfCollision) {
+            case 'top':
+                victim.ySpeed = -victim.baseSpeed;
+                break;
+            case 'bottom':
+                victim.ySpeed = victim.baseSpeed;
+                break;
+            case 'left':
+                victim.xSpeed = -victim.baseSpeed;
+                break;
+            case 'right':
+                victim.xSpeed = victim.baseSpeed;
+                break;
+        }
+    }
+    
 
     //TODO damage calculation
 }
@@ -353,8 +378,8 @@ function activateHurtbox(entity) {
                     break;
                 case 'Left':
                     entity.hurtbox.x = entity.x - 22;
-                    entity.hurtbox.y = entity.y + 28;
-                    entity.hurtbox.height = 20;
+                    entity.hurtbox.y = entity.y + 23;
+                    entity.hurtbox.height = 30;
                     entity.hurtbox.width = 50;
                     entity.hurtbox.top = entity.hurtbox.y;
                     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
@@ -363,8 +388,8 @@ function activateHurtbox(entity) {
                     break;
                 case 'Right':
                     entity.hurtbox.x = entity.x + 40;
-                    entity.hurtbox.y = entity.y + 28;
-                    entity.hurtbox.height = 20;
+                    entity.hurtbox.y = entity.y + 23;
+                    entity.hurtbox.height = 30;
                     entity.hurtbox.width = 50;
                     entity.hurtbox.top = entity.hurtbox.y;
                     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;

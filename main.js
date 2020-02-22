@@ -158,9 +158,6 @@ Background.prototype.update = function () {
             this.y = bgY - playerY;
         }
     }
-
-
-
 };
 
 
@@ -293,21 +290,19 @@ function MaleKnightSpear(game,spritesheet) {
 
 MaleKnightSpear.prototype.update = function() {
     if(!ON_TITLESCREEN) {
+        let animationDelay = this.currAnimation.totalTime / 2;
+
         updateEnemyPositionAndAnimation(this);
         updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
         updateInvincibilityFrames(this);
 
-        if(this.isAttacking) activateHurtbox(this);
+        if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
+        checkForCollisions(this);
       
-        // if (this.hitbox.isActive) {
+        // if (this.isRecoiling) {
         //     this.removeFromWorld = true;
         // }
-      
-        // console.log(this.isRecoiling);
-        if (this.isRecoiling) {
-            this.removeFromWorld = true;
-        }
     }
     
     Entity.prototype.update.call(this);
