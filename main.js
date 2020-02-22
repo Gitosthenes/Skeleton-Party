@@ -28,16 +28,6 @@ let time = 60;
 //enemy count
 let enemyCount = 0;
 
-function changePlayerX(val) {
-    playerX += val;
-}
-
-function changePlayerY(val) {
-    playerY += val;
-}
-
-
-
 //! ******** Animation Definition ******** */
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale) {
     this.spriteSheet = spriteSheet;
@@ -180,6 +170,8 @@ function SkeletonDagger(game, spritesheet) {
     this.direction = 'down';
     this.isAttacking = false;
     this.isRecoiling = false;
+    this.hitByEnemy = false;
+    this.hitByTerrain = false;
     this.attAnimationSpeed = 0.05;
     entityAnimationInit(this, spritesheet, 1);
     this.currAnimation = this.animations['idleDown'];
@@ -250,7 +242,7 @@ SkeletonDagger.prototype.update = function () {
         if(boundHitDown) playerY = 1550;
     }
 
-    if (this.isRecoiling) {
+    if (this.isRecoiling && this.hitByEnemy) {
         hp -= enemyAtk;
     }
 
@@ -272,7 +264,7 @@ SkeletonDagger.prototype.draw = function () {
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    
+
     this.enemyHP = 1000;
     this.x = this.relativeX = 0;
     this.y = this.relativeY = 0;
@@ -307,8 +299,8 @@ MaleKnightSpear.prototype.update = function() {
         if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
         checkForCollisions(this);
-      
-        if (this.isRecoiling) {
+
+        if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
                 this.removeFromWorld = true;
@@ -326,7 +318,7 @@ MaleKnightSpear.prototype.draw = function() {
 }
 
 function MaleKnightMace(game, spritesheet) {
-    
+
     this.enemyHP = 1000;
     this.enemyAttack= 1;
     this.x = this.relativeX = 850;
@@ -362,8 +354,8 @@ MaleKnightMace.prototype.update = function() {
         if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
         checkForCollisions(this);
-      
-        if (this.isRecoiling) {
+
+        if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
                 this.removeFromWorld = true;
