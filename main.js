@@ -183,7 +183,7 @@ function SkeletonDagger(game, spritesheet) {
     this.attAnimationSpeed = 0.05;
     entityAnimationInit(this, spritesheet, 1);
     this.currAnimation = this.animations['idleDown'];
-    this.hitbox = new Hitbox(this.x, this.y, 50, 32, true);
+    this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, true);
     this.invincibilityFrames = 0;
 }
@@ -534,8 +534,6 @@ VolumeToggle.prototype.flipVolume = function () {
         }
     }
 }
-
-
 
 //! ******** QUEUE ASSET DOWNLOAD ******** */
 // Background images
