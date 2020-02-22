@@ -348,6 +348,7 @@ function MaleKnightMace(game, spritesheet) {
     setEnemyRandomLocation(this, this.currAnimation.frameWidth);
     Entity.call(game, this.x, this.y, undefined);
     this.hitbox = new Hitbox(this.x, this.y, 60, 40, true);
+    this.hurtbox = new Hitbox(0, 0, 0, 0, false);
 }
 
 MaleKnightMace.prototype.update = function() {
