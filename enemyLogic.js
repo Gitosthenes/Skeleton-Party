@@ -39,7 +39,6 @@ function updateEnemyPositionAndAnimation(enemy) {
 }
 
 function updateEnemyAnimation(enemy, deltaX, deltaY) {
-    console.log(deltaX + ", " + deltaY);
     let action, direction;
     let deltaVariance = 0.25 ;
     if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
@@ -58,10 +57,7 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
         direction = enemy.direction;
     }
 
-    // enemy.direction = direction;
-    // enemy.state = action + direction;
     if(action && direction) {
-        console.log(action+direction);
         enemy.direction = direction;
         enemy.state = action+direction;
         enemy.currAnimation = enemy.animations[action+direction];
