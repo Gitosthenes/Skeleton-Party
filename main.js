@@ -23,7 +23,7 @@ let atk = 10;
 let enemyAtk = 1;
 
 //time of countdown timer in seconds
-let time = 150;
+let time = 60;
 
 //enemy count
 let enemyCount = 0;
@@ -274,9 +274,8 @@ SkeletonDagger.prototype.draw = function () {
 function MaleKnightSpear(game,spritesheet) {
     
     this.enemyHP = 1000;
-    this.enemyAttack = 1;
-    this.x = this.relativeX = 650;
-    this.y = this.relativeY = 80;
+    this.x = this.relativeX = 0;
+    this.y = this.relativeY = 0;
     this.hitboxOffsetX = 18;
     this.hitboxOffsetY = 10;
     this.safeDist = 63;
@@ -290,9 +289,11 @@ function MaleKnightSpear(game,spritesheet) {
     this.attAnimationSpeed = 0.12;
     entityAnimationInit(this, spritesheet, 2);
     this.currAnimation = this.animations[this.state];
+    setEnemyRandomLocation(this);
+    console.log("Spear spawn X " + this.x + "Y " + this.y);
+    Entity.call(game, this.x, this.y, undefined);
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
-    Entity.call(game,this.x,this.y, undefined);
 }
 
 MaleKnightSpear.prototype.update = function() {
@@ -340,12 +341,14 @@ function MaleKnightMace(game, spritesheet) {
     this.isRecoiling = false;
     this.direction = 'Down';
     this.state = "walkDown";
+
     this.attAnimationSpeed = 0.17;
     entityAnimationInit(this, spritesheet, 1);
     this.currAnimation = this.animations[this.state];
-    this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
+    setEnemyRandomLocation(this, this.currAnimation.frameWidth);
+    Entity.call(game, this.x, this.y, undefined);
+    this.hitbox = new Hitbox(this.x, this.y, 60, 40, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
-    Entity.call(game,this.x,this.y, undefined);
 }
 
 MaleKnightMace.prototype.update = function() {
@@ -578,9 +581,10 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.startInput();
 
     gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
-    forestMapGen(gameEngine, ASSET_MANAGER);
-    gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
-    gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
+    forestMapGenTerrain(gameEngine, ASSET_MANAGER);
+    forestMapGenEnemy(gameEngine, ASSET_MANAGER);
+    // gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
+    // gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
     gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png")));
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));
     gameEngine.setVolumeToggle(volumeToggle);
