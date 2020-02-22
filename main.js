@@ -258,7 +258,7 @@ SkeletonDagger.prototype.draw = function () {
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    entityAnimationInit(this, spritesheet);
+    entityAnimationInit(this, spritesheet, 2);
     this.enemyHP = 1000;
     this.x = this.relativeX = 650;
     this.y = this.relativeY = 80;
