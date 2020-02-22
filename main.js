@@ -217,7 +217,7 @@ function entityAnimationInit(entity, spritesheet, type) {
         animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, 0.12, 6, true, 1);
         break;
   }
-  
+
 
   entity.animations = animations;
 }
@@ -230,9 +230,6 @@ SkeletonDagger.prototype.update = function () {
     if(this.isAttacking && this.currAnimation.elapsedTime == 0) activateHurtbox(this);
     if(!this.isAttacking) this.hurtbox.isActive = false;
 
-    // player coordinates for debug
-    // console.log("playerX = " + playerX);
-    // console.log("playerY = "  + playerY);
     if (this.changeX) {
         playerX += this.game.clockTick * this.xSpeed;
         if(boundHitLeft) playerX = -454;
@@ -247,16 +244,6 @@ SkeletonDagger.prototype.update = function () {
     updatePlayerHitbox(this);
     checkForCollisions(this);
     updateInvincibilityFrames(this);
-
-    // if (this.x > 1024) {
-    //     this.x = -64
-    // } else if (this.x < -64) {
-    //     this.x = 1024;
-    // } else if (this.y > 1088) {
-    //     this.y = 0;
-    // } else if (this.y < 0) {
-    //     this.y = 1088;
-    // }
 
     this.changeX = this.changeY = false;
 
@@ -295,17 +282,17 @@ MaleKnightSpear.prototype.update = function() {
         updateEnemyPositionAndAnimation(this);
         updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
         updateInvincibilityFrames(this);
-      
+
         // if (this.hitbox.isActive) {
         //     this.removeFromWorld = true;
         // }
-      
+
         console.log(this.isRecoiling);
         if (this.isRecoiling) {
             this.removeFromWorld = true;
         }
     }
-    
+
     Entity.prototype.update.call(this);
 }
 
@@ -559,10 +546,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.startInput();
 
     gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
-    //
-    gameEngine.addTerrain(new Rock1(gameEngine, ASSET_MANAGER.getAsset("./res/terrain/Rock1.png")));
     forestMapGen(gameEngine, ASSET_MANAGER);
-    //
     gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
     gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
     gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png")));
