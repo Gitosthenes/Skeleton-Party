@@ -281,8 +281,10 @@ function MaleKnightSpear(game,spritesheet) {
     this.isRecoiling = false;
     this.direction = 'down';
     this.state = "walkDown";
+    //this.removeFromWorld = false;
     this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
+    Entity.call(game,this.x,this.y, undefined);
 }
 
 MaleKnightSpear.prototype.update = function() {
@@ -318,7 +320,13 @@ MaleKnightSpear.prototype.update = function() {
                 this.y += this.game.clockTick* this.speed;
             }
         }
-
+        // if (this.hitbox.isActive) {
+        //     this.removeFromWorld = true;
+        // }
+        console.log(this.isRecoiling);
+        if (this.isRecoiling) {
+            this.removeFromWorld = true;
+        }
     }
     updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
     updateInvincibilityFrames(this);
@@ -340,6 +348,7 @@ function MaleKnightMace(game, spritesheet) {
     this.ctx = game.ctx;
     this.direction = 'down';
     this.state = "walkDown";
+    this.removeFromWorld = false;
     this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
     this.hitbox = new Hitbox(this.x, this.y, 62, 44, true);
 }
@@ -444,6 +453,7 @@ function EnemyUI (game, spritesheet) {
 
 EnemyUI.prototype.draw = function () {
     if(!ON_TITLESCREEN && !GAME_OVER) {
+        enemyCount = this.game.enemies.length;
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 50, 50);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
