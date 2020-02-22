@@ -68,3 +68,9 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
         }
     }
 }
+
+function setEnemyRandomLocation(entity, width) {
+    let padding = 80;
+    entity.x = entity.relativeX = Math.floor(Math.random() * (((800 * 2.5) - entity.currAnimation.frameWidth - padding) - padding + 1)) + padding;
+    entity.y = entity.relativeY = Math.floor(Math.random() * (((800 * 2.5) - entity.currAnimation.frameWidth - padding) - padding + 1)) + padding;
+}
