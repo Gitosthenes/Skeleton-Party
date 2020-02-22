@@ -11,7 +11,7 @@ Terrain.prototype.update = function () {
 };
 
 Terrain.prototype.draw = function (entity) {
-    if(!ON_TITLESCREEN) {
+    if(!ON_TITLESCREEN && !GAME_OVER) {
         entity.ctx.drawImage(entity.spriteSheet, entity.x, entity.y, entity.width, entity.height);
         Entity.prototype.draw.call(entity);
     }

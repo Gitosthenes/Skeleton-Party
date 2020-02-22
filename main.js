@@ -1,5 +1,6 @@
 let ASSET_MANAGER = new AssetManager();
 let ON_TITLESCREEN = true;
+let GAME_OVER = false;
 var font = "VT323";
 
 //For scrolling
@@ -19,7 +20,7 @@ let def = 10;
 let atk = 10;
 
 //time of countdown timer in seconds
-let time = 120;
+let time = 150;
 
 //enemy count
 let enemyCount = 0;
@@ -99,6 +100,22 @@ Background.prototype.draw = function () {
     else {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5); // Why? Who knows!
     }
+    if(time === 0 || hp === 0) {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText("<GAME OVER>", 425, 350);
+        this.ctx.fillText("Refresh to start again!", 370, 450);
+        GAME_OVER = true;
+    }
+    if(enemyCount === 0) {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText("<YOU WIN>", 425, 350);
+        this.ctx.fillText("Refresh to start again!", 370, 450);
+        GAME_OVER = true;
+    }
 };
 
 Background.prototype.update = function () {
@@ -141,6 +158,8 @@ Background.prototype.update = function () {
             this.y = bgY - playerY;
         }
     }
+
+
 
 };
 
@@ -245,8 +264,11 @@ SkeletonDagger.prototype.update = function () {
 };
 
 SkeletonDagger.prototype.draw = function () {
-    this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-    Entity.prototype.draw.call(this);
+    if (!ON_TITLESCREEN && !GAME_OVER) {
+        this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        Entity.prototype.draw.call(this);
+    }
+
 };
 
 function MaleKnightSpear(game,spritesheet) {
@@ -265,21 +287,30 @@ function MaleKnightSpear(game,spritesheet) {
     this.state = "walkDown";
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
+    Entity.call(game,this.x,this.y, undefined);
 }
 
 MaleKnightSpear.prototype.update = function() {
     if(!ON_TITLESCREEN) {
         updateEnemyPositionAndAnimation(this);
-
         updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
         updateInvincibilityFrames(this);
+      
+        // if (this.hitbox.isActive) {
+        //     this.removeFromWorld = true;
+        // }
+      
+        console.log(this.isRecoiling);
+        if (this.isRecoiling) {
+            this.removeFromWorld = true;
+        }
     }
     
     Entity.prototype.update.call(this);
 }
 
 MaleKnightSpear.prototype.draw = function() {
-    if(!ON_TITLESCREEN) {
+    if(!ON_TITLESCREEN && !GAME_OVER) {
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         Entity.prototype.draw.call(this);
     }
@@ -293,6 +324,7 @@ function MaleKnightMace(game, spritesheet) {
     this.ctx = game.ctx;
     this.direction = 'down';
     this.state = "walkDown";
+    this.removeFromWorld = false;
     this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
     this.hitbox = new Hitbox(this.x, this.y, 62, 44, true);
 }
@@ -318,8 +350,11 @@ MaleKnightMace.prototype.update = function() {
 };
 
 MaleKnightMace.prototype.draw = function() {
-    this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-    Entity.prototype.draw.call(this);
+    if(!ON_TITLESCREEN && !GAME_OVER) {
+        this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        Entity.prototype.draw.call(this);
+    }
+
 };
 
 
@@ -334,7 +369,7 @@ function SkeletonHealthUI(game, spritesheet) {
 }
 
 SkeletonHealthUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN) {
+    if(!ON_TITLESCREEN && !GAME_OVER) {
         // console.log("drawing ui 2")
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 90, 90);
         this.ctx.font = "25px " + font;
@@ -355,7 +390,7 @@ function SkeletonDefUI(game, spritesheet) {
 }
 
 SkeletonDefUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN) {
+    if(!ON_TITLESCREEN && !GAME_OVER) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 30, 30);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -374,7 +409,7 @@ function SkeletonAtkUI(game, spritesheet) {
 }
 
 SkeletonAtkUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN) {
+    if(!ON_TITLESCREEN && !GAME_OVER) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 25, 25);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -393,7 +428,8 @@ function EnemyUI (game, spritesheet) {
 }
 
 EnemyUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN) {
+    if(!ON_TITLESCREEN && !GAME_OVER) {
+        enemyCount = this.game.enemies.length;
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 50, 50);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -412,7 +448,7 @@ function TimerUI (game, spritesheet) {
 }
 
 TimerUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN) {
+    if(!ON_TITLESCREEN && !GAME_OVER) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 35, 35);
         time -= this.game.clockTick;
         this.ctx.font = "48px " + font;

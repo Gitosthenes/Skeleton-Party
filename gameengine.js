@@ -290,13 +290,24 @@ GameEngine.prototype.update = function () {
     this.enemyUI.update();
     this.timerUI.update();
     for (let i = 0; i < this.enemies.length; i++) {
-        this.enemies[i].update();
+        let enemy = this.enemies[i];
+        if(!enemy.removeFromWorld) {
+            this.enemies[i].update();
+        }
     }
     for (let i = 0; i < this.terrain.length; i++) {
         this.terrain[i].update();
     }
     for (let i = 0; i < this.entities.length; i++) {
         this.entities[i].update();
+    }
+    //console.log(this.enemies.length);
+    for (var i = this.enemies.length - 1; i >= 0; --i) {
+        let enemy = this.enemies[i];
+        if (enemy.removeFromWorld) {
+            console.log("removing enemy");
+            this.enemies.splice(i, 1);
+        }
     }
 };
 
