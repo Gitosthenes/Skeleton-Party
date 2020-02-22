@@ -210,6 +210,7 @@ function handleHitCollision(abuser, victim) {
     
 
     //TODO damage calculation
+    // takeDamage()
 }
 
 /**
@@ -398,5 +399,50 @@ function activateHurtbox(entity) {
                     break;
             }
             break;
-    }
+            //!--------------------------MaleKnightMace--------------------------------
+        case MaleKnightMace:
+            switch(entity.direction) {
+                case 'Down':
+                    entity.hurtbox.x = entity.x + 10;
+                    entity.hurtbox.y = (entity.y + entity.hitboxOffsetY + 45);
+                    entity.hurtbox.height = 35;
+                    entity.hurtbox.width = 75;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'Up':
+                    entity.hurtbox.x = entity.x + 10;
+                    entity.hurtbox.y = entity.y - 15;
+                    entity.hurtbox.height = 35;
+                    entity.hurtbox.width = 75;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'Left':
+                    entity.hurtbox.x = entity.x - 20;
+                    entity.hurtbox.y = entity.y + 10;
+                    entity.hurtbox.height = 50;
+                    entity.hurtbox.width = 50;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'Right':
+                    entity.hurtbox.x = entity.x + 40;
+                    entity.hurtbox.y = entity.y + 10;
+                    entity.hurtbox.height = 50;
+                    entity.hurtbox.width = 50;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+            }
+            break;
+        }
 }
