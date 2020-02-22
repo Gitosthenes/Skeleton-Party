@@ -25,14 +25,6 @@ let time = 150;
 //enemy count
 let enemyCount = 0;
 
-function distance(a, b) {
-    if(a.x && a.y && b.x && b.y) {
-    let dx = a.x - b.x;
-    let dy = a.y - b.y;
-    return Math.sqrt(dx * dx + dy * dy);
-    }
-}
-
 function changePlayerX(val) {
     playerX += val;
 }
@@ -174,7 +166,7 @@ Background.prototype.update = function () {
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
-    entityAnimationInit(this, spritesheet);
+    entityAnimationInit(this, spritesheet, 1);
     this.x = -250;
     this.y = -50;
     this.xSpeed = 0;
@@ -193,14 +185,8 @@ function SkeletonDagger(game, spritesheet) {
     this.invincibilityFrames = 0;
 }
 
-function entityAnimationInit(entity, spritesheet) {
+function entityAnimationInit(entity, spritesheet, type) {
   let animations = [];
-
-  /* Idle animations. */
-  animations['idleUp'] = new Animation(spritesheet, 0, 0, 64, 62, 512, 0.6, 2, true, 1);
-  animations['idleDown'] = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
-  animations['idleLeft'] = new Animation(spritesheet, 0, 64, 64, 62, 512, 0.6, 2, true, 1);
-  animations['idleRight'] = new Animation(spritesheet, 0, 192, 64, 62, 512, 0.6, 2, true, 1);
 
   /* Walking animations. */
   animations['walkUp'] = new Animation(spritesheet, 0, 512, 64, 62, 9, 0.15, 9, true, 1);
@@ -208,11 +194,30 @@ function entityAnimationInit(entity, spritesheet) {
   animations['walkLeft'] = new Animation(spritesheet, 0, 576, 64, 62, 9, 0.15, 9, true, 1);
   animations['walkRight'] = new Animation(spritesheet, 0, 704, 64, 62, 9, 0.15, 9, true, 1);
 
-  /* Attack animations. */
-  animations['attackUp'] = new Animation(spritesheet, 62, 1411, 189, 121, 6, 0.05, 6, true, 1);
-  animations['attackDown'] = new Animation(spritesheet, 64, 1790, 189, 121, 6, 0.05, 6, true, 1);
-  animations['attackLeft'] = new Animation(spritesheet, 66, 1603, 189, 121, 6, 0.05, 6, true, 1);
-  animations['attackRight'] = new Animation(spritesheet, 66, 1985, 189, 121, 6, 0.05, 6, true, 1);
+  switch(type) {
+      case 1: //For large attack spritesheets with idle
+        /* Idle animations. */
+        animations['idleUp'] = new Animation(spritesheet, 0, 0, 64, 62, 512, 0.6, 2, true, 1);
+        animations['idleDown'] = new Animation(spritesheet, 0, 128, 64, 62, 512, 0.5, 2, true, 1);
+        animations['idleLeft'] = new Animation(spritesheet, 0, 64, 64, 62, 512, 0.6, 2, true, 1);
+        animations['idleRight'] = new Animation(spritesheet, 0, 192, 64, 62, 512, 0.6, 2, true, 1);
+
+        /* Attack animations. */
+        animations['attackUp'] = new Animation(spritesheet, 62, 1411, 189, 121, 6, 0.05, 6, true, 1);
+        animations['attackDown'] = new Animation(spritesheet, 64, 1790, 189, 121, 6, 0.05, 6, true, 1);
+        animations['attackLeft'] = new Animation(spritesheet, 66, 1603, 189, 121, 6, 0.05, 6, true, 1);
+        animations['attackRight'] = new Animation(spritesheet, 66, 1985, 189, 121, 6, 0.05, 6, true, 1);
+        break;
+
+    case 2: //For small attack spritesheets w/o idle
+        /* Attack animations. */
+        animations['attackUp'] = new Animation(spritesheet, 0, 258, 64, 62, 6, 0.12, 6, true, 1);
+        animations['attackDown'] = new Animation(spritesheet, 0, 387, 64, 62, 6, 0.12, 6, true, 1);
+        animations['attackLeft'] = new Animation(spritesheet, 0, 322, 64, 62, 6, 0.12, 6, true, 1);
+        animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, 0.12, 6, true, 1);
+        break;
+  }
+  
 
   entity.animations = animations;
 }
@@ -267,69 +272,40 @@ SkeletonDagger.prototype.draw = function () {
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    entityAnimationInit(this, spritesheet);
-    this.x = 650;
-    this.y = 80;
+    entityAnimationInit(this, spritesheet, 2);
+    this.x = this.relativeX = 650;
+    this.y = this.relativeY = 80;
     this.hitboxOffsetX = 18;
     this.hitboxOffsetY = 10;
-    this.spawnX = this.x;
-    this.spawnY = this.y;
-    this.speed = 100;
+    this.safeDist = 63;
+    this.speed = 200;
     this.game = game;
     this.ctx = game.ctx;
-    this.isAttacking = false; //TODO AI logic to use this later
+    this.isAttacking = false;
     this.isRecoiling = false;
-    this.direction = 'down';
+    this.direction = 'Down';
     this.state = "walkDown";
-    //this.removeFromWorld = false;
-    this.currAnimation = new Animation(spritesheet, 0, 384, 64, 62, 512, 0.1, 8, true, 1);
+    this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
     Entity.call(game,this.x,this.y, undefined);
 }
 
 MaleKnightSpear.prototype.update = function() {
     if(!ON_TITLESCREEN) {
-
-        //Update relative distance between enemy and player for scrolling consistency
-        let safeDist = 63;
-        let tempX = this.x;
-        let tempY = this.y;
-        let relX = this.spawnX - playerX;
-        let relY = this.spawnY - playerY;
-        let deltaX;
-        let deltaY;
-        this.x = relX;
-        this.y = relY;
-        deltaX = tempX - this.x;
-        deltaY = tempY - this.y;
-        this.spawnX += deltaX / 2;
-        this.spawnY += deltaY / 2;
-
-        //Update distance again to reflect this entity's movement;
-        if(distance(this, this.game.player) > safeDist ) {
-            let dx = this.x - this.game.player.x;
-            let dy = this.y - this.game.player.y;
-            if(dx > 2) {
-                this.x -= (this.game.clockTick * this.speed);
-            } else if(dx < 0) {
-                this.x += (this.game.clockTick * this.speed);
-            }
-            if(dy > 2) {
-                this.y -= this.game.clockTick * this.speed;
-            } else if(dy < 0) {
-                this.y += this.game.clockTick* this.speed;
-            }
-        }
+        updateEnemyPositionAndAnimation(this);
+        updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
+        updateInvincibilityFrames(this);
+      
         // if (this.hitbox.isActive) {
         //     this.removeFromWorld = true;
         // }
+      
         console.log(this.isRecoiling);
         if (this.isRecoiling) {
             this.removeFromWorld = true;
         }
     }
-    updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
-    updateInvincibilityFrames(this);
+    
     Entity.prototype.update.call(this);
 }
 
