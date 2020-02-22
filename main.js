@@ -134,11 +134,11 @@ Background.prototype.update = function () {
     // console.log("y = " + this.y);
     if(!ON_TITLESCREEN) {
         // Bounds checking for the x axis.
-        if (bgX - playerX > 454) {
-            this.x = 454;
+        if (bgX - playerX > 438) {
+            this.x = 438;
             boundHitLeft = true;
-        } else if (bgX - playerX < -1496) {
-            this.x = -1496
+        } else if (bgX - playerX < -1476) {
+            this.x = -1476;
             boundHitRight = true;
         } else {
             boundHitLeft = false;
@@ -146,11 +146,11 @@ Background.prototype.update = function () {
             this.x = bgX - playerX;
         }
         // Bounds checking for the y axis.
-        if (bgY - playerY > 323) {
-            this.y = 323;
+        if (bgY - playerY > 303) {
+            this.y = 303;
             boundHitUp = true;
-        } else if (bgY - playerY < -1579) {
-            this.y = -1579;
+        } else if (bgY - playerY < -1550) {
+            this.y = -1550;
             boundHitDown = true;
         } else {
             boundHitUp = false;
@@ -232,13 +232,13 @@ SkeletonDagger.prototype.update = function () {
 
     if (this.changeX) {
         playerX += this.game.clockTick * this.xSpeed;
-        if(boundHitLeft) playerX = -454;
-        if(boundHitRight) playerX = 1496;
+        if(boundHitLeft) playerX = -438;
+        if(boundHitRight) playerX = 1476;
     }
     if (this.changeY) {
         playerY += this.game.clockTick * this.ySpeed;
-        if(boundHitUp) playerY = -323;
-        if(boundHitDown) playerY = 1579;
+        if(boundHitUp) playerY = -303;
+        if(boundHitDown) playerY = 1550;
     }
 
     updatePlayerHitbox(this);
