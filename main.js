@@ -19,6 +19,9 @@ let hp = 100;
 let def = 10;
 let atk = 10;
 
+//enemy stats
+let enemyAtk = 1;
+
 //time of countdown timer in seconds
 let time = 150;
 
@@ -100,7 +103,7 @@ Background.prototype.draw = function () {
     else {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5); // Why? Who knows!
     }
-    if(time === 0 || hp === 0) {
+    if(time <= 0 || hp <= 0) {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -178,7 +181,7 @@ function SkeletonDagger(game, spritesheet) {
     this.isRecoiling = false;
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 50, 32, true);
-    this.hurtbox = new Hitbox(0, 0, 0, 0, false);
+    this.hurtbox = new Hitbox(0, 0, 0, 0, true);
     this.invincibilityFrames = 0;
 }
 
@@ -238,6 +241,10 @@ SkeletonDagger.prototype.update = function () {
         playerY += this.game.clockTick * this.ySpeed;
         if(boundHitUp) playerY = -303;
         if(boundHitDown) playerY = 1550;
+    }
+
+    if (this.isRecoiling) {
+        hp -= enemyAtk;
     }
 
     updatePlayerHitbox(this);
@@ -408,6 +415,7 @@ function SkeletonHealthUI(game, spritesheet) {
 SkeletonHealthUI.prototype.draw = function () {
     if(!ON_TITLESCREEN && !GAME_OVER) {
         // console.log("drawing ui 2")
+
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 90, 90);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
