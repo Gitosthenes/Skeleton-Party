@@ -121,7 +121,7 @@ function DirtHole(game, spriteSheet) {
 DirtHole.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 16, 14, 68, 38);
+    updateTerrainHitbox(this, 20, -3, 60, 42);
 };
 
 DirtHole.prototype.draw = function () {
