@@ -390,6 +390,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    drawDebugHitbox(this);
-    drawDebugHurtbox(this);
+    //drawDebugHitbox(this);
+    //drawDebugHurtbox(this);
 };

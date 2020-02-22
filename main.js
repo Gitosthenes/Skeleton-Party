@@ -134,11 +134,11 @@ Background.prototype.update = function () {
     // console.log("y = " + this.y);
     if(!ON_TITLESCREEN) {
         // Bounds checking for the x axis.
-        if (bgX - playerX > 454) {
-            this.x = 454;
+        if (bgX - playerX > 438) {
+            this.x = 438;
             boundHitLeft = true;
-        } else if (bgX - playerX < -1496) {
-            this.x = -1496
+        } else if (bgX - playerX < -1476) {
+            this.x = -1476;
             boundHitRight = true;
         } else {
             boundHitLeft = false;
@@ -146,11 +146,11 @@ Background.prototype.update = function () {
             this.x = bgX - playerX;
         }
         // Bounds checking for the y axis.
-        if (bgY - playerY > 323) {
-            this.y = 323;
+        if (bgY - playerY > 303) {
+            this.y = 303;
             boundHitUp = true;
-        } else if (bgY - playerY < -1579) {
-            this.y = -1579;
+        } else if (bgY - playerY < -1550) {
+            this.y = -1550;
             boundHitDown = true;
         } else {
             boundHitUp = false;
@@ -168,7 +168,7 @@ function SkeletonDagger(game, spritesheet) {
     this.y = -50;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.baseSpeed = 200;
+    this.baseSpeed = 280;
     this.changeX = false;
     this.changeY = false;
     this.game = game;
@@ -214,7 +214,7 @@ function entityAnimationInit(entity, spritesheet, type) {
         animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, 0.12, 6, true, 1);
         break;
   }
-  
+
 
   entity.animations = animations;
 }
@@ -227,33 +227,20 @@ SkeletonDagger.prototype.update = function () {
     if(this.isAttacking && this.currAnimation.elapsedTime == 0) activateHurtbox(this);
     if(!this.isAttacking) this.hurtbox.isActive = false;
 
-    // player coordinates for debug
-    // console.log("playerX = " + playerX);
-    // console.log("playerY = "  + playerY);
     if (this.changeX) {
         playerX += this.game.clockTick * this.xSpeed;
-        if(boundHitLeft) playerX = -454;
-        if(boundHitRight) playerX = 1496;
+        if(boundHitLeft) playerX = -438;
+        if(boundHitRight) playerX = 1476;
     }
     if (this.changeY) {
         playerY += this.game.clockTick * this.ySpeed;
-        if(boundHitUp) playerY = -323;
-        if(boundHitDown) playerY = 1579;
+        if(boundHitUp) playerY = -303;
+        if(boundHitDown) playerY = 1550;
     }
 
     updatePlayerHitbox(this);
     checkForCollisions(this);
     updateInvincibilityFrames(this);
-
-    // if (this.x > 1024) {
-    //     this.x = -64
-    // } else if (this.x < -64) {
-    //     this.x = 1024;
-    // } else if (this.y > 1088) {
-    //     this.y = 0;
-    // } else if (this.y < 0) {
-    //     this.y = 1088;
-    // }
 
     this.changeX = this.changeY = false;
 
@@ -296,6 +283,7 @@ MaleKnightSpear.prototype.update = function() {
         updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
         updateInvincibilityFrames(this);
 
+
         if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
         checkForCollisions(this);
@@ -303,8 +291,9 @@ MaleKnightSpear.prototype.update = function() {
         // if (this.isRecoiling) {
         //     this.removeFromWorld = true;
         // }
+
     }
-    
+
     Entity.prototype.update.call(this);
 }
 
@@ -558,10 +547,7 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.startInput();
 
     gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
-    //
-    gameEngine.addTerrain(new Rock1(gameEngine, ASSET_MANAGER.getAsset("./res/terrain/Rock1.png")));
     forestMapGen(gameEngine, ASSET_MANAGER);
-    //
     gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
     gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
     gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png")));
