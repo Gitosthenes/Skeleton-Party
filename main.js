@@ -551,6 +551,7 @@ ASSET_MANAGER.queueDownload("./res/terrain/Rock1.png");
 ASSET_MANAGER.queueDownload("./res/terrain/Rock2.png");
 ASSET_MANAGER.queueDownload("./res/terrain/DirtHole.png");
 ASSET_MANAGER.queueDownload("./res/terrain/IvyColumn.png");
+ASSET_MANAGER.queueDownload("./res/terrain/ConiferousTree.png");
 
 
 ASSET_MANAGER.downloadAll(function () {
