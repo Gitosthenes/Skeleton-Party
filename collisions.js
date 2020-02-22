@@ -331,46 +331,46 @@ function activateHurtbox(entity) {
         //!--------------------------MaleKnightSpear--------------------------------
         case MaleKnightSpear:
             switch(entity.direction) {
-                case 'down':
-                    entity.hurtbox.x = (entity.x - 5);
-                    entity.hurtbox.y = (entity.y + 45);
-                    entity.hurtbox.height = 38;
-                    entity.hurtbox.width = 115;
+                case 'Down':
+                    entity.hurtbox.x = (entity.x + entity.hitboxOffsetX + 5);
+                    entity.hurtbox.y = (entity.y + entity.hitboxOffsetY + 45);
+                    entity.hurtbox.height = 40;
+                    entity.hurtbox.width = 20;
                     entity.hurtbox.top = entity.hurtbox.y;
                     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
                     entity.hurtbox.left = entity.hurtbox.x;
                     entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
                     break;
-                // case 'up':
-                //     entity.hurtbox.x = (entity.x - 5);
-                //     entity.hurtbox.y = entity.y;
-                //     entity.hurtbox.height = 38;
-                //     entity.hurtbox.width = 115;
-                //     entity.hurtbox.top = entity.hurtbox.y;
-                //     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                //     entity.hurtbox.left = entity.hurtbox.x;
-                //     entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                //     break;
-                // case 'left':
-                //     entity.hurtbox.x = entity.x - 52;
-                //     entity.hurtbox.y = entity.y + 17;
-                //     entity.hurtbox.height = 38;
-                //     entity.hurtbox.width = 80;
-                //     entity.hurtbox.top = entity.hurtbox.y;
-                //     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                //     entity.hurtbox.left = entity.hurtbox.x;
-                //     entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                //     break;
-                // case 'right':
-                //     entity.hurtbox.x = entity.x + 40;
-                //     entity.hurtbox.y = entity.y + 17;
-                //     entity.hurtbox.height = 38;
-                //     entity.hurtbox.width = 80;
-                //     entity.hurtbox.top = entity.hurtbox.y;
-                //     entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                //     entity.hurtbox.left = entity.hurtbox.x;
-                //     entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                //     break;
+                case 'Up':
+                    entity.hurtbox.x = (entity.x + entity.hitboxOffsetX + 5);
+                    entity.hurtbox.y = (entity.y + entity.hitboxOffsetY - 30);
+                    entity.hurtbox.height = 30;
+                    entity.hurtbox.width = 20;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'Left':
+                    entity.hurtbox.x = entity.x - 22;
+                    entity.hurtbox.y = entity.y + 28;
+                    entity.hurtbox.height = 20;
+                    entity.hurtbox.width = 50;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
+                case 'Right':
+                    entity.hurtbox.x = entity.x + 40;
+                    entity.hurtbox.y = entity.y + 28;
+                    entity.hurtbox.height = 20;
+                    entity.hurtbox.width = 50;
+                    entity.hurtbox.top = entity.hurtbox.y;
+                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
+                    entity.hurtbox.left = entity.hurtbox.x;
+                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
+                    break;
             }
             break;
     }

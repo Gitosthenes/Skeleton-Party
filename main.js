@@ -287,6 +287,7 @@ function MaleKnightSpear(game,spritesheet) {
     this.state = "walkDown";
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
+    this.hurtbox = new Hitbox(0, 0, 0, 0, false);
     Entity.call(game,this.x,this.y, undefined);
 }
 
@@ -295,12 +296,15 @@ MaleKnightSpear.prototype.update = function() {
         updateEnemyPositionAndAnimation(this);
         updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
         updateInvincibilityFrames(this);
+
+        if(this.isAttacking) activateHurtbox(this);
+        if(!this.isAttacking) this.hurtbox.isActive = false;
       
         // if (this.hitbox.isActive) {
         //     this.removeFromWorld = true;
         // }
       
-        console.log(this.isRecoiling);
+        // console.log(this.isRecoiling);
         if (this.isRecoiling) {
             this.removeFromWorld = true;
         }

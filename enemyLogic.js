@@ -43,6 +43,7 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
     let deltaVariance = 0.25 ;
     if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
         action = 'walk';
+        enemy.isAttacking = false;
         if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY < 0) {//is enemy moving straight up?
             direction = 'Up';
         } else if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY > 0) {//is enemy moving straight down?
@@ -55,6 +56,7 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
     } else {//else enemy should be attaking the player
         action = 'attack';
         direction = enemy.direction;
+        enemy.isAttacking = true;
     }
 
     if(action && direction) {
