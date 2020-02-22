@@ -33,6 +33,8 @@ function changePlayerY(val) {
     playerY += val;
 }
 
+
+
 //! ******** Animation Definition ******** */
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale) {
     this.spriteSheet = spriteSheet;
@@ -163,7 +165,6 @@ Background.prototype.update = function () {
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheet) {
-    entityAnimationInit(this, spritesheet, 1);
     this.x = -250;
     this.y = -50;
     this.xSpeed = 0;
@@ -176,6 +177,8 @@ function SkeletonDagger(game, spritesheet) {
     this.direction = 'down';
     this.isAttacking = false;
     this.isRecoiling = false;
+    this.attAnimationSpeed = 0.05;
+    entityAnimationInit(this, spritesheet, 1);
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 50, 32, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
@@ -200,23 +203,27 @@ function entityAnimationInit(entity, spritesheet, type) {
         animations['idleRight'] = new Animation(spritesheet, 0, 192, 64, 62, 512, 0.6, 2, true, 1);
 
         /* Attack animations. */
-        animations['attackUp'] = new Animation(spritesheet, 62, 1411, 189, 121, 6, 0.05, 6, true, 1);
-        animations['attackDown'] = new Animation(spritesheet, 64, 1790, 189, 121, 6, 0.05, 6, true, 1);
-        animations['attackLeft'] = new Animation(spritesheet, 66, 1603, 189, 121, 6, 0.05, 6, true, 1);
-        animations['attackRight'] = new Animation(spritesheet, 66, 1985, 189, 121, 6, 0.05, 6, true, 1);
+        animations['attackUp'] = new Animation(spritesheet, 62, 1411, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
+        animations['attackDown'] = new Animation(spritesheet, 64, 1790, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
+        animations['attackLeft'] = new Animation(spritesheet, 66, 1603, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
+        animations['attackRight'] = new Animation(spritesheet, 66, 1985, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
         break;
 
     case 2: //For small attack spritesheets w/o idle
         /* Attack animations. */
-        animations['attackUp'] = new Animation(spritesheet, 0, 258, 64, 62, 6, 0.12, 6, true, 1);
-        animations['attackDown'] = new Animation(spritesheet, 0, 387, 64, 62, 6, 0.12, 6, true, 1);
-        animations['attackLeft'] = new Animation(spritesheet, 0, 322, 64, 62, 6, 0.12, 6, true, 1);
-        animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, 0.12, 6, true, 1);
+        animations['attackUp'] = new Animation(spritesheet, 0, 258, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+        animations['attackDown'] = new Animation(spritesheet, 0, 387, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+        animations['attackLeft'] = new Animation(spritesheet, 0, 322, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+        animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
         break;
   }
 
 
   entity.animations = animations;
+}
+
+SkeletonDagger.prototype.takeDamage = function(amount) {
+    hp -= amount;
 }
 
 SkeletonDagger.prototype.update = function () {
@@ -258,8 +265,9 @@ SkeletonDagger.prototype.draw = function () {
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    entityAnimationInit(this, spritesheet, 2);
+    
     this.enemyHP = 1000;
+    this.enemyAttack = 1;
     this.x = this.relativeX = 650;
     this.y = this.relativeY = 80;
     this.hitboxOffsetX = 18;
@@ -272,6 +280,8 @@ function MaleKnightSpear(game,spritesheet) {
     this.isRecoiling = false;
     this.direction = 'Down';
     this.state = "walkDown";
+    this.attAnimationSpeed = 0.12;
+    entityAnimationInit(this, spritesheet, 2);
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
@@ -280,31 +290,23 @@ function MaleKnightSpear(game,spritesheet) {
 
 MaleKnightSpear.prototype.update = function() {
     if(!ON_TITLESCREEN) {
-        let animationDelay = this.currAnimation.totalTime / 2;
+        let animationDelay = this.currAnimation.totalTime / 1.8;
 
         updateEnemyPositionAndAnimation(this);
         updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
         updateInvincibilityFrames(this);
 
-
         if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
         checkForCollisions(this);
       
-        // if (this.isRecoiling) {
-        //     this.removeFromWorld = true;
-        // }
-        console.log(this.isRecoiling);
         if (this.isRecoiling) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
                 this.removeFromWorld = true;
             }
-
         }
-
     }
-
     Entity.prototype.update.call(this);
 }
 
@@ -316,73 +318,48 @@ MaleKnightSpear.prototype.draw = function() {
 }
 
 function MaleKnightMace(game, spritesheet) {
+    
     this.enemyHP = 1000;
-    this.x = 650;
-    this.y = 80;
+    this.enemyAttack= 1;
+    this.x = this.relativeX = 850;
+    this.y = this.relativeY = 80;
     this.hitboxOffsetX = 18;
     this.hitboxOffsetY = 10;
-    this.spawnX = this.x;
-    this.spawnY = this.y;
+    this.safeDist = 60;
     this.speed = 150;
     this.game = game;
     this.ctx = game.ctx;
-    this.isAttacking = false; //TODO AI logic to use this later
+    this.isAttacking = false;
     this.isRecoiling = false;
-    this.direction = 'down';
+    this.direction = 'Down';
     this.state = "walkDown";
-    this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
-    this.hitbox = new Hitbox(this.x, this.y, 60, 40, true);
+    this.attAnimationSpeed = 0.17;
+    entityAnimationInit(this, spritesheet, 1);
+    this.currAnimation = this.animations[this.state];
+    this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
+    this.hurtbox = new Hitbox(0, 0, 0, 0, false);
+    Entity.call(game,this.x,this.y, undefined);
 }
 
 MaleKnightMace.prototype.update = function() {
-    //TODO: make the integers into variables to make it work when they are moving by themselves.
-    //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
-    //player.
     if(!ON_TITLESCREEN) {
-        //Update relative distance between enemy and player for scrolling consistency
-        let safeDist = -10;
-        let tempX = this.x;
-        let tempY = this.y;
-        let relX = this.spawnX - playerX;
-        let relY = this.spawnY - playerY;
-        let deltaX;
-        let deltaY;
-        this.x = relX;
-        this.y = relY;
-        deltaX = tempX - this.x;
-        deltaY = tempY - this.y;
-        this.spawnX += deltaX / 2;
-        this.spawnY += deltaY / 2;
+        let animationDelay = this.currAnimation.totalTime / 1.8;
 
-        //Update distance again to reflect this entity's movement;
-        if(distance(this, this.game.player) > safeDist ) {
-            let dx = this.x - this.game.player.x;
-            let dy = this.y - this.game.player.y;
-            if(dx > 2) {
-                this.x -= (this.game.clockTick * this.speed);
-            } else if(dx < 0) {
-                this.x += (this.game.clockTick * this.speed);
-            }
-            if(dy > 2) {
-                this.y -= this.game.clockTick * this.speed;
-            } else if(dy < 0) {
-                this.y += this.game.clockTick* this.speed;
-            }
-        }
-        // if (this.hitbox.isActive) {
-        //     this.removeFromWorld = true;
-        // }
-        console.log(this.isRecoiling);
+        updateEnemyPositionAndAnimation(this);
+        updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
+        updateInvincibilityFrames(this);
+
+        if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
+        if(!this.isAttacking) this.hurtbox.isActive = false;
+        checkForCollisions(this);
+      
         if (this.isRecoiling) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
                 this.removeFromWorld = true;
             }
-
         }
     }
-    updateHitbox(this, (this.x + this.hitboxOffsetX) + 65, (this.y + this.hitboxOffsetY) + 50);
-    updateInvincibilityFrames(this);
     Entity.prototype.update.call(this);
 };
 
@@ -391,7 +368,6 @@ MaleKnightMace.prototype.draw = function() {
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         Entity.prototype.draw.call(this);
     }
-
 };
 
 
