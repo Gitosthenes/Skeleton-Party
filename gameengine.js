@@ -91,7 +91,8 @@ GameEngine.prototype.startInput = function () {
 
     /* Key Press Listeners */
     this.ctx.canvas.addEventListener("keydown", function (e) {
-        switch (e.key) {
+        let key = e.key.toLowerCase();
+        switch (key) {
             case 'w':   // Up
                 checkPressInput('w');
                 break;
@@ -124,33 +125,34 @@ GameEngine.prototype.startInput = function () {
 
     /* Key Release Listeners */
     this.ctx.canvas.addEventListener("keyup", function (e) {
-        switch (e.key) {
+        let key = e.key.toLowerCase();
+        switch (key) {
             case 'w':   // Up
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 's':   // Down
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'a':   // Left
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'd':   // Right
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'j':
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case 'm':
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
 
             case ' ':
-                checkReleaseInput(e.key);
+                checkReleaseInput(key);
                 break;
         }
     }, false);
@@ -288,13 +290,24 @@ GameEngine.prototype.update = function () {
     this.enemyUI.update();
     this.timerUI.update();
     for (let i = 0; i < this.enemies.length; i++) {
-        this.enemies[i].update();
+        let enemy = this.enemies[i];
+        if(!enemy.removeFromWorld) {
+            this.enemies[i].update();
+        }
     }
     for (let i = 0; i < this.terrain.length; i++) {
         this.terrain[i].update();
     }
     for (let i = 0; i < this.entities.length; i++) {
         this.entities[i].update();
+    }
+    //console.log(this.enemies.length);
+    for (var i = this.enemies.length - 1; i >= 0; --i) {
+        let enemy = this.enemies[i];
+        if (enemy.removeFromWorld) {
+            console.log("removing enemy");
+            this.enemies.splice(i, 1);
+        }
     }
 };
 
@@ -377,6 +390,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    drawDebugHitbox(this);
-    drawDebugHurtbox(this);
+//     drawDebugHitbox(this);
+//     drawDebugHurtbox(this);
 };
