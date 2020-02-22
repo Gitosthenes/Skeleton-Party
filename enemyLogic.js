@@ -20,18 +20,20 @@ function updateEnemyPositionAndAnimation(enemy) {
     enemy.relativeY += deltaY / 2;
 
 //Update distance again to reflect entity's movement;
-    if(distance(enemy, enemy.game.player) > enemy.safeDist ) {
-        let dx = enemy.x - enemy.game.player.x;
-        let dy = enemy.y - enemy.game.player.y;
-        if(dx > 2) {
-            enemy.x -= (enemy.game.clockTick * enemy.speed);
-        } else if(dx < 0) {
-            enemy.x += (enemy.game.clockTick * enemy.speed);
-        }
-        if(dy > 2) {
-            enemy.y -= enemy.game.clockTick * enemy.speed;
-        } else if(dy < 0) {
-            enemy.y += enemy.game.clockTick* enemy.speed;
+    if (!enemy.isRecoiling) {
+        if (distance(enemy, enemy.game.player) > enemy.safeDist ) {
+            let dx = enemy.x - enemy.game.player.x;
+            let dy = enemy.y - enemy.game.player.y;
+            if(dx > 2) {
+                enemy.x -= (enemy.game.clockTick * enemy.speed);
+            } else if(dx < 0) {
+                enemy.x += (enemy.game.clockTick * enemy.speed);
+            }
+            if(dy > 2) {
+                enemy.y -= enemy.game.clockTick * enemy.speed;
+            } else if(dy < 0) {
+                enemy.y += enemy.game.clockTick* enemy.speed;
+            }
         }
     }
 
@@ -60,7 +62,7 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
             direction = enemy.direction;
             enemy.isAttacking = true;
         }
-    
+
         if(action && direction) {
             enemy.direction = direction;
             enemy.state = action+direction;

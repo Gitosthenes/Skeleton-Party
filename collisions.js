@@ -37,7 +37,7 @@ function distance(a, b) {
  *
  * @param entity The entity we are checking collisions for.
  */
-function checkForCollisions(entity) {    
+function checkForCollisions(entity) {
     let otherEntity;
 
     if(entity === entity.game.player) {//if entity is player]
@@ -132,6 +132,7 @@ function directionOfCollision(hitboxA, hitboxB) {
 function handleTerrainCollision(entity, terrain) {
     entity.isRecoiling = true;
     entity.invincibilityFrames = 2;
+    entity.hitByTerrain = true;
 
     switch (directionOfCollision(entity.hitbox, terrain.hitbox)) {
         case 'top':
@@ -159,6 +160,7 @@ function handleTerrainCollision(entity, terrain) {
 function handleEnemyCollision(you, them) {
     you.isRecoiling = true;
     you.invincibilityFrames = 6;
+    you.hitByEnemy = true;
     let dirOfCollision = directionOfCollision(you.hitbox, them.hitbox);
 
     switch (dirOfCollision) {
@@ -175,9 +177,6 @@ function handleEnemyCollision(you, them) {
             you.xSpeed = you.baseSpeed;
             break;
     }
-
-    // TODO: Add damage to the player when we get there.
-
 }
 
 /**
@@ -189,6 +188,7 @@ function handleEnemyCollision(you, them) {
 function handleHitCollision(abuser, victim) {
     victim.isRecoiling = true;
     victim.invincibilityFrames = 6;
+    victim.hitByEnemy = true;
 
     if(victim === abuser.game.player) {
         let dirOfCollision = directionOfCollision(victim.hitbox, abuser.hurtbox);
@@ -207,7 +207,7 @@ function handleHitCollision(abuser, victim) {
                 break;
         }
     }
-    
+
 
     //TODO damage calculation
     // takeDamage()
@@ -226,6 +226,8 @@ function updateInvincibilityFrames(entity) {
         entity.xSpeed = 0;
         entity.ySpeed = 0;
         entity.isRecoiling = false;
+        entity.hitByEnemy = false;
+        entity.hitByTerrain = false;
     }
 }
 
