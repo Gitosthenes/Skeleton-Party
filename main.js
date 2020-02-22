@@ -224,7 +224,9 @@ SkeletonDagger.prototype.update = function () {
     handleInput(this);
 
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttacking && this.currAnimation.elapsedTime == 0) activateHurtbox(this);
+    if(this.isAttacking && this.currAnimation.elapsedTime == 0) {
+        activateHurtbox(this);
+    }
     if(!this.isAttacking) this.hurtbox.isActive = false;
 
     if (this.changeX) {
@@ -256,7 +258,8 @@ SkeletonDagger.prototype.draw = function () {
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    entityAnimationInit(this, spritesheet, 2);
+    entityAnimationInit(this, spritesheet);
+    this.enemyHP = 1000;
     this.x = this.relativeX = 650;
     this.y = this.relativeY = 80;
     this.hitboxOffsetX = 18;
@@ -291,6 +294,14 @@ MaleKnightSpear.prototype.update = function() {
         // if (this.isRecoiling) {
         //     this.removeFromWorld = true;
         // }
+        console.log(this.isRecoiling);
+        if (this.isRecoiling) {
+            this.enemyHP -= atk;
+            if(this.enemyHP <= 0) {
+                this.removeFromWorld = true;
+            }
+
+        }
 
     }
 
@@ -305,35 +316,73 @@ MaleKnightSpear.prototype.draw = function() {
 }
 
 function MaleKnightMace(game, spritesheet) {
-    this.x = -200;
+    this.enemyHP = 1000;
+    this.x = 650;
     this.y = 80;
-    this.speed = 0;
+    this.hitboxOffsetX = 18;
+    this.hitboxOffsetY = 10;
+    this.spawnX = this.x;
+    this.spawnY = this.y;
+    this.speed = 150;
     this.game = game;
     this.ctx = game.ctx;
+    this.isAttacking = false; //TODO AI logic to use this later
+    this.isRecoiling = false;
     this.direction = 'down';
     this.state = "walkDown";
-    this.removeFromWorld = false;
     this.currAnimation = new Animation(spritesheet, 0, 1744, 190, 123, 6, 0.1, 6, true, 1);
-    this.hitbox = new Hitbox(this.x, this.y, 62, 44, true);
+    this.hitbox = new Hitbox(this.x, this.y, 60, 40, true);
 }
 
 MaleKnightMace.prototype.update = function() {
-    let key = this.game.userInput[0];
-    switch (key) {
-        case ' ':
-            this.x = 690;
-            break;
-    }
-    updateHitbox(this);
     //TODO: make the integers into variables to make it work when they are moving by themselves.
     //NOTE: this is essentially moving the entity furthur or closer to the person according to the postion of the
     //player.
     if(!ON_TITLESCREEN) {
-        this.x = 690 - playerX;
-        this.y = 80 - playerY;
+        //Update relative distance between enemy and player for scrolling consistency
+        let safeDist = -10;
+        let tempX = this.x;
+        let tempY = this.y;
+        let relX = this.spawnX - playerX;
+        let relY = this.spawnY - playerY;
+        let deltaX;
+        let deltaY;
+        this.x = relX;
+        this.y = relY;
+        deltaX = tempX - this.x;
+        deltaY = tempY - this.y;
+        this.spawnX += deltaX / 2;
+        this.spawnY += deltaY / 2;
 
-        // console.log(this.x + " : "+ this.y);
+        //Update distance again to reflect this entity's movement;
+        if(distance(this, this.game.player) > safeDist ) {
+            let dx = this.x - this.game.player.x;
+            let dy = this.y - this.game.player.y;
+            if(dx > 2) {
+                this.x -= (this.game.clockTick * this.speed);
+            } else if(dx < 0) {
+                this.x += (this.game.clockTick * this.speed);
+            }
+            if(dy > 2) {
+                this.y -= this.game.clockTick * this.speed;
+            } else if(dy < 0) {
+                this.y += this.game.clockTick* this.speed;
+            }
+        }
+        // if (this.hitbox.isActive) {
+        //     this.removeFromWorld = true;
+        // }
+        console.log(this.isRecoiling);
+        if (this.isRecoiling) {
+            this.enemyHP -= atk;
+            if(this.enemyHP <= 0) {
+                this.removeFromWorld = true;
+            }
+
+        }
     }
+    updateHitbox(this, (this.x + this.hitboxOffsetX) + 65, (this.y + this.hitboxOffsetY) + 50);
+    updateInvincibilityFrames(this);
     Entity.prototype.update.call(this);
 };
 
