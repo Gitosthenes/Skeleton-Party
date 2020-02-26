@@ -27,7 +27,7 @@ function forestMapGenTerrain(game, assetManager) {
     }
 }
 
-// Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight)
+
 function forestMapGenEnemy(game, assetManager) {
     for (let i = 0; i < 8; i++) {
         game.addEnemy(new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath)));
