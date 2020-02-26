@@ -50,6 +50,7 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/map/desert.png");
     // Character sprites
     this.queueDownload("./res/character/skeleton_sword.png");
+    this.queueDownload("./res/character/skeletonbow.png");
     this.queueDownload("./res/character/male_knight_spear.png");
     this.queueDownload("./res/character/male_knight_mace.png");
     this.queueDownload("./res/character/skeleton_life.png");
