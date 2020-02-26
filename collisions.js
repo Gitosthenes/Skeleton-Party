@@ -19,6 +19,23 @@ function Hitbox(x, y, h, w, isActive) {
     this.isActive = isActive;
 }
 
+function Hurtbox(horWidth, horHeight, vertWidth, vertHeight, upXOffs, upYOffs,
+                 downXOffs, downYOffs, leftXOffs, leftYOffs, rightXOffs, rightYOffs) {
+    this.horizontalWidth = horWidth;
+    this.horizontalHeight = horHeight;
+    this.verticalWidth = vertWidth;
+    this.verticalHeight = vertHeight;
+    this.upXOffset = upXOffs;
+    this.upYOffset = upYOffs;
+    this.downXOffset = downXOffs;
+    this.downYOffset = downYOffs;
+    this.leftXOffset = leftXOffs;
+    this.leftYOffset = leftYOffs;
+    this.rightXOffset = rightXOffs;
+    this.rightYOffset = rightYOffs;
+    this.isActive = false;
+}
+
 /**
  * Calculates and returns the distance between two entities using their X and Y coordinate within the game.
  *
