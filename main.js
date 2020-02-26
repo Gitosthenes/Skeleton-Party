@@ -211,7 +211,12 @@ function entityAnimationInit(entity, spritesheet, type) {
         animations['attackLeft'] = new Animation(spritesheet, 0, 322, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
         animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
         break;
+
+
   }
+
+  //dying animation
+  animations['dying'] = new Animation(spritesheet, 0, 1290, 64, 62, 6, 0.5, 6, false, 1);
 
 
   entity.animations = animations;
@@ -302,10 +307,15 @@ MaleKnightSpear.prototype.update = function() {
 
         if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
-            if(this.enemyHP <= 0) {
+        }
+        if(this.enemyHP <= 0) {
+            this.currAnimation = this.animations['dying'];
+            this.speed = 0;
+            if (this.currAnimation.isDone()) {
                 this.removeFromWorld = true;
             }
         }
+
     }
     Entity.prototype.update.call(this);
 }
@@ -357,7 +367,11 @@ MaleKnightMace.prototype.update = function() {
 
         if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
-            if(this.enemyHP <= 0) {
+        }
+        if(this.enemyHP <= 0) {
+            this.currAnimation = this.animations['dying'];
+            this.speed = 0;
+            if (this.currAnimation.isDone()) {
                 this.removeFromWorld = true;
             }
         }
