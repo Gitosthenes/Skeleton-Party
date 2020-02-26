@@ -9,6 +9,8 @@ let bgX = 0;
 let bgY = 0;
 let playerX = 0;
 let playerY = 0;
+let playerDeltaX = 0;
+let playerDeltaY = 0;
 let boundHitLeft = false;
 let boundHitRight = false;
 let boundHitUp = false;
@@ -238,16 +240,23 @@ SkeletonDagger.prototype.update = function () {
     }
     if(!this.isAttacking) this.hurtbox.isActive = false;
 
+    let oldX = playerX;
+    let oldY = playerY;
     if (this.changeX) {
         playerX += this.game.clockTick * this.xSpeed;
         if(boundHitLeft) playerX = -438;
         if(boundHitRight) playerX = 1476;
     }
     if (this.changeY) {
+        
         playerY += this.game.clockTick * this.ySpeed;
+        
         if(boundHitUp) playerY = -303;
         if(boundHitDown) playerY = 1550;
-    }
+    }        
+    playerDeltaX = playerX - oldX;
+    playerDeltaY = playerY - oldY;
+
 
     if (this.isRecoiling && this.hitByEnemy) {
         hp -= enemyAtk;

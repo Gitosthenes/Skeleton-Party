@@ -16,8 +16,8 @@ function updateEnemyPositionAndAnimation(enemy) {
     enemy.y = enemy.relativeY - playerY;
     deltaX = oldX - enemy.x;
     deltaY = oldY - enemy.y;
-    enemy.relativeX += deltaX / 2;
-    enemy.relativeY += deltaY / 2;
+    enemy.relativeX += (deltaX - playerDeltaX) / 2;
+    enemy.relativeY += (deltaY - playerDeltaY) / 2;
 
 //Update distance again to reflect entity's movement;
     if (!enemy.isRecoiling) {
