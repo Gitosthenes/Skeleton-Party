@@ -73,7 +73,7 @@ GameEngine.prototype.start = function () {
  * to receive user input and react accordingly.
  */
 GameEngine.prototype.startInput = function () {
-    //console.log('Starting User Input');
+    console.log('Starting User Input');
     let that = this;
 
     let checkPressInput = function (key) {
@@ -84,6 +84,7 @@ GameEngine.prototype.startInput = function () {
 
     let checkReleaseInput = function (key) {
         if (that.userInput.includes(key)) {
+            console.log("removing " + key);
             let index = that.userInput.indexOf(key);
             if (index !== -1) that.userInput.splice(index, 1);
         }
@@ -111,6 +112,12 @@ GameEngine.prototype.startInput = function () {
 
             case 'j':
                 checkPressInput('j');
+                console.log("We pressed j");
+                break;
+
+            case 'k':
+                checkPressInput('k');
+                console.log("we pressed k");
                 break;
 
             case 'm':
@@ -145,6 +152,12 @@ GameEngine.prototype.startInput = function () {
 
             case 'j':
                 checkReleaseInput(key);
+                console.log("we let go of j");
+                break;
+
+            case 'k':
+                checkReleaseInput(key);
+                console.log("we let go of k");
                 break;
 
             case 'm':
