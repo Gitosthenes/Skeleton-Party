@@ -236,15 +236,12 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 }
 
 SkeletonDagger.prototype.update = function () {
-    // let that = this;
-
-
     handleInput(this);
 
 
 
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttacking && this.currAnimation.elapsedTime == 0) {
+    if(this.isAttacking && this.currAnimation.elapsedTime === 0) {
         activateHurtbox(this);
     }
     if(!this.isAttacking) this.hurtbox.isActive = false;
@@ -289,66 +286,6 @@ SkeletonDagger.prototype.draw = function () {
     }
 
 };
-
-function MaleKnightSpear(game,spritesheet) {
-
-    this.enemyHP = 1000;
-    this.x = this.relativeX = 0;
-    this.y = this.relativeY = 0;
-    this.hitboxOffsetX = 18;
-    this.hitboxOffsetY = 10;
-    this.safeDist = 63;
-    this.speed = 200;
-    this.game = game;
-    this.ctx = game.ctx;
-    this.isAttacking = false;
-    this.isRecoiling = false;
-    this.direction = 'Down';
-    this.state = "walkDown";
-    this.attAnimationSpeed = 0.12;
-    entityAnimationInit(this, spritesheet, spritesheet,2);
-    this.currAnimation = this.animations[this.state];
-    setEnemyRandomLocation(this);
-    console.log("Spear spawn X " + this.x + "Y " + this.y);
-    Entity.call(game, this.x, this.y, undefined);
-    this.hitbox = new Hitbox(this.x, this.y, 55, 30, true);
-    this.hurtbox = new Hitbox(0, 0, 0, 0, false);
-}
-
-MaleKnightSpear.prototype.update = function() {
-    if(!ON_TITLESCREEN) {
-        let animationDelay = this.currAnimation.totalTime / 1.8;
-
-        updateEnemyPositionAndAnimation(this);
-        updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
-        updateInvincibilityFrames(this);
-
-        if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
-        if(!this.isAttacking) this.hurtbox.isActive = false;
-        checkForCollisions(this);
-
-        if (this.isRecoiling && this.hitByEnemy) {
-            this.enemyHP -= atk;
-        }
-        if(this.enemyHP <= 0) {
-            this.speed = 0;
-            this.currAnimation = this.animations['dying'];
-
-            if (this.currAnimation.isDone()) {
-                this.removeFromWorld = true;
-            }
-        }
-
-    }
-    Entity.prototype.update.call(this);
-}
-
-MaleKnightSpear.prototype.draw = function() {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
-        this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-        Entity.prototype.draw.call(this);
-    }
-}
 
 function MaleKnightMace(game, spritesheet) {
 
@@ -566,16 +503,17 @@ VolumeToggle.prototype.flipVolume = function () {
 
 ASSET_MANAGER.retrieveAllAssets();
 
+
 ASSET_MANAGER.downloadAll(function () {
     WebFontConfig = {
         google:{ families: [font] },
-      };
-      (function(){
+    };
+    (function(){
         var wf = document.createElement("script");
         wf.src = "https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js";
         wf.async = 'true';
         document.head.appendChild(wf);
-      })();
+    })();
 
     let canvas = document.getElementById('gameWorld');
     let ctx = canvas.getContext('2d');
