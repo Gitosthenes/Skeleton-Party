@@ -12,7 +12,7 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     this.state = "walkDown";
     this.safeDist = 63;
     this.attAnimationSpeed = 0.12;
-    entityAnimationInit(this, spriteSheet, animationType);
+    entityAnimationInit(this, spriteSheet, spriteSheet, animationType);
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
