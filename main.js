@@ -527,32 +527,7 @@ VolumeToggle.prototype.flipVolume = function () {
     }
 }
 
-//! ******** QUEUE ASSET DOWNLOAD ******** */
-// Background images
-ASSET_MANAGER.queueDownload("./res/map/titlescreen.jpg");
-ASSET_MANAGER.queueDownload("./res/map/proto_map.jpg");
-ASSET_MANAGER.queueDownload("./res/map/Floor1.png");
-ASSET_MANAGER.queueDownload("./res/map/forest.png");
-// Character sprites
-ASSET_MANAGER.queueDownload("./res/character/skeleton_sword.png");
-ASSET_MANAGER.queueDownload("./res/character/male_knight_spear.png");
-ASSET_MANAGER.queueDownload("./res/character/male_knight_mace.png");
-ASSET_MANAGER.queueDownload("./res/character/skeleton_life.png");
-ASSET_MANAGER.queueDownload("./res/character/def_ui.png");
-ASSET_MANAGER.queueDownload("./res/character/sword_ui.png");
-ASSET_MANAGER.queueDownload("./res/character/enemy_ui.png");
-ASSET_MANAGER.queueDownload("./res/character/timer_ui.png");
-// Audio assets
-ASSET_MANAGER.queueDownload("./res/audio/megalovania.mp3");
-ASSET_MANAGER.queueDownload("./res/audio/volume_bgON.png");
-ASSET_MANAGER.queueDownload("./res/audio/volume_bgOFF.png");
-// Terrain assets.
-ASSET_MANAGER.queueDownload("./res/terrain/Rock1.png");
-ASSET_MANAGER.queueDownload("./res/terrain/Rock2.png");
-ASSET_MANAGER.queueDownload("./res/terrain/DirtHole.png");
-ASSET_MANAGER.queueDownload("./res/terrain/IvyColumn.png");
-ASSET_MANAGER.queueDownload("./res/terrain/ConiferousTree.png");
-
+ASSET_MANAGER.retrieveAllAssets();
 
 ASSET_MANAGER.downloadAll(function () {
     WebFontConfig = {
@@ -576,8 +551,6 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
     forestMapGenTerrain(gameEngine, ASSET_MANAGER);
     forestMapGenEnemy(gameEngine, ASSET_MANAGER);
-    // gameEngine.addEnemy(new MaleKnightSpear(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_spear.png")));
-    // gameEngine.addEnemy(new MaleKnightMace(gameEngine, ASSET_MANAGER.getAsset("./res/character/male_knight_mace.png")));
     gameEngine.setPlayer(new SkeletonDagger(gameEngine, ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png")));
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));
     gameEngine.setVolumeToggle(volumeToggle);

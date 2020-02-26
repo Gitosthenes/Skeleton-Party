@@ -8,11 +8,11 @@ function AssetManager() {
 AssetManager.prototype.queueDownload = function (path) {
     console.log("Queueing " + path);
     this.downloadQueue.push(path);
-}
+};
 
 AssetManager.prototype.isDone = function () {
     return this.downloadQueue.length === this.successCount + this.errorCount;
-}
+};
 
 AssetManager.prototype.downloadAll = function (callback) {
     for (var i = 0; i < this.downloadQueue.length; i++) {
@@ -37,8 +37,47 @@ AssetManager.prototype.downloadAll = function (callback) {
         img.src = path;
         this.cache[path] = img;
     }
-}
+};
 
 AssetManager.prototype.getAsset = function (path) {
     return this.cache[path];
-}
+};
+
+AssetManager.prototype.retrieveAllAssets = function () {
+    // Background images
+    this.queueDownload("./res/map/titlescreen.jpg");
+    this.queueDownload("./res/map/forest.png");
+    this.queueDownload("./res/map/desert.png");
+    // Character sprites
+    this.queueDownload("./res/character/skeleton_sword.png");
+    this.queueDownload("./res/character/male_knight_spear.png");
+    this.queueDownload("./res/character/male_knight_mace.png");
+    this.queueDownload("./res/character/skeleton_life.png");
+    this.queueDownload("./res/character/def_ui.png");
+    this.queueDownload("./res/character/sword_ui.png");
+    this.queueDownload("./res/character/enemy_ui.png");
+    this.queueDownload("./res/character/timer_ui.png");
+    // Audio assets
+    this.queueDownload("./res/audio/megalovania.mp3");
+    this.queueDownload("./res/audio/volume_bgON.png");
+    this.queueDownload("./res/audio/volume_bgOFF.png");
+    // Terrain assets.
+    // Forest terrain
+    this.queueDownload("./res/terrain/Rock1.png");
+    this.queueDownload("./res/terrain/Rock2.png");
+    this.queueDownload("./res/terrain/DirtHole.png");
+    this.queueDownload("./res/terrain/IvyColumn.png");
+    this.queueDownload("./res/terrain/ConiferousTree.png");
+    // Desert Terrain
+    this.queueDownload("./res/terrain/BigCactus.png");
+    this.queueDownload("./res/terrain/DesertRiver.png");
+    this.queueDownload("./res/terrain/DesertRockLarge.png");
+    this.queueDownload("./res/terrain/DesertRockSmall.png");
+    this.queueDownload("./res/terrain/DesertSpikesDark.png");
+    this.queueDownload("./res/terrain/DesertSpikesLight.png");
+    this.queueDownload("./res/terrain/DesertRubble.png");
+};
+
+AssetManager.prototype.downloadAndAttach = function () {
+
+};
