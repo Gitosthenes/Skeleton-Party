@@ -96,12 +96,14 @@ Background.prototype.draw = function () {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5); // Why? Who knows!
     }
     if(time <= 0 || hp <= 0) {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        this.ctx.font = "25px " + font;
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillText("<GAME OVER>", 425, 350);
-        this.ctx.fillText("Refresh to start again!", 370, 450);
-        GAME_OVER = true;
+        if (this.game.player.currAnimation.isDone()) {
+            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            this.ctx.font = "25px " + font;
+            this.ctx.fillStyle = 'white';
+            this.ctx.fillText("<GAME OVER>", 425, 350);
+            this.ctx.fillText("Refresh to start again!", 370, 450);
+            GAME_OVER = true;
+        }
     }
     if(enemyCount === 0) {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -211,7 +213,12 @@ function entityAnimationInit(entity, spritesheet, type) {
         animations['attackLeft'] = new Animation(spritesheet, 0, 322, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
         animations['attackRight'] = new Animation(spritesheet, 0, 450, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
         break;
+
+
   }
+
+  //dying animation
+  animations['dying'] = new Animation(spritesheet, 0, 1290, 64, 62, 6, 0.5, 6, false, 1);
 
 
   entity.animations = animations;
@@ -243,6 +250,14 @@ SkeletonDagger.prototype.update = function () {
 
     if (this.isRecoiling && this.hitByEnemy) {
         hp -= enemyAtk;
+    }
+
+    if(hp <= 0) {
+        this.currAnimation = this.animations['dying'];
+        this.speed = 0;
+        if (this.currAnimation.isDone()) {
+            this.removeFromWorld = true;
+        }
     }
 
     updatePlayerHitbox(this);
@@ -302,7 +317,11 @@ MaleKnightMace.prototype.update = function() {
 
         if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
-            if(this.enemyHP <= 0) {
+        }
+        if(this.enemyHP <= 0) {
+            this.currAnimation = this.animations['dying'];
+            this.speed = 0;
+            if (this.currAnimation.isDone()) {
                 this.removeFromWorld = true;
             }
         }
