@@ -96,12 +96,14 @@ Background.prototype.draw = function () {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5); // Why? Who knows!
     }
     if(time <= 0 || hp <= 0) {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        this.ctx.font = "25px " + font;
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillText("<GAME OVER>", 425, 350);
-        this.ctx.fillText("Refresh to start again!", 370, 450);
-        GAME_OVER = true;
+        if (this.game.player.currAnimation.isDone()) {
+            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+            this.ctx.font = "25px " + font;
+            this.ctx.fillStyle = 'white';
+            this.ctx.fillText("<GAME OVER>", 425, 350);
+            this.ctx.fillText("Refresh to start again!", 370, 450);
+            GAME_OVER = true;
+        }
     }
     if(enemyCount === 0) {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -249,6 +251,14 @@ SkeletonDagger.prototype.update = function () {
 
     if (this.isRecoiling && this.hitByEnemy) {
         hp -= enemyAtk;
+    }
+
+    if(hp <= 0) {
+        this.currAnimation = this.animations['dying'];
+        this.speed = 0;
+        if (this.currAnimation.isDone()) {
+            this.removeFromWorld = true;
+        }
     }
 
     updatePlayerHitbox(this);
