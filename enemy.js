@@ -11,7 +11,7 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     this.direction = 'Down';
     this.state = "walkDown";
     this.safeDist = 63;
-    this.attAnimationSpeed = 0.12;
+    this.attAnimationSpeed = 0.09;
     entityAnimationInit(this, spriteSheet, spriteSheet, animationType);
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
@@ -56,7 +56,7 @@ function activateHurtbox(entity) {
     entity.hurtbox.isActive = true;
     switch (entity.direction.toLowerCase()) {
         case 'down':
-            entity.hurtbox.x = (entity.x - entity.hurtbox.downXOffset);
+            entity.hurtbox.x = (entity.x + entity.hurtbox.downXOffset);
             entity.hurtbox.y = (entity.y + entity.hurtbox.downYOffset);
             entity.hurtbox.height = entity.hurtbox.verticalHeight;
             entity.hurtbox.width = entity.hurtbox.verticalWidth;
@@ -66,8 +66,8 @@ function activateHurtbox(entity) {
             entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
             break;
         case 'up':
-            entity.hurtbox.x = (entity.x - entity.hurtbox.upXOffset);
-            entity.hurtbox.y = entity.y;
+            entity.hurtbox.x = (entity.x + entity.hurtbox.upXOffset);
+            entity.hurtbox.y = entity.y - entity.hurtbox.upYOffset;
             entity.hurtbox.height = entity.hurtbox.verticalHeight;
             entity.hurtbox.width = entity.hurtbox.verticalWidth;
             entity.hurtbox.top = entity.hurtbox.y;
@@ -99,19 +99,20 @@ function activateHurtbox(entity) {
 };
 
 function MaleKnightSpear(game,spritesheet) {
-    Enemy.call(this, game, spritesheet, 200, 2, 18, 10, 30, 55);
-    let hbHorWidth = 50;
-    let hbHorHeight = 30;
-    let hbVertWidth = 20;
+    let animType = 2;
+    Enemy.call(this, game, spritesheet, 200, animType, 24, 14, 18, 34);
+    let hbHorWidth = 46;
+    let hbHorHeight = 12;
+    let hbVertWidth = 12;
     let hbVertHeight = 40;
-    let hbUpXOff = 5;
-    let hbUpYOff = 30;
-    let hbDownXOff = 5;
-    let hbDownYOff = 45;
-    let hbLeftXOff = 22;
-    let hbLeftYOff = 23;
-    let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbUpXOff = 28;
+    let hbUpYOff = 18;
+    let hbDownXOff = 28;
+    let hbDownYOff = 50;
+    let hbLeftXOff = 18;
+    let hbLeftYOff = 28;
+    let hbRightXOff = 35;
+    let hbRightYOff = 28;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
                                 hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -125,17 +126,18 @@ MaleKnightSpear.prototype.draw = function() {
 };
 
 function MaleKnightMace(game, spritesheet) {
-    Enemy.call(this, game, spritesheet, 200, 2, 18, 10, 30, 55);
-    let hbHorWidth = 50;
-    let hbHorHeight = 30;
-    let hbVertWidth = 20;
-    let hbVertHeight = 40;
-    let hbUpXOff = 5;
-    let hbUpYOff = 30;
-    let hbDownXOff = 5;
-    let hbDownYOff = 45;
-    let hbLeftXOff = 22;
-    let hbLeftYOff = 23;
+    let animType = 1;
+    Enemy.call(this, game, spritesheet, 200, animType, 24, 14, 18, 34);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
     let hbRightXOff = 40;
     let hbRightYOff = 23;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
