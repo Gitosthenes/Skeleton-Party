@@ -267,10 +267,11 @@ SkeletonDagger.prototype.update = function () {
 
 
     if (this.isRecoiling && this.hitByEnemy) {
-        hp -= enemyAtk;
+        hp = Math.max(0, hp-enemyAtk);
     }
 
     if(hp <= 0) {
+        this.hitbox.isActive = false;
         this.speed = 0;
         this.currAnimation = this.animations['dying'];
 
