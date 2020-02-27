@@ -1,5 +1,6 @@
 /* Map Image Paths */
 const titleScreenPath = "./res/map/titlescreen.jpg";
+const levelCompletePath = "./res/map/LevelComplete.png";
 const forestMapPath = "./res/map/forest.png";
 const desertMapPath = "./res/map/desert.png";
 
@@ -29,9 +30,14 @@ function Map(game, spritesheet, width, height, scale, imagePath, nextMapPath) {
 }
 
 Map.prototype.draw = function () {
-    if(ON_TITLESCREEN) this.ctx.drawImage(this.spritesheet, this.x, this.y);
+    if(this.game.onTitleScreen) this.ctx.drawImage(this.spritesheet, this.x, this.y);
     else {
-        this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
+        if (this.game.levelComplete) {
+            this.spritesheet = ASSET_MANAGER.getAsset(levelCompletePath);
+            this.ctx.drawImage(this.spritesheet, 0, 0, 950, 700);
+        } else {
+            this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
+        }
     }
     if(time <= 0 || hp <= 0) {
         if (this.game.player.currAnimation.isDone()) {
@@ -40,55 +46,54 @@ Map.prototype.draw = function () {
             this.ctx.fillStyle = 'white';
             this.ctx.fillText("<GAME OVER>", 425, 350);
             this.ctx.fillText("Refresh to start again!", 370, 450);
-            GAME_OVER = true;
+            this.game.gameOver = true;
         }
     }
     if(enemyCount === 0) {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        this.ctx.font = "25px " + font;
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillText("<YOU WIN>", 425, 350);
-        this.ctx.fillText("Refresh to start again!", 370, 450);
-        GAME_OVER = true;
+        this.game.levelComplete = true;
     }
 };
 
 Map.prototype.update = function () {
     if (this.game.userInput.includes(' ')) {
-        if(ON_TITLESCREEN) {
+        if(this.game.onTitleScreen) {
             this.game.setBackground(forestMapInit(this.game, ASSET_MANAGER));
             document.getElementById('audio').play();
             document.getElementById('audio').volume = 0.5;
-            ON_TITLESCREEN = false;
+            this.game.onTitleScreen = false;
         }
     }
 
     //this is the scrolling
     //background coordinates for debug
-    if(!ON_TITLESCREEN) {
-        // Bounds checking for the x axis.
-        if (bgX - playerX > 438) {
-            this.x = 438;
-            boundHitLeft = true;
-        } else if (bgX - playerX < -1476) {
-            this.x = -1476;
-            boundHitRight = true;
+    if (!this.game.onTitleScreen) {
+        if (this.game.entities.length <= 0) {
+            this.game.levelComplete = true;
         } else {
-            boundHitLeft = false;
-            boundHitRight = false;
-            this.x = bgX - playerX;
-        }
-        // Bounds checking for the y axis.
-        if (bgY - playerY > 303) {
-            this.y = 303;
-            boundHitUp = true;
-        } else if (bgY - playerY < -1550) {
-            this.y = -1550;
-            boundHitDown = true;
-        } else {
-            boundHitUp = false;
-            boundHitDown = false;
-            this.y = bgY - playerY;
+            // Bounds checking for the x axis.
+            if (bgX - playerX > 438) {
+                this.x = 438;
+                boundHitLeft = true;
+            } else if (bgX - playerX < -1476) {
+                this.x = -1476;
+                boundHitRight = true;
+            } else {
+                boundHitLeft = false;
+                boundHitRight = false;
+                this.x = bgX - playerX;
+            }
+            // Bounds checking for the y axis.
+            if (bgY - playerY > 303) {
+                this.y = 303;
+                boundHitUp = true;
+            } else if (bgY - playerY < -1550) {
+                this.y = -1550;
+                boundHitDown = true;
+            } else {
+                boundHitUp = false;
+                boundHitDown = false;
+                this.y = bgY - playerY;
+            }
         }
     }
 };
@@ -96,6 +101,10 @@ Map.prototype.update = function () {
 function titleScreenInit(game, assetManager) {
     game.enemies.push(new PlaceHolderEnemy(game, undefined));
     return new Map(game, assetManager.getAsset(titleScreenPath), 800, 800, 1, titleScreenPath, forestMapPath);
+}
+
+function levelCompleteInit(game, assetManager) {
+
 }
 
 function forestMapInit(game, assetManager) {
@@ -128,10 +137,10 @@ function forestMapGenTerrain(game, assetManager) {
 
 function forestMapGenEnemy(game, assetManager) {
     game.enemies = [];
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 1; i++) {
         game.addEnemy(new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath)));
     }
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 1; i++) {
         game.addEnemy(new MaleKnightMace(game, assetManager.getAsset(maceGuyPath)));
     }
 

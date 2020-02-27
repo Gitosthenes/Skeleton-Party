@@ -29,6 +29,9 @@ function GameEngine() {
     this.enemies = [];
     this.terrain = [];
     this.drawables = [];
+    this.onTitleScreen = true;
+    this.levelComplete = false
+    this.gameOver = false;
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
