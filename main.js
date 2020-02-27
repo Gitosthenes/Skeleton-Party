@@ -1,6 +1,4 @@
 let ASSET_MANAGER = new AssetManager();
-let ON_TITLESCREEN = true;
-let GAME_OVER = false;
 var font = "VT323";
 
 //For scrolling
@@ -228,7 +226,7 @@ SkeletonDagger.prototype.update = function () {
 };
 
 SkeletonDagger.prototype.draw = function () {
-    if (!ON_TITLESCREEN && !GAME_OVER) {
+    if (!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         Entity.prototype.draw.call(this);
     }
@@ -247,7 +245,7 @@ function SkeletonHealthUI(game, spritesheet) {
 }
 
 SkeletonHealthUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
+    if(!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
         // console.log("drawing ui 2")
 
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 90, 90);
@@ -269,7 +267,7 @@ function SkeletonDefUI(game, spritesheet) {
 }
 
 SkeletonDefUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
+    if(!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 30, 30);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -288,7 +286,7 @@ function SkeletonAtkUI(game, spritesheet) {
 }
 
 SkeletonAtkUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
+    if(!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 25, 25);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
@@ -307,7 +305,7 @@ function EnemyUI (game, spritesheet) {
 }
 
 EnemyUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
+    if(!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
         enemyCount = this.game.enemies.length;
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 50, 50);
         this.ctx.font = "25px " + font;
@@ -327,7 +325,7 @@ function TimerUI (game, spritesheet) {
 }
 
 TimerUI.prototype.draw = function () {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
+    if(!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 35, 35);
         time -= this.game.clockTick;
         this.ctx.font = "48px " + font;
@@ -354,6 +352,7 @@ function VolumeToggle(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.ctx = game.ctx;
     this.state = 'on';
+    this.game = game;
 }
 
 VolumeToggle.prototype.update = function () {};
@@ -364,7 +363,7 @@ VolumeToggle.prototype.update = function () {};
  *      for overloaded drawImage() parameters
  */
 VolumeToggle.prototype.draw = function () {
-    if (!ON_TITLESCREEN) {
+    if (!this.game.onTitleScreen && !this.game.levelComplete) {
         if (this.state === 'on') {
             this.ctx.drawImage(this.spritesheet, 48, 0, 47 ,47, 900, 650, 30, 30);
         } else if (this.state === 'off') {
@@ -377,7 +376,7 @@ VolumeToggle.prototype.draw = function () {
  * Toggles volume state to ON if not playing; sets it to OFF and restarts audio track if it is playing.
  */
 VolumeToggle.prototype.flipVolume = function () {
-    if(!ON_TITLESCREEN) {
+    if(!this.game.onTitleScreen && !this.game.levelComplete) {
         let isON = this.state == 'on' ? true : false;
         if (isON) {
             this.state = 'off';

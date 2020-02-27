@@ -24,7 +24,7 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
 }
 
 Enemy.prototype.update = function() {
-    if(!ON_TITLESCREEN) {
+    if(!this.game.onTitleScreen) {
         // console.log(this.x + ', ' + this.y)
         let animationDelay = this.currAnimation.totalTime / 1.8;
 
@@ -47,7 +47,7 @@ Enemy.prototype.update = function() {
 };
 
 Enemy.prototype.draw = function() {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
+    if(!this.game.onTitleScreen && !this.game.gameOver) {
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         Entity.prototype.draw.call(this);
     }

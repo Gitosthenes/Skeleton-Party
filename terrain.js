@@ -11,9 +11,8 @@ Terrain.prototype.update = function () {
 };
 
 Terrain.prototype.draw = function (entity) {
-    if(!ON_TITLESCREEN && !GAME_OVER) {
+    if(!entity.game.onTitleScreen && !entity.game.gameOver && !entity.game.levelComplete) {
         entity.ctx.drawImage(entity.spriteSheet, entity.x, entity.y, entity.width, entity.height);
-        Entity.prototype.draw.call(entity);
     }
 };
 
@@ -65,7 +64,7 @@ function Rock1(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y + 18, this.height - 22, this.width, true);
 }
@@ -90,7 +89,7 @@ function Rock2(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 32;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height - 18, this.width, true);
 }
@@ -115,7 +114,7 @@ function DirtHole(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 96;
     this.height = 96;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -140,7 +139,7 @@ function IvyColumn(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 32;
     this.height = 128;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -165,7 +164,7 @@ function ConiferousTree(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 96;
     this.height = 192;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -191,7 +190,7 @@ function BigCactus(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -216,7 +215,7 @@ function DesertRockLarge(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -241,7 +240,7 @@ function DesertRockSmall(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -266,7 +265,7 @@ function DesertSpikesDark(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -291,7 +290,7 @@ function DesertSpikesLight(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -316,7 +315,7 @@ function DesertRubble(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
@@ -341,7 +340,7 @@ function DesertRiver(game, spriteSheet) {
     this.spawnY = 0;
     this.width = 64;
     this.height = 64;
-    Entity.call(game, this.x, this.y, undefined);
+    Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
 }
