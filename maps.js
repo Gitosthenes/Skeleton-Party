@@ -29,10 +29,10 @@ function forestMapGenTerrain(game, assetManager) {
 
 
 function forestMapGenEnemy(game, assetManager) {
-    // for (let i = 0; i < 8; i++) {
-    //     game.addEnemy(new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath)));
-    // }
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 8; i++) {
+        game.addEnemy(new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath)));
+    }
+    for (let i = 0; i < 6; i++) {
         game.addEnemy(new MaleKnightMace(game, assetManager.getAsset(maceGuyPath)));
     }
 

@@ -181,7 +181,7 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtBoxInit();
-    this.invincibilityFrames = 0;
+    this.recoilFrames = 0;
 }
 
 SkeletonDagger.prototype.hurtBoxInit = function () {
@@ -299,7 +299,7 @@ SkeletonDagger.prototype.update = function () {
 
     updatePlayerHitbox(this);
     checkForCollisions(this);
-    updateInvincibilityFrames(this);
+    updateRecoilFrames(this);
 
     this.changeX = this.changeY = false;
 

@@ -7,11 +7,11 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     this.isRecoiling = false;
     this.hitboxOffsetX = hitboxOffsetX;
     this.hitboxOffsetY = hitboxOffsetY;
-    this.speed = speed;
+    this.baseSpeed = speed;
     this.direction = 'Down';
     this.state = "walkDown";
     this.safeDist = 63;
-    this.attAnimationSpeed = 0.09;
+    this.attAnimationSpeed = 0.07;
     entityAnimationInit(this, spriteSheet, spriteSheet, animationType);
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
@@ -27,7 +27,7 @@ Enemy.prototype.update = function() {
 
         updateEnemyPositionAndAnimation(this);
         updateHitbox(this, (this.x + this.hitboxOffsetX), (this.y + this.hitboxOffsetY));
-        updateInvincibilityFrames(this);
+        updateRecoilFrames(this);
 
         if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
@@ -127,7 +127,7 @@ MaleKnightSpear.prototype.draw = function() {
 
 function MaleKnightMace(game, spritesheet) {
     let animType = 1;
-    Enemy.call(this, game, spritesheet, 200, animType, 24, 14, 18, 34);
+    Enemy.call(this, game, spritesheet, 240, animType, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;

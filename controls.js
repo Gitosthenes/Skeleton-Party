@@ -8,7 +8,7 @@ function handleInput(entity) {
     let spd = entity.baseSpeed;
     let key = entity.game.userInput[0]; // Get the first value in the userInput array.
     if (entity.isRecoiling) {    // If the entity is in a busy state, don't interrupt their animation.
-        if (entity.invincibilityFrames > 0) {
+        if (entity.recoilFrames > 0) {
             entity.changeX = entity.changeY = true;
         }
     }
