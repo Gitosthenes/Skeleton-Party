@@ -245,8 +245,8 @@ GameEngine.prototype.addTerrain = function (entity) {
     this.terrain.push(entity);
 };
 
-GameEngine.prototype.setBackground = function (entity) {
-    this.background = entity;
+GameEngine.prototype.setBackground = function (mapFunction) {
+    this.background = mapFunction;
 };
 
 GameEngine.prototype.setPlayer = function (entity) {
@@ -332,8 +332,6 @@ GameEngine.prototype.sortEnities = function () {
     let sortFunction = function (entityA, entityB) {
         return entityA.y - entityB.y;
     }
-
-
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */

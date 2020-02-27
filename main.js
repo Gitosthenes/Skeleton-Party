@@ -80,86 +80,6 @@ Animation.prototype.isDone = function () {
     return (this.elapsedTime >= this.totalTime);
 }
 
-//! ******** Background Definition ******** */
-function Background(game, spritesheet, width, height, scale) {
-    this.x = bgX;
-    this.y = bgY;
-    this.width = width;
-    this.height = height;
-    this.scale = scale;
-    this.spritesheet = spritesheet;
-    this.game = game;
-    this.ctx = game.ctx;
-}
-
-Background.prototype.draw = function () {
-    if(ON_TITLESCREEN) this.ctx.drawImage(this.spritesheet, this.x, this.y);
-    else {
-        this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5); // Why? Who knows!
-    }
-    if(time <= 0 || hp <= 0) {
-        if (this.game.player.currAnimation.isDone()) {
-            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-            this.ctx.font = "25px " + font;
-            this.ctx.fillStyle = 'white';
-            this.ctx.fillText("<GAME OVER>", 425, 350);
-            this.ctx.fillText("Refresh to start again!", 370, 450);
-            GAME_OVER = true;
-        }
-    }
-    if(enemyCount === 0) {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-        this.ctx.font = "25px " + font;
-        this.ctx.fillStyle = 'white';
-        this.ctx.fillText("<YOU WIN>", 425, 350);
-        this.ctx.fillText("Refresh to start again!", 370, 450);
-        GAME_OVER = true;
-    }
-};
-
-Background.prototype.update = function () {
-    if (this.game.userInput.includes(' ')) {
-        if(ON_TITLESCREEN) {
-            this.spritesheet = ASSET_MANAGER.getAsset("./res/map/forest.png");
-            document.getElementById('audio').play();
-            document.getElementById('audio').volume = 0.5;
-            ON_TITLESCREEN = false;
-        }
-    }
-
-    //this is the scrolling
-    //background coordinates for debug
-    // console.log("x = " + this.x);
-    // console.log("y = " + this.y);
-    if(!ON_TITLESCREEN) {
-        // Bounds checking for the x axis.
-        if (bgX - playerX > 438) {
-            this.x = 438;
-            boundHitLeft = true;
-        } else if (bgX - playerX < -1476) {
-            this.x = -1476;
-            boundHitRight = true;
-        } else {
-            boundHitLeft = false;
-            boundHitRight = false;
-            this.x = bgX - playerX;
-        }
-        // Bounds checking for the y axis.
-        if (bgY - playerY > 303) {
-            this.y = 303;
-            boundHitUp = true;
-        } else if (bgY - playerY < -1550) {
-            this.y = -1550;
-            boundHitDown = true;
-        } else {
-            boundHitUp = false;
-            boundHitDown = false;
-            this.y = bgY - playerY;
-        }
-    }
-};
-
-
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.x = -250;
@@ -492,9 +412,10 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.startInput();
 
-    gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
-    forestMapGenTerrain(gameEngine, ASSET_MANAGER);
-    forestMapGenEnemy(gameEngine, ASSET_MANAGER);
+    gameEngine.setBackground(titleScreenInit(gameEngine, ASSET_MANAGER));
+    // gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
+    // forestMapGenTerrain(gameEngine, ASSET_MANAGER);
+    // forestMapGenEnemy(gameEngine, ASSET_MANAGER);
     gameEngine.setPlayer(new SkeletonDagger(gameEngine,
         ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png"), ASSET_MANAGER.getAsset("./res/character/skeletonbow.png")));
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));

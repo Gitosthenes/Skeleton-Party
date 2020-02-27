@@ -21,8 +21,6 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     let padding = 80;
     this.x = this.relativeX = Math.floor(Math.random() * (((800 * 2.5) - this.currAnimation.frameWidth - padding) - padding + 1)) + padding;
     this.y = this.relativeY = Math.floor(Math.random() * (((800 * 2.5) - this.currAnimation.frameWidth - padding) - padding + 1)) + padding;
-    // this.x = this.relativeX = 200
-    // this.y = this.relativeY = 200
 }
 
 Enemy.prototype.update = function() {
@@ -43,14 +41,7 @@ Enemy.prototype.update = function() {
             if(this.enemyHP <= 0) {
                 this.removeFromWorld = true;
             }
-        } 
-        // if(this.hitByTerrain) {
-        //     // console.log(this.prototype);
-        //     this.x += this.game.clocktick * this.xSpeed;
-        //     this.relativeX += this.game.clocktick * this.xSpeed;
-        //     this.y += this.game.clocktick * this.ySpeed;
-        //     this.relativeY += this.game.clocktick * this.ySpeed;
-        // }
+        }
     }
     Entity.prototype.update.call(this);
 };
@@ -63,8 +54,6 @@ Enemy.prototype.draw = function() {
 };
 
 function activateHurtbox(entity) {
-    // TODO: Make activateHurtbox from the collisions file an enemy entity function.
-    // TODO: Add new hurtbox constructor to this.
     entity.hurtbox.isActive = true;
     switch (entity.direction.toLowerCase()) {
         case 'down':
@@ -109,6 +98,14 @@ function activateHurtbox(entity) {
             break;
     }
 };
+
+function PlaceHolderEnemy(game, spritesheet) {
+    Enemy.call(this, game, spritesheet, 200, 1, 0, 0, 0, 0);
+    this.hurtbox = new Hurtbox(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+}
+
+PlaceHolderEnemy.prototype.update = function () {};
+PlaceHolderEnemy.prototype.draw = function () {};
 
 function MaleKnightSpear(game,spritesheet) {
     let animType = 2;

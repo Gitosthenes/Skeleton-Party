@@ -12,11 +12,8 @@ function handleInput(entity) {
             entity.changeX = entity.changeY = true;
         }
     }
-
     if (entity.isAttacking) {
-
         if (entity.currAnimation.elapsedTime === 0) {
-            console.log("stoping attack");
             entity.isAttacking = false;
         }
     }
