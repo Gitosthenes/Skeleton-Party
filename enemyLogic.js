@@ -20,10 +20,10 @@ function updateEnemyPositionAndAnimation(enemy) {
     enemy.relativeY += (deltaY - playerDeltaY) / 2;
 
 //Update distance again to reflect entity's movement;
+    let dx = enemy.x - enemy.game.player.x;
+    let dy = enemy.y - enemy.game.player.y;
     if (!enemy.isRecoiling) {
         if (distance(enemy, enemy.game.player) > enemy.safeDist ) {
-            let dx = enemy.x - enemy.game.player.x;
-            let dy = enemy.y - enemy.game.player.y;
             if(dx > 2) {
                 enemy.x -= (enemy.game.clockTick * enemy.baseSpeed);
             } else if(dx < 0) {
@@ -32,9 +32,13 @@ function updateEnemyPositionAndAnimation(enemy) {
             if(dy > 2) {
                 enemy.y -= enemy.game.clockTick * enemy.baseSpeed;
             } else if(dy < 0) {
-                enemy.y += enemy.game.clockTick* enemy.baseSpeed;
+                enemy.y += enemy.game.clockTick * enemy.baseSpeed;
             }
         }
+    }
+    else {
+        enemy.x += enemy.game.clockTick * enemy.xSpeed;
+        enemy.y += enemy.game.clockTick * enemy.ySpeed;
     }
 
     updateEnemyAnimation(enemy, deltaX, deltaY);
@@ -57,7 +61,7 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
             } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX > 0) {// is the enemy moving straight right?
                 direction = 'Right';
             }
-        } else {//else enemy should be attaking the player
+        } else { //else enemy should be attaking the player
             action = 'attack';
             direction = enemy.direction;
             enemy.isAttacking = true;

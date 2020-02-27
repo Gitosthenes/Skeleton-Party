@@ -73,7 +73,6 @@ function checkForCollisions(entity) {
         }
     }
 
-
     for (let i = 0; i < entity.game.terrain.length; i++) {
         let terrain = entity.game.terrain[i];
         if (hasCollided(entity, terrain) && entity !== terrain) {
@@ -148,8 +147,10 @@ function directionOfCollision(hitboxA, hitboxB) {
 
 function handleTerrainCollision(entity, terrain) {
     entity.isRecoiling = true;
-    entity.invincibilityFrames = 3;
     entity.hitByTerrain = true;
+
+    if (entity === entity.game.player) entity.recoilFrames = 2;
+    else entity.recoilFrames = 4;
 
     switch (directionOfCollision(entity.hitbox, terrain.hitbox)) {
         case 'top':
@@ -176,7 +177,7 @@ function handleTerrainCollision(entity, terrain) {
  */
 function handleEnemyCollision(you, them) {
     you.isRecoiling = true;
-    you.invincibilityFrames = 6;
+    you.recoilFrames = 6;
     you.hitByEnemy = true;
     let dirOfCollision = directionOfCollision(you.hitbox, them.hitbox);
 
@@ -204,7 +205,7 @@ function handleEnemyCollision(you, them) {
  */
 function handleHitCollision(abuser, victim) {
     victim.isRecoiling = true;
-    victim.invincibilityFrames = 6;
+    victim.recoilFrames = 6;
     victim.hitByEnemy = true;
 
     if(victim === abuser.game.player) {
@@ -236,10 +237,11 @@ function handleHitCollision(abuser, victim) {
  *
  * @param entity The entity to update.
  */
-function updateInvincibilityFrames(entity) {
-    if (entity.invincibilityFrames > 0) {
-        entity.invincibilityFrames--;
+function updateRecoilFrames(entity) {
+    if (entity.recoilFrames > 0) {
+        entity.recoilFrames--;
     } else {
+
         entity.xSpeed = 0;
         entity.ySpeed = 0;
         entity.isRecoiling = false;
