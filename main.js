@@ -180,8 +180,25 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     entityAnimationInit(this, spritesheetSword, spritesheetBow,1);
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
-    this.hurtbox = new Hitbox(0, 0, 0, 0, true);
+    this.hurtBoxInit();
     this.invincibilityFrames = 0;
+}
+
+SkeletonDagger.prototype.hurtBoxInit = function () {
+    let hbHorWidth = 80;
+    let hbHorHeight = 38;
+    let hbVertWidth = 115;
+    let hbVertHeight = 38;
+    let hbUpXOff = 5;
+    let hbUpYOff = 0;
+    let hbDownXOff = 5;
+    let hbDownYOff = 45;
+    let hbLeftXOff = 52;
+    let hbLeftYOff = 17;
+    let hbRightXOff = 40;
+    let hbRightYOff = 17;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
 
 function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
@@ -256,12 +273,12 @@ SkeletonDagger.prototype.update = function () {
         if(boundHitRight) playerX = 1476;
     }
     if (this.changeY) {
-        
+
         playerY += this.game.clockTick * this.ySpeed;
-        
+
         if(boundHitUp) playerY = -303;
         if(boundHitDown) playerY = 1550;
-    }        
+    }
     playerDeltaX = playerX - oldX;
     playerDeltaY = playerY - oldY;
 
@@ -272,6 +289,7 @@ SkeletonDagger.prototype.update = function () {
 
     if(hp <= 0) {
         this.speed = 0;
+        this.isDead = true;
         this.currAnimation = this.animations['dying'];
 
         if (this.currAnimation.isDone()) {

@@ -7,7 +7,6 @@
 function handleInput(entity) {
     let spd = entity.baseSpeed;
     let key = entity.game.userInput[0]; // Get the first value in the userInput array.
-    //console.log("we are attacking" + entity.isAttacking);
     if (entity.isRecoiling) {    // If the entity is in a busy state, don't interrupt their animation.
         if (entity.invincibilityFrames > 0) {
             entity.changeX = entity.changeY = true;
@@ -22,7 +21,7 @@ function handleInput(entity) {
         }
     }
 
-    if (!entity.isAttacking && !entity.isRecoiling) {   // If the entity isn't busy, update their state based on input received.
+    if (!entity.isAttacking && !entity.isRecoiling && !entity.isDead) {   // If the entity isn't busy, update their state based on input received.
         switch (key) {
             case undefined:    // No input.
                 if (entity.direction === 'up') setIdleState(entity,'Up');
@@ -192,8 +191,10 @@ function setMovementState(entity, direction, xVal, yVal) {
  */
 function setDiagonalState(entity, direction, xSpd, ySpd) {
     if (entity.game.userInput.includes('j')) {
-        setBattleState(entity, direction);
+        setBattleState(entity, '', direction);
+    } else if (entity.game.userInput.includes('k')) {
+        setBattleState(entity, 'Bow', direction);
     } else {
-        setMovementState(entity, direction, xSpd, ySpd)
+        setMovementState(entity, direction, xSpd, ySpd);
     }
 }
