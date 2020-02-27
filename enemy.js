@@ -8,6 +8,8 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     this.hitboxOffsetX = hitboxOffsetX;
     this.hitboxOffsetY = hitboxOffsetY;
     this.baseSpeed = speed;
+    this.xSpeed = 0;
+    this.ySpeed = 0;
     this.direction = 'Down';
     this.state = "walkDown";
     this.safeDist = 63;
@@ -19,10 +21,13 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     let padding = 80;
     this.x = this.relativeX = Math.floor(Math.random() * (((800 * 2.5) - this.currAnimation.frameWidth - padding) - padding + 1)) + padding;
     this.y = this.relativeY = Math.floor(Math.random() * (((800 * 2.5) - this.currAnimation.frameWidth - padding) - padding + 1)) + padding;
+    // this.x = this.relativeX = 200
+    // this.y = this.relativeY = 200
 }
 
 Enemy.prototype.update = function() {
     if(!ON_TITLESCREEN) {
+        // console.log(this.x + ', ' + this.y)
         let animationDelay = this.currAnimation.totalTime / 1.8;
 
         updateEnemyPositionAndAnimation(this);
@@ -38,7 +43,14 @@ Enemy.prototype.update = function() {
             if(this.enemyHP <= 0) {
                 this.removeFromWorld = true;
             }
-        }
+        } 
+        // if(this.hitByTerrain) {
+        //     // console.log(this.prototype);
+        //     this.x += this.game.clocktick * this.xSpeed;
+        //     this.relativeX += this.game.clocktick * this.xSpeed;
+        //     this.y += this.game.clocktick * this.ySpeed;
+        //     this.relativeY += this.game.clocktick * this.ySpeed;
+        // }
     }
     Entity.prototype.update.call(this);
 };
