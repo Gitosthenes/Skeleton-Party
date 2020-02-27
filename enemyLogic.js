@@ -25,14 +25,14 @@ function updateEnemyPositionAndAnimation(enemy) {
             let dx = enemy.x - enemy.game.player.x;
             let dy = enemy.y - enemy.game.player.y;
             if(dx > 2) {
-                enemy.x -= (enemy.game.clockTick * enemy.speed);
+                enemy.x -= (enemy.game.clockTick * enemy.baseSpeed);
             } else if(dx < 0) {
-                enemy.x += (enemy.game.clockTick * enemy.speed);
+                enemy.x += (enemy.game.clockTick * enemy.baseSpeed);
             }
             if(dy > 2) {
-                enemy.y -= enemy.game.clockTick * enemy.speed;
+                enemy.y -= enemy.game.clockTick * enemy.baseSpeed;
             } else if(dy < 0) {
-                enemy.y += enemy.game.clockTick* enemy.speed;
+                enemy.y += enemy.game.clockTick* enemy.baseSpeed;
             }
         }
     }

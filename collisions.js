@@ -91,7 +91,7 @@ function checkForCollisions(entity) {
  */
 function hasCollided(a, b) {
     let result = false;
-    if (a.hitbox && b.hitbox) {
+    if (a.hitbox && a.hitbox.isActive && b.hitbox && b.hitbox.isActive) {
         result = a.hitbox.x < b.hitbox.x + b.hitbox.width
             && a.hitbox.x + a.hitbox.width > b.hitbox.x
             && a.hitbox.y < b.hitbox.y + b.hitbox.height
@@ -108,7 +108,7 @@ function hasCollided(a, b) {
  */
 function hasHitEnemy(abuser, victim) {
     let result = false;
-    if(abuser.hurtbox && victim.hitbox && abuser.hurtbox.isActive) {
+    if(abuser.hurtbox && abuser.hurtbox.isActive && victim.hitbox && victim.hitbox.isActive) {
         result = abuser.hurtbox.x < victim.hitbox.x + victim.hitbox.width
             && abuser.hurtbox.x + abuser.hurtbox.width > victim.hitbox.x
             && abuser.hurtbox.y < victim.hitbox.y + victim.hitbox.height
@@ -148,7 +148,7 @@ function directionOfCollision(hitboxA, hitboxB) {
 
 function handleTerrainCollision(entity, terrain) {
     entity.isRecoiling = true;
-    entity.invincibilityFrames = 2;
+    entity.invincibilityFrames = 3;
     entity.hitByTerrain = true;
 
     switch (directionOfCollision(entity.hitbox, terrain.hitbox)) {
