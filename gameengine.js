@@ -30,8 +30,11 @@ function GameEngine() {
     this.terrain = [];
     this.drawables = [];
     this.onTitleScreen = true;
-    this.levelComplete = false
+    this.levelComplete = false;
     this.gameOver = false;
+    this.levelCount = 2;
+    this.currentLevel = 1;
+    this.mapOrder = ['title', 'forest', 'desert'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -56,7 +59,6 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.timer = new Timer();
-    //console.log('game initialized');
 };
 
 /**
@@ -300,6 +302,28 @@ GameEngine.prototype.update = function () {
     this.atkUI.update();
     this.enemyUI.update();
     this.timerUI.update();
+
+    if (this.enemies.length <= 0) {
+        this.levelComplete = true;
+        if (this.currentLevel + 1 > this.levelCount) {
+            // TODO: Add win splash screen here
+        } else if (this.userInput.includes(' ')) { // Waiting for next level.
+            console.log("Got your space input");
+            console.log(this.currentLevel);
+            console.log(this.mapOrder[this.currentLevel]);
+            this.currentLevel++;
+            this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
+        }
+    }
+    if (this.userInput.includes(' ')) {
+        if(this.onTitleScreen) {
+            this.setBackground(mapSetUp(this, ASSET_MANAGER, 'forest'));
+            document.getElementById('audio').play();
+            document.getElementById('audio').volume = 0.5;
+            this.onTitleScreen = false;
+            this.levelCount++;
+        }
+    }
     for (let i = 0; i < this.enemies.length; i++) {
         let enemy = this.enemies[i];
         if(!enemy.removeFromWorld) {
@@ -312,7 +336,6 @@ GameEngine.prototype.update = function () {
     for (let i = 0; i < this.entities.length; i++) {
         this.entities[i].update();
     }
-    //console.log(this.enemies.length);
     for (var i = this.enemies.length - 1; i >= 0; --i) {
         let enemy = this.enemies[i];
         if (enemy.removeFromWorld) {
@@ -335,6 +358,11 @@ GameEngine.prototype.sortEnities = function () {
     let sortFunction = function (entityA, entityB) {
         return entityA.y - entityB.y;
     }
+};
+
+GameEngine.prototype.clearEntities = function () {
+    this.enemies = [];
+    this.terrain = [];
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */
