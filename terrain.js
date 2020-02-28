@@ -13,6 +13,7 @@ Terrain.prototype.update = function () {
 Terrain.prototype.draw = function (entity) {
     if(!entity.game.onTitleScreen && !entity.game.gameOver && !entity.game.levelComplete) {
         entity.ctx.drawImage(entity.spriteSheet, entity.x, entity.y, entity.width, entity.height);
+        Entity.prototype.draw.call(entity, entity.ctx);
     }
 };
 
@@ -198,7 +199,7 @@ function BigCactus(game, spriteSheet) {
 BigCactus.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 38, 86, 20, 30);
+    updateTerrainHitbox(this, 0, 0, 64, 64);
 };
 
 BigCactus.prototype.draw = function () {
@@ -223,7 +224,7 @@ function DesertRockLarge(game, spriteSheet) {
 DesertRockLarge.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 38, 86, 20, 30);
+    updateTerrainHitbox(this, 0, 0, 64, 64);
 };
 
 DesertRockLarge.prototype.draw = function () {
@@ -238,8 +239,8 @@ function DesertRockSmall(game, spriteSheet) {
     this.y = 0;
     this.spawnX = 0;
     this.spawnY = 0;
-    this.width = 64;
-    this.height = 64;
+    this.width = 32;
+    this.height = 32;
     Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
@@ -248,7 +249,7 @@ function DesertRockSmall(game, spriteSheet) {
 DesertRockSmall.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 38, 86, 20, 30);
+    updateTerrainHitbox(this, 0, 0, 32, 32);
 };
 
 DesertRockSmall.prototype.draw = function () {
@@ -263,8 +264,8 @@ function DesertSpikesDark(game, spriteSheet) {
     this.y = 0;
     this.spawnX = 0;
     this.spawnY = 0;
-    this.width = 64;
-    this.height = 64;
+    this.width = 32;
+    this.height = 32;
     Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
@@ -273,7 +274,7 @@ function DesertSpikesDark(game, spriteSheet) {
 DesertSpikesDark.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 38, 86, 20, 30);
+    updateTerrainHitbox(this, 0, 0, 32, 32);
 };
 
 DesertSpikesDark.prototype.draw = function () {
@@ -288,8 +289,8 @@ function DesertSpikesLight(game, spriteSheet) {
     this.y = 0;
     this.spawnX = 0;
     this.spawnY = 0;
-    this.width = 64;
-    this.height = 64;
+    this.width = 32;
+    this.height = 32;
     Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
@@ -298,7 +299,7 @@ function DesertSpikesLight(game, spriteSheet) {
 DesertSpikesLight.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 38, 86, 20, 30);
+    updateTerrainHitbox(this, 0, 0, 32, 32);
 };
 
 DesertSpikesLight.prototype.draw = function () {
@@ -314,7 +315,7 @@ function DesertRubble(game, spriteSheet) {
     this.spawnX = 0;
     this.spawnY = 0;
     this.width = 64;
-    this.height = 64;
+    this.height = 32;
     Entity.call(this, game, this.x, this.y, undefined);
     setRandomLocation(this, 800 * 2.5, 800 * 2.5);
     this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
@@ -323,7 +324,7 @@ function DesertRubble(game, spriteSheet) {
 DesertRubble.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 38, 86, 20, 30);
+    updateTerrainHitbox(this, 0, 0, 64, 32);
 };
 
 DesertRubble.prototype.draw = function () {
@@ -348,7 +349,7 @@ function DesertRiver(game, spriteSheet) {
 DesertRiver.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 38, 86, 20, 30);
+    updateTerrainHitbox(this, 0, 0, 64, 64);
 };
 
 DesertRiver.prototype.draw = function () {

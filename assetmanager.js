@@ -54,6 +54,11 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/character/male_knight_spear.png");
     this.queueDownload("./res/character/male_knight_mace.png");
     this.queueDownload("./res/character/skeleton_life.png");
+    this.queueDownload("./res/character/DesertWarriorWarAxe.png");
+    this.queueDownload("./res/character/DesertWarriorDagger.png");
+    this.queueDownload("./res/character/ZombieShovel.png");
+
+    // UI Assets
     this.queueDownload("./res/character/def_ui.png");
     this.queueDownload("./res/character/sword_ui.png");
     this.queueDownload("./res/character/enemy_ui.png");
