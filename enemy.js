@@ -160,3 +160,84 @@ MaleKnightMace.prototype.update = function() {
 MaleKnightMace.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
+
+function DesertWarriorDagger(game, spriteSheet) {
+    let animType = 1;
+    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 23;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+DesertWarriorDagger.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+DesertWarriorDagger.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
+
+function DesertWarriorWarAxe(game, spriteSheet) {
+    let animType = 1;
+    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 23;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+DesertWarriorWarAxe.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+DesertWarriorWarAxe.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
+
+function ZombieShovel(game, spriteSheet) {
+    let animType = 1;
+    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 23;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+ZombieShovel.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+ZombieShovel.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};

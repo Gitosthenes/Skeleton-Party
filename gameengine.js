@@ -427,6 +427,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    drawDebugHitbox(this);
-    drawDebugHurtbox(this);
+    if (this.hitbox !== undefined) drawDebugHitbox(this);
+    if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };
