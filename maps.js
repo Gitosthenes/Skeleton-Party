@@ -173,13 +173,13 @@ function desertMapGenTerrain(game, assetManager) {
 }
 
 function desertMapGenEnemy(game, assetManager) {
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 1; i++) {
         game.addEnemy(new DesertWarriorWarAxe(game, assetManager.getAsset(desertWarriorWarAxePath)));
     }
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 1; i++) {
         game.addEnemy(new DesertWarriorDagger(game, assetManager.getAsset(desertWarriorDaggerPath)));
     }
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 1; i++) {
         game.addEnemy(new ZombieShovel(game, assetManager.getAsset(zombieShovelPath)));
     }
 }
