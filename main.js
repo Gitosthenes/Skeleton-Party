@@ -90,7 +90,8 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.game = game;
     this.ctx = game.ctx;
     this.direction = 'down';
-    this.isAttacking = false;
+    this.isAttackingSword = false;
+    this.isAttackingBow = false;
     this.isRecoiling = false;
     this.hitByEnemy = false;
     this.hitByTerrain = false;
@@ -143,10 +144,10 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
         animations['attackRight'] = new Animation(spritesheetSword, 66, 1985, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
 
         //bow attack
-        animations['attackBowUp'] = new Animation(spritesheetBow, 0, 1037, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-        animations['attackBowLeft'] = new Animation(spritesheetBow, 0, 1099, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-        animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1161, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-        animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1223, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowUp'] = new Animation(spritesheetBow, 0, 1025, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowLeft'] = new Animation(spritesheetBow, 0, 1089, 64, 60, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1149, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1215, 64, 60, 13, entity.attAnimationSpeed, 13, true, 1);
         break;
 
 
@@ -170,14 +171,17 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
 
 SkeletonDagger.prototype.takeDamage = function(amount) {
     hp -= amount;
-}
+};
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
 
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttacking && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
-    if(!this.isAttacking) this.hurtbox.isActive = false;
+    if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
+    if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
+        this.game.addProjectile(new Arrow(this.game, ASSET_MANAGER.getAsset("./res/character/Arrow.png")));
+    }
+    if(!this.isAttackingSword) this.hurtbox.isActive = false;
 
     let oldX = playerX;
     let oldY = playerY;
@@ -227,6 +231,91 @@ SkeletonDagger.prototype.draw = function () {
 
 };
 
+function Arrow(game, spritesheet) {
+    this.x = this.relX = 0;
+    this.y = this.relY = 0;
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spritesheet = spritesheet;
+    this.removeFromWorld = false;
+    this.speed = 500;
+    this.isRecoiling = false;
+    this.hitByEnemy = false;
+    this.direction = this.game.player.direction;
+
+    switch (this.game.player.direction) {
+        case "down" :
+            this.x = this.relX = 450;
+            this.y = this.relY = 325 + 50;
+            break;
+        case "up" :
+            this.x = this.relX = 450;
+            this.y = this.relY = 325 - 15;
+            break;
+        case "left" :
+            this.x = this.relX = 450 - 15;
+            this.y = this.relY = 325;
+            break;
+        case "right":
+            this.x = this.relX = 450 + 15;
+            this.y = this.relY = 325;
+            break
+    }
+    // console.log("arrow x " + this.x);
+    // console.log("arrow y " + this.y);
+    // console.log("player x " + playerX);
+    // console.log("player y " + playerY);
+    ArrowAnimationInit(this, this.spritesheet);
+    this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
+    this.currAnimation = this.animations[this.direction];
+}
+
+function ArrowAnimationInit(entity, spritesheet) {
+    let animations = [];
+
+    animations["left"] = new Animation(spritesheet, 0, 0, 50,
+        40, 4, 1, 1, true, 1);
+    animations["down"] = new Animation(spritesheet, 50, 0, 50, 40,
+        4, 1,1, true, 1);
+    animations["up"] = new Animation(spritesheet, 100, 0, 50, 40,
+        4, 1,1, true, 1);
+    animations["right"] = new Animation(spritesheet, 150, 0, 50, 40,
+        4, 1, 1, true, 1);
+
+    entity.animations = animations;
+}
+
+Arrow.prototype.update = function () {
+    switch (this.direction) {
+        case "down":
+            this.y += this.game.clockTick * this.speed;
+            break;
+
+        case "up":
+            this.y -= this.game.clockTick * this.speed;
+            break;
+
+        case "left":
+            this.x -= this.game.clockTick * this.speed;
+            break;
+
+        case "right":
+            this.x += this.game.clockTick * this.speed;
+            break
+    }
+    updatePlayerHitbox(this);
+    checkForCollisions(this);
+    updateRecoilFrames(this);
+    Entity.prototype.update.call(this);
+};
+
+
+Arrow.prototype.draw = function () {
+    if (!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
+        this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        Entity.prototype.draw.call(this);
+    }
+};
 
 //UI stuff below
 function SkeletonHealthUI(game, spritesheet) {
