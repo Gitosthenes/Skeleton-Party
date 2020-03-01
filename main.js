@@ -238,8 +238,33 @@ function Arrow(game, spritesheet) {
     this.ctx = game.ctx;
     this.spritesheet = spritesheet;
     this.removeFromWorld = false;
+    this.speed = 500;
+    this.direction = this.game.player.direction;
+    this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
+    switch (this.game.player.direction) {
+        case "down" :
+            this.x = this.relX = 450;
+            this.y = this.relY = 325 + 50;
+            break;
+        case "up" :
+            this.x = this.relX = 450;
+            this.y = this.relY = 325 - 15;
+            break;
+        case "left" :
+            this.x = this.relX = 450 - 15;
+            this.y = this.relY = 325;
+            break;
+        case "right":
+            this.x = this.relX = 450 + 15;
+            this.y = this.relY = 325;
+            break
+    }
+    // console.log("arrow x " + this.x);
+    // console.log("arrow y " + this.y);
+    // console.log("player x " + playerX);
+    // console.log("player y " + playerY);
     ArrowAnimationInit(this, this.spritesheet);
-    this.currAnimation = animations[this.game.player.direction];
+    this.currAnimation = this.animations[this.direction];
 }
 
 function ArrowAnimationInit(entity, spritesheet) {
@@ -258,17 +283,34 @@ function ArrowAnimationInit(entity, spritesheet) {
 }
 
 Arrow.prototype.update = function () {
-    if (this.player.direction === "down") {
+    switch (this.direction) {
+        case "down":
+            this.y += this.game.clockTick * this.speed;
+            break;
 
+        case "up":
+            this.y -= this.game.clockTick * this.speed;
+            break;
+
+        case "left":
+            this.x -= this.game.clockTick * this.speed;
+            break;
+
+        case "right":
+            this.x += this.game.clockTick * this.speed;
+            break
     }
-}
+    console.log("arrow y " + this.y);
+    Entity.prototype.update.call(this);
+};
+
 
 Arrow.prototype.draw = function () {
     if (!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         Entity.prototype.draw.call(this);
     }
-}
+};
 
 //UI stuff below
 function SkeletonHealthUI(game, spritesheet) {

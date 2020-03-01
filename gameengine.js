@@ -342,6 +342,7 @@ GameEngine.prototype.update = function () {
     }
     for (let i = 0; i < this.projectiles.length; i++) {
         let projectile = this.projectiles[i];
+        console.log("entering projectile update");
         if(!projectile.removeFromWorld) {
             this.projectiles[i].update();
         }
