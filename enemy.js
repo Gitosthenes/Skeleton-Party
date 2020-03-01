@@ -25,7 +25,6 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
 
 Enemy.prototype.update = function() {
     if(!this.game.onTitleScreen) {
-        // console.log(this.x + ', ' + this.y)
         let animationDelay = this.currAnimation.totalTime / 1.8;
 
         updateEnemyPositionAndAnimation(this);
@@ -54,7 +53,6 @@ Enemy.prototype.draw = function() {
 };
 
 //!----------Enemy update logic----------
-
 function distance(a, b) {
     if(a.x && a.y && b.x && b.y) {
     let dx = a.x - b.x;
@@ -103,7 +101,7 @@ function updateEnemyPositionAndAnimation(enemy) {
 
 function updateEnemyAnimation(enemy, deltaX, deltaY) {
     let action, direction;
-    let deltaVariance = 0.25 ;
+    let deltaVariance = 2;
 
     if(!enemy.isAttacking || enemy.currAnimation.elapsedTime == 0) {
         if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
@@ -130,12 +128,6 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
             enemy.currAnimation = enemy.animations[action+direction];
         }
     }
-}
-
-function setEnemyRandomLocation(entity) {
-    let padding = 80;
-    entity.x = entity.relativeX = Math.floor(Math.random() * (((800 * 2.5) - entity.currAnimation.frameWidth - padding) - padding + 1)) + padding;
-    entity.y = entity.relativeY = Math.floor(Math.random() * (((800 * 2.5) - entity.currAnimation.frameWidth - padding) - padding + 1)) + padding;
 }
 
 function activateHurtbox(entity) {
@@ -184,6 +176,7 @@ function activateHurtbox(entity) {
     }
 };
 
+//!----------Enemy function definitions----------
 function PlaceHolderEnemy(game, spritesheet) {
     Enemy.call(this, game, spritesheet, 200, 1, 0, 0, 0, 0);
     this.hurtbox = new Hurtbox(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);

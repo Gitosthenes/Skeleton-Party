@@ -29,7 +29,7 @@ let time = 60;
 let enemyCount = 0;
 
 //! ******** Animation Definition ******** */
-function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale) {
+function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale, flipped) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
     this.startY = startY;
@@ -42,6 +42,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWi
     this.elapsedTime = 0;
     this.loop = loop;
     this.scale = scale;
+    this.isFlipped = flipped;
 }
 
 Animation.prototype.drawFrame = function (tick, ctx, x, y) {
@@ -54,6 +55,9 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y) {
     let xindex = frame % this.sheetWidth;
     let yindex = Math.floor(frame / this.sheetWidth);
 
+    ctx.save();
+    if(this.isFlipped) ctx.scale(-1, 1);
+
     ctx.drawImage(this.spriteSheet,
         xindex * this.frameWidth + this.startX,
         yindex * this.frameHeight + this.startY,
@@ -63,11 +67,7 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y) {
         this.frameWidth * this.scale,
         this.frameHeight * this.scale);
 
-    if (this.hitbox !== undefined) {
-        ctx.strokeStyle = 'blue';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height);
-    }
+    ctx.restore();
 }
 
 Animation.prototype.currentFrame = function () {
@@ -175,12 +175,8 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
 
-
-
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttacking && this.currAnimation.elapsedTime === 0) {
-        activateHurtbox(this);
-    }
+    if(this.isAttacking && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
     if(!this.isAttacking) this.hurtbox.isActive = false;
 
     let oldX = playerX;
@@ -191,9 +187,7 @@ SkeletonDagger.prototype.update = function () {
         if(boundHitRight) playerX = 1476;
     }
     if (this.changeY) {
-
         playerY += this.game.clockTick * this.ySpeed;
-
         if(boundHitUp) playerY = -303;
         if(boundHitDown) playerY = 1550;
     }
@@ -339,9 +333,7 @@ TimerUI.prototype.draw = function () {
             var timer = minutes.toString() + ":" + seconds.toFixed(0).padStart(2, '0')
             this.ctx.fillText(timer, 450, 40);
         }
-
     }
-
 }
 
 TimerUI.prototype.update = function () {
@@ -390,8 +382,6 @@ VolumeToggle.prototype.flipVolume = function () {
 }
 
 ASSET_MANAGER.retrieveAllAssets();
-
-
 ASSET_MANAGER.downloadAll(function () {
     WebFontConfig = {
         google:{ families: [font] },
