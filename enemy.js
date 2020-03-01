@@ -25,7 +25,6 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
 
 Enemy.prototype.update = function() {
     if(!this.game.onTitleScreen) {
-        // console.log(this.x + ', ' + this.y)
         let animationDelay = this.currAnimation.totalTime / 1.8;
 
         updateEnemyPositionAndAnimation(this);
@@ -53,6 +52,84 @@ Enemy.prototype.draw = function() {
         Entity.prototype.draw.call(this);
     }
 };
+
+//!----------Enemy update logic----------
+function distance(a, b) {
+    if(a.x && a.y && b.x && b.y) {
+    let dx = a.x - b.x;
+    let dy = a.y - b.y;
+    return Math.sqrt(dx * dx + dy * dy);
+    }
+}
+
+function updateEnemyPositionAndAnimation(enemy) {
+    //Update relative distance between enemy and player for scrolling consistency
+    let deltaX, deltaY;
+    let oldX = enemy.x;
+    let oldY = enemy.y;
+
+    enemy.x = enemy.relativeX - playerX;
+    enemy.y = enemy.relativeY - playerY;
+    deltaX = oldX - enemy.x;
+    deltaY = oldY - enemy.y;
+    enemy.relativeX += (deltaX - playerDeltaX) / 2;
+    enemy.relativeY += (deltaY - playerDeltaY) / 2;
+
+//Update distance again to reflect entity's movement;
+    let dx = enemy.x - enemy.game.player.x;
+    let dy = enemy.y - enemy.game.player.y;
+    if (!enemy.isRecoiling) {
+        if (distance(enemy, enemy.game.player) > enemy.safeDist ) {
+            if(dx > 2) {
+                enemy.x -= (enemy.game.clockTick * enemy.baseSpeed);
+            } else if(dx < 0) {
+                enemy.x += (enemy.game.clockTick * enemy.baseSpeed);
+            }
+            if(dy > 2) {
+                enemy.y -= enemy.game.clockTick * enemy.baseSpeed;
+            } else if(dy < 0) {
+                enemy.y += enemy.game.clockTick * enemy.baseSpeed;
+            }
+        }
+    }
+    else {
+        enemy.x += enemy.game.clockTick * enemy.xSpeed;
+        enemy.y += enemy.game.clockTick * enemy.ySpeed;
+    }
+
+    updateEnemyAnimation(enemy, deltaX, deltaY);
+}
+
+function updateEnemyAnimation(enemy, deltaX, deltaY) {
+    let action, direction;
+    let deltaVariance = 2;
+
+    if(!enemy.isAttacking || enemy.currAnimation.elapsedTime == 0) {
+        if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
+            action = 'walk';
+            enemy.isAttacking = false;
+            if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY < 0) {//is enemy moving straight up?
+                direction = 'Up';
+            } else if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY > 0) {//is enemy moving straight down?
+                direction = 'Down';
+            } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX < 0) {//is the enemy moving straight left?
+                direction = 'Left';
+            } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX > 0) {// is the enemy moving straight right?
+                direction = 'Right';
+            }
+        } else { //else enemy should be attaking the player
+            action = 'attack';
+            direction = enemy.direction;
+            enemy.isAttacking = true;
+        }
+
+        if(action && direction) {
+            enemy.direction = direction;
+            enemy.state = action+direction;
+            enemy.currAnimation = enemy.animations[action+direction];
+        }
+    }
+}
 
 function activateHurtbox(entity) {
     entity.hurtbox.isActive = true;
@@ -100,6 +177,7 @@ function activateHurtbox(entity) {
     }
 };
 
+//!----------Enemy function definitions----------
 function PlaceHolderEnemy(game, spritesheet) {
     Enemy.call(this, game, spritesheet, 200, 1, 0, 0, 0, 0);
     this.hurtbox = new Hurtbox(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -163,7 +241,7 @@ MaleKnightMace.prototype.draw = function() {
 };
 
 function DesertWarriorDagger(game, spriteSheet) {
-    let animType = 1;
+    let animType = 2;
     Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
@@ -217,7 +295,7 @@ DesertWarriorWarAxe.prototype.draw = function() {
 };
 
 function ZombieShovel(game, spriteSheet) {
-    let animType = 1;
+    let animType = 2;
     Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;

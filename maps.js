@@ -189,6 +189,7 @@ function desertGenerateEnemy(game, assetManager) {
         case 2:
             enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath));
             break;
+
     }
     game.addEnemy(enemy);
 }
