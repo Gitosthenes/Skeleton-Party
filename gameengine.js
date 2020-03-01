@@ -305,8 +305,9 @@ GameEngine.prototype.update = function () {
 
     if (this.enemies.length <= 0) {
         this.levelComplete = true;
-        if (this.currentLevel + 1 > this.levelCount) {
+        if (this.currentLevel + 1 >= this.levelCount) {
             // TODO: Add win splash screen here
+            console.log('YOU WIN!');
         } else if (this.userInput.includes(' ')) { // Waiting for next level.
             console.log("Got your space input");
             console.log(this.currentLevel);
