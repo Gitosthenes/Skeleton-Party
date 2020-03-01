@@ -12,9 +12,10 @@ function handleInput(entity) {
             entity.changeX = entity.changeY = true;
         }
     }
-    if (entity.isAttacking) {
+    if (entity.isAttackingSword || entity.isAttackingBow) {
         if (entity.currAnimation.elapsedTime === 0) {
-            entity.isAttacking = false;
+            entity.isAttackingBow = false;
+            entity.isAttackingSword = false;
         }
     }
 
@@ -140,7 +141,12 @@ function setBattleState(entity, weapon, direction) {
     updateEntitySpeed(entity, 0, 0);
     entity.direction = direction.toLowerCase();
     entity.currAnimation = entity.animations[animationName];
-    entity.isAttacking = true;
+    if (weapon === "Bow") {
+        entity.isAttackingBow = true;
+    } else {
+        entity.isAttackingSword = true;
+    }
+
 }
 
 /**

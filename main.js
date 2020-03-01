@@ -90,7 +90,8 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.game = game;
     this.ctx = game.ctx;
     this.direction = 'down';
-    this.isAttacking = false;
+    this.isAttackingSword = false;
+    this.isAttackingBow = false;
     this.isRecoiling = false;
     this.hitByEnemy = false;
     this.hitByTerrain = false;
@@ -176,7 +177,10 @@ SkeletonDagger.prototype.update = function () {
     handleInput(this);
 
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttacking && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
+    if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
+    if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
+        this.game.addProjectile(new Arrow(this.game, ASSET_MANAGER.getAsset("./res/character/Arrow.png")));
+    }
     if(!this.isAttacking) this.hurtbox.isActive = false;
 
     let oldX = playerX;
@@ -227,6 +231,44 @@ SkeletonDagger.prototype.draw = function () {
 
 };
 
+function Arrow(game, spritesheet) {
+    this.x = this.relX = 0;
+    this.y = this.relY = 0;
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spritesheet = spritesheet;
+    this.removeFromWorld = false;
+    ArrowAnimationInit(this, this.spritesheet);
+    this.currAnimation = animations[this.game.player.direction];
+}
+
+function ArrowAnimationInit(entity, spritesheet) {
+    let animations = [];
+
+    animations["left"] = new Animation(spritesheet, 0, 0, 50,
+        40, 4, 1, 1, true, 1);
+    animations["down"] = new Animation(spritesheet, 50, 0, 50, 40,
+        4, 1,1, true, 1);
+    animations["up"] = new Animation(spritesheet, 100, 0, 50, 40,
+        4, 1,1, true, 1);
+    animations["right"] = new Animation(spritesheet, 150, 0, 50, 40,
+        4, 1, 1, true, 1);
+
+    entity.animations = animations;
+}
+
+Arrow.prototype.update = function () {
+    if (this.player.direction === "down") {
+
+    }
+}
+
+Arrow.prototype.draw = function () {
+    if (!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
+        this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        Entity.prototype.draw.call(this);
+    }
+}
 
 //UI stuff below
 function SkeletonHealthUI(game, spritesheet) {
