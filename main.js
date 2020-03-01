@@ -300,11 +300,10 @@ function EnemyUI (game, spritesheet) {
 
 EnemyUI.prototype.draw = function () {
     if(!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
-        enemyCount = this.game.enemies.length;
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 50, 50);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
-        this.ctx.fillText(enemyCount.toString() + " LEFT", 835, 33);
+        this.ctx.fillText(this.game.enemyCount.toString() + " LEFT", 835, 33);
     }
 }
 
@@ -425,8 +424,5 @@ ASSET_MANAGER.downloadAll(function () {
     let timerUI = new TimerUI(gameEngine, ASSET_MANAGER.getAsset("./res/character/timer_ui.png"));
     gameEngine.setTimerUI(timerUI);
     gameEngine.addEntity(timerUI);
-
-    enemyCount = gameEngine.enemies.length;
-
     gameEngine.start();
 });
