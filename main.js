@@ -144,10 +144,10 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
         animations['attackRight'] = new Animation(spritesheetSword, 66, 1985, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
 
         //bow attack
-        animations['attackBowUp'] = new Animation(spritesheetBow, 0, 1037, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-        animations['attackBowLeft'] = new Animation(spritesheetBow, 0, 1099, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-        animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1161, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-        animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1223, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowUp'] = new Animation(spritesheetBow, 0, 1025, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowLeft'] = new Animation(spritesheetBow, 0, 1089, 64, 60, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1149, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
+        animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1215, 64, 60, 13, entity.attAnimationSpeed, 13, true, 1);
         break;
 
 
@@ -171,7 +171,7 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
 
 SkeletonDagger.prototype.takeDamage = function(amount) {
     hp -= amount;
-}
+};
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
@@ -181,7 +181,7 @@ SkeletonDagger.prototype.update = function () {
     if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
         this.game.addProjectile(new Arrow(this.game, ASSET_MANAGER.getAsset("./res/character/Arrow.png")));
     }
-    if(!this.isAttacking) this.hurtbox.isActive = false;
+    if(!this.isAttackingSword) this.hurtbox.isActive = false;
 
     let oldX = playerX;
     let oldY = playerY;
@@ -239,8 +239,10 @@ function Arrow(game, spritesheet) {
     this.spritesheet = spritesheet;
     this.removeFromWorld = false;
     this.speed = 500;
+    this.isRecoiling = false;
+    this.hitByEnemy = false;
     this.direction = this.game.player.direction;
-    this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
+
     switch (this.game.player.direction) {
         case "down" :
             this.x = this.relX = 450;
@@ -264,6 +266,7 @@ function Arrow(game, spritesheet) {
     // console.log("player x " + playerX);
     // console.log("player y " + playerY);
     ArrowAnimationInit(this, this.spritesheet);
+    this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.currAnimation = this.animations[this.direction];
 }
 
@@ -300,7 +303,9 @@ Arrow.prototype.update = function () {
             this.x += this.game.clockTick * this.speed;
             break
     }
-    console.log("arrow y " + this.y);
+    updatePlayerHitbox(this);
+    checkForCollisions(this);
+    updateRecoilFrames(this);
     Entity.prototype.update.call(this);
 };
 
