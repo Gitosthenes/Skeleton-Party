@@ -33,7 +33,7 @@ function GameEngine() {
     this.levelComplete = false;
     this.gameOver = false;
     this.levelCount = 2;
-    this.currentLevel = 1;
+    this.currentLevel = 0;
     this.mapOrder = ['title', 'forest', 'desert'];
     //begin ui stuff
     this.volumeToggle = null;
@@ -47,6 +47,9 @@ function GameEngine() {
     this.surfaceWidth = null;
     this.surfaceHeight = null;
     this.userInput = [];
+
+    this.enemyCount = 0;
+    this.spawnMax = 0;
 }
 
 /**
@@ -302,8 +305,9 @@ GameEngine.prototype.update = function () {
     this.atkUI.update();
     this.enemyUI.update();
     this.timerUI.update();
+    this.updateEnemyCount();
 
-    if (this.enemies.length <= 0) {
+    if (this.enemyCount <= 0) {
         this.levelComplete = true;
         if (this.currentLevel + 1 > this.levelCount) {
             // TODO: Add win splash screen here
@@ -352,17 +356,17 @@ GameEngine.prototype.loop = function () {
     this.clockTick = this.timer.tick();
     this.update();
     this.draw();
-}
-
-GameEngine.prototype.sortEnities = function () {
-    let sortFunction = function (entityA, entityB) {
-        return entityA.y - entityB.y;
-    }
 };
 
 GameEngine.prototype.clearEntities = function () {
     this.enemies = [];
     this.terrain = [];
+};
+
+GameEngine.prototype.updateEnemyCount = function () {
+    if (this.enemies.length < this.spawnMax && this.enemyCount >= this.spawnMax) {
+        this.background.generateEnemy(this, ASSET_MANAGER);
+    }
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */
