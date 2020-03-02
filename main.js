@@ -158,11 +158,11 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
         animations['attackRight'] = new Animation(spritesheetSword, 0, 450, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
         break;
 
-        case 3:
-            animations['attackUp'] = new Animation(spritesheetSword, 0, 768, 64, 62, 6, 0.075, 6, true, 1);
-            animations['attackDown'] = new Animation(spritesheetSword, 0, 896, 64, 62, 6, 0.075, 6, true, 1);
-            animations['attackLeft'] = new Animation(spritesheetSword, 0, 832, 64, 62, 6, 0.075, 6, true, 1);
-            animations['attackRight'] = new Animation(spritesheetSword, 0, 960, 64, 62, 6, 0.075, 6, true, 1);
+        case 3: // Small Dagger Attacks
+            animations['attackUp'] = new Animation(spritesheetSword, 0, 768, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackDown'] = new Animation(spritesheetSword, 0, 896, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackLeft'] = new Animation(spritesheetSword, 0, 832, 62, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackRight'] = new Animation(spritesheetSword, 4, 960, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
             break;
   }
 

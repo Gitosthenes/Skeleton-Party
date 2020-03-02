@@ -186,27 +186,6 @@ GameEngine.prototype.startInput = function () {
                 that.volumeToggle.flipVolume();
         }
     }, false);
-
-    this.ctx.canvas.addEventListener('mousedown', function (e) {
-        const rect = that.ctx.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        let adjX = x + (x - that.background.x);
-        let adjY = y + (y - that.background.y);
-        if (x > that.player.hitbox.x) {
-            adjX = x + (x - that.background.x);
-        } else {
-            adjX = x - (x - that.background.x);
-        }
-        if (y > that.player.hitbox.y) {
-            adjY = y + (y - that.background.y);
-        } else {
-            adjY = y - (y - that.background.y);
-        }
-
-
-        console.log("x: " + adjX + " y: " + adjY);
-    });
 };
 
 /**
@@ -322,9 +301,6 @@ GameEngine.prototype.update = function () {
             // TODO: Add win splash screen here
             console.log('YOU WIN!');
         } else if (this.userInput.includes(' ')) { // Waiting for next level.
-            console.log("Got your space input");
-            console.log(this.currentLevel);
-            console.log(this.mapOrder[this.currentLevel]);
             this.currentLevel++;
             this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
         }

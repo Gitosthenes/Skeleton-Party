@@ -41,7 +41,6 @@ function setRandomLocation(entity, mapWidth, mapHeight) {
                 && entity.y < other.y + other.height
                 && entity.y + entity.height > other.y;
             if (isColliding) {
-                console.log('Fixing terrain collision');
                 entity.x = Math.floor(Math.random() * ((mapWidth - entity.width - padding) - padding + 1)) + padding;
                 entity.y = Math.floor(Math.random() * ((mapHeight - entity.height - padding) - padding + 1)) + padding;
             }
