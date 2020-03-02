@@ -150,7 +150,6 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
         animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1215, 64, 60, 13, entity.attAnimationSpeed, 13, true, 1);
         break;
 
-
     case 2: //For small attack spritesheets w/o idle
         /* Attack animations. */
         animations['attackUp'] = new Animation(spritesheetSword, 0, 258, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
@@ -159,7 +158,12 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
         animations['attackRight'] = new Animation(spritesheetSword, 0, 450, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
         break;
 
-
+        case 3: // Small Dagger Attacks
+            animations['attackUp'] = new Animation(spritesheetSword, 0, 768, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackDown'] = new Animation(spritesheetSword, 0, 896, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackLeft'] = new Animation(spritesheetSword, 0, 832, 62, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackRight'] = new Animation(spritesheetSword, 4, 960, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            break;
   }
 
   //dying animation

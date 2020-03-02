@@ -241,7 +241,7 @@ MaleKnightMace.prototype.draw = function() {
 };
 
 function DesertWarriorDagger(game, spriteSheet) {
-    let animType = 2;
+    let animType = 3;
     Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
@@ -295,7 +295,7 @@ DesertWarriorWarAxe.prototype.draw = function() {
 };
 
 function ZombieShovel(game, spriteSheet) {
-    let animType = 2;
+    let animType = 3;
     Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;

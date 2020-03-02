@@ -100,20 +100,18 @@ function mapSetUp(game, assetManager, mapName) {
             map = new Map(game, assetManager.getAsset(titleScreenPath), 950, 700);
             break;
         case 'forest':
-            console.log("Setting up forest map");
             game.clearEntities();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 20;
-            game.spawnMax = 10;
+            game.enemyCount = 0;
+            game.spawnMax = 0;
             break;
         case 'desert':
-            console.log("Setting up desert map");
             game.clearEntities();
             desertMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension, desertGenerateEnemy);
-            game.enemyCount = 32;
-            game.spawnMax = 16;
+            game.enemyCount = 6;
+            game.spawnMax = 6;
             break;
     }
 
