@@ -1,6 +1,9 @@
 function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
     this.removeFromWorld = false;
     this.game = game;
+    let coords = [100, 1000, 1950];
+    this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
+    this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
     this.ctx = game.ctx;
     this.enemyHP = 1000;
     this.isAttacking = false;
@@ -18,9 +21,6 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
-    let padding = 80;
-    this.x = this.relativeX = Math.floor(Math.random() * (((800 * 2.5) - this.currAnimation.frameWidth - padding) - padding + 1)) + padding;
-    this.y = this.relativeY = Math.floor(Math.random() * (((800 * 2.5) - this.currAnimation.frameWidth - padding) - padding + 1)) + padding;
 }
 
 Enemy.prototype.update = function() {
@@ -38,6 +38,7 @@ Enemy.prototype.update = function() {
         if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
+                this.game.enemyCount--;
                 this.removeFromWorld = true;
             }
         }
@@ -240,7 +241,7 @@ MaleKnightMace.prototype.draw = function() {
 };
 
 function DesertWarriorDagger(game, spriteSheet) {
-    let animType = 2;
+    let animType = 3;
     Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
@@ -294,7 +295,7 @@ DesertWarriorWarAxe.prototype.draw = function() {
 };
 
 function ZombieShovel(game, spriteSheet) {
-    let animType = 2;
+    let animType = 3;
     Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;

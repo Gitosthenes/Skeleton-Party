@@ -12,13 +12,15 @@ function handleInput(entity) {
             entity.changeX = entity.changeY = true;
         }
     }
-    if (entity.isAttacking) {
+    if (entity.isAttackingSword || entity.isAttackingBow) {
         if (entity.currAnimation.elapsedTime === 0) {
-            entity.isAttacking = false;
+            entity.isAttackingBow = false;
+            entity.isAttackingSword = false;
         }
     }
 
-    if (!entity.isAttacking && !entity.isRecoiling && !entity.isDead) {   // If the entity isn't busy, update their state based on input received.
+    if (!entity.isAttackingSword && !entity.isAttackingBow && !entity.isRecoiling && !entity.isDead) {
+        // If the entity isn't busy, update their state based on input received.
         switch (key) {
             case undefined:    // No input.
                 if (entity.direction === 'up') setIdleState(entity,'Up');
@@ -140,7 +142,12 @@ function setBattleState(entity, weapon, direction) {
     updateEntitySpeed(entity, 0, 0);
     entity.direction = direction.toLowerCase();
     entity.currAnimation = entity.animations[animationName];
-    entity.isAttacking = true;
+    if (weapon === "Bow") {
+        entity.isAttackingBow = true;
+    } else {
+        entity.isAttackingSword = true;
+    }
+
 }
 
 /**

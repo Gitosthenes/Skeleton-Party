@@ -29,11 +29,12 @@ function GameEngine() {
     this.enemies = [];
     this.terrain = [];
     this.drawables = [];
+    this.projectiles = [];
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
     this.levelCount = 2;
-    this.currentLevel = 1;
+    this.currentLevel = 0;
     this.mapOrder = ['title', 'forest', 'desert'];
     //begin ui stuff
     this.volumeToggle = null;
@@ -47,6 +48,9 @@ function GameEngine() {
     this.surfaceWidth = null;
     this.surfaceHeight = null;
     this.userInput = [];
+
+    this.enemyCount = 0;
+    this.spawnMax = 0;
 }
 
 /**
@@ -182,27 +186,6 @@ GameEngine.prototype.startInput = function () {
                 that.volumeToggle.flipVolume();
         }
     }, false);
-
-    this.ctx.canvas.addEventListener('mousedown', function (e) {
-        const rect = that.ctx.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        let adjX = x + (x - that.background.x);
-        let adjY = y + (y - that.background.y);
-        if (x > that.player.hitbox.x) {
-            adjX = x + (x - that.background.x);
-        } else {
-            adjX = x - (x - that.background.x);
-        }
-        if (y > that.player.hitbox.y) {
-            adjY = y + (y - that.background.y);
-        } else {
-            adjY = y - (y - that.background.y);
-        }
-
-
-        console.log("x: " + adjX + " y: " + adjY);
-    });
 };
 
 /**
@@ -250,6 +233,10 @@ GameEngine.prototype.addTerrain = function (entity) {
     this.terrain.push(entity);
 };
 
+GameEngine.prototype.addProjectile = function(entity) {
+    this.projectiles.push(entity)
+}
+
 GameEngine.prototype.setBackground = function (mapFunction) {
     this.background = mapFunction;
 };
@@ -275,6 +262,10 @@ GameEngine.prototype.draw = function () {
     for (let i = 0; i < this.enemies.length; i++) {     // Draw all enemies.
         //this.enemies[i].draw(this.ctx);
         this.drawables.push(this.enemies[i]);
+    }
+    for (let i = 0; i < this.projectiles.length; i++) {     // Draw all enemies.
+        //this.enemies[i].draw(this.ctx);
+        this.drawables.push(this.projectiles[i]);
     }
     this.drawables.sort( (a,b) => parseFloat(a.hitbox.y) - parseFloat(b.hitbox.y));
     for (let i = 0; i < this.drawables.length; i++) {
@@ -302,16 +293,14 @@ GameEngine.prototype.update = function () {
     this.atkUI.update();
     this.enemyUI.update();
     this.timerUI.update();
+    this.updateEnemyCount();
 
-    if (this.enemies.length <= 0) {
+    if (this.enemyCount <= 0) {
         this.levelComplete = true;
         if (this.currentLevel + 1 >= this.levelCount) {
             // TODO: Add win splash screen here
             console.log('YOU WIN!');
         } else if (this.userInput.includes(' ')) { // Waiting for next level.
-            console.log("Got your space input");
-            console.log(this.currentLevel);
-            console.log(this.mapOrder[this.currentLevel]);
             this.currentLevel++;
             this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
         }
@@ -331,6 +320,13 @@ GameEngine.prototype.update = function () {
             this.enemies[i].update();
         }
     }
+    for (let i = 0; i < this.projectiles.length; i++) {
+        let projectile = this.projectiles[i];
+        console.log("entering projectile update");
+        if(!projectile.removeFromWorld) {
+            this.projectiles[i].update();
+        }
+    }
     for (let i = 0; i < this.terrain.length; i++) {
         this.terrain[i].update();
     }
@@ -344,6 +340,13 @@ GameEngine.prototype.update = function () {
             this.enemies.splice(i, 1);
         }
     }
+    for (var i = this.projectiles.length - 1; i >= 0; --i) {
+        let projectile = this.projectiles[i];
+        if (projectile.removeFromWorld) {
+            console.log("removing enemy");
+            this.projectiles.splice(i, 1);
+        }
+    }
 };
 
 /**
@@ -353,17 +356,17 @@ GameEngine.prototype.loop = function () {
     this.clockTick = this.timer.tick();
     this.update();
     this.draw();
-}
-
-GameEngine.prototype.sortEnities = function () {
-    let sortFunction = function (entityA, entityB) {
-        return entityA.y - entityB.y;
-    }
 };
 
 GameEngine.prototype.clearEntities = function () {
     this.enemies = [];
     this.terrain = [];
+};
+
+GameEngine.prototype.updateEnemyCount = function () {
+    if (this.enemies.length < this.spawnMax && this.enemyCount >= this.spawnMax) {
+        this.background.generateEnemy(this, ASSET_MANAGER);
+    }
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */

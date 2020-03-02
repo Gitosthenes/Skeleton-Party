@@ -26,7 +26,7 @@ const desertSpikesLightPath = "./res/terrain/DesertSpikesLight.png";
 const bigCactusPath = "./res/terrain/BigCactus.png";
 
 
-function Map(game, spritesheet, width, height) {
+function Map(game, spritesheet, width, height, enemyGenFunction) {
     this.x = bgX;
     this.y = bgY;
     this.width = width;
@@ -34,6 +34,7 @@ function Map(game, spritesheet, width, height) {
     this.spritesheet = spritesheet;
     this.game = game;
     this.ctx = game.ctx;
+    this.generateEnemy = enemyGenFunction;
 }
 
 Map.prototype.draw = function () {
@@ -99,18 +100,18 @@ function mapSetUp(game, assetManager, mapName) {
             map = new Map(game, assetManager.getAsset(titleScreenPath), 950, 700);
             break;
         case 'forest':
-            console.log("Setting up forest map");
             game.clearEntities();
             forestMapGenTerrain(game, assetManager);
-            forestMapGenEnemy(game, assetManager);
-            map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension);
+            map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
+            game.enemyCount = 0;
+            game.spawnMax = 0;
             break;
         case 'desert':
-            console.log("Setting up desert map");
             game.clearEntities();
-            desertMapGenEnemy(game, assetManager);
             desertMapGenTerrain(game, assetManager);
-            map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension);
+            map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension, desertGenerateEnemy);
+            game.enemyCount = 6;
+            game.spawnMax = 6;
             break;
     }
 
@@ -140,15 +141,17 @@ function forestMapGenTerrain(game, assetManager) {
     }
 }
 
-
-function forestMapGenEnemy(game, assetManager) {
-    for (let i = 0; i < 1; i++) {
-        game.addEnemy(new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath)));
+function forestGenerateEnemy(game, assetManager) {
+    let enemy = undefined;
+    switch (Math.floor(Math.random() * 2)) {
+        case 0:
+            enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath));
+            break;
+        case 1:
+            enemy = new MaleKnightMace(game, assetManager.getAsset(maceGuyPath));
+            break;
     }
-    for (let i = 0; i < 1; i++) {
-        game.addEnemy(new MaleKnightMace(game, assetManager.getAsset(maceGuyPath)));
-    }
-
+    game.addEnemy(enemy);
 }
 
 function desertMapGenTerrain(game, assetManager) {
@@ -172,15 +175,20 @@ function desertMapGenTerrain(game, assetManager) {
     }
 }
 
-function desertMapGenEnemy(game, assetManager) {
-    for (let i = 0; i < 1; i++) {
-        game.addEnemy(new DesertWarriorWarAxe(game, assetManager.getAsset(desertWarriorWarAxePath)));
+function desertGenerateEnemy(game, assetManager) {
+    let enemy = undefined;
+    switch (Math.floor(Math.random() * 3)) {
+        case 0:
+            enemy = new DesertWarriorWarAxe(game, assetManager.getAsset(desertWarriorWarAxePath));
+            break;
+        case 1:
+            enemy = new DesertWarriorDagger(game, assetManager.getAsset(desertWarriorDaggerPath));
+            break;
+        case 2:
+            enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath));
+            break;
+
     }
-    for (let i = 0; i < 1; i++) {
-        game.addEnemy(new DesertWarriorDagger(game, assetManager.getAsset(desertWarriorDaggerPath)));
-    }
-    for (let i = 0; i < 1; i++) {
-        game.addEnemy(new ZombieShovel(game, assetManager.getAsset(zombieShovelPath)));
-    }
+    game.addEnemy(enemy);
 }
 
