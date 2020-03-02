@@ -199,7 +199,7 @@ function BigCactus(game, spriteSheet) {
 BigCactus.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, 0, 64, 64);
+    updateTerrainHitbox(this, 12, 28, 26, 18);
 };
 
 BigCactus.prototype.draw = function () {
@@ -224,7 +224,7 @@ function DesertRockLarge(game, spriteSheet) {
 DesertRockLarge.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, 0, 64, 64);
+    updateTerrainHitbox(this, 4, 26, 48, 16);
 };
 
 DesertRockLarge.prototype.draw = function () {
@@ -249,7 +249,7 @@ function DesertRockSmall(game, spriteSheet) {
 DesertRockSmall.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, 0, 32, 32);
+    updateTerrainHitbox(this, 6, 6, 20, 8);
 };
 
 DesertRockSmall.prototype.draw = function () {
@@ -274,7 +274,7 @@ function DesertSpikesDark(game, spriteSheet) {
 DesertSpikesDark.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, 0, 32, 32);
+    updateTerrainHitbox(this, 6, 10, 22, 6);
 };
 
 DesertSpikesDark.prototype.draw = function () {
@@ -299,7 +299,7 @@ function DesertSpikesLight(game, spriteSheet) {
 DesertSpikesLight.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, 0, 32, 32);
+    updateTerrainHitbox(this, 6, 10, 22, 6);
 };
 
 DesertSpikesLight.prototype.draw = function () {
@@ -324,7 +324,7 @@ function DesertRubble(game, spriteSheet) {
 DesertRubble.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, 0, 64, 32);
+    updateTerrainHitbox(this, 6, 10, 42, 4);
 };
 
 DesertRubble.prototype.draw = function () {
