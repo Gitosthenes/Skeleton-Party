@@ -276,9 +276,9 @@ function ArrowAnimationInit(entity, spritesheet) {
     animations["left"] = new Animation(spritesheet, 0, 0, 50,
         40, 4, 1, 1, true, 1);
     animations["down"] = new Animation(spritesheet, 50, 0, 50, 40,
-        4, 1,1, true, 1);
+        4, 1, 1, true, 1);
     animations["up"] = new Animation(spritesheet, 100, 0, 50, 40,
-        4, 1,1, true, 1);
+        4, 1, 1, true, 1);
     animations["right"] = new Animation(spritesheet, 150, 0, 50, 40,
         4, 1, 1, true, 1);
 

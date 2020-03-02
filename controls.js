@@ -19,7 +19,8 @@ function handleInput(entity) {
         }
     }
 
-    if (!entity.isAttacking && !entity.isRecoiling && !entity.isDead) {   // If the entity isn't busy, update their state based on input received.
+    if (!entity.isAttackingSword && !entity.isAttackingBow && !entity.isRecoiling && !entity.isDead) {
+        // If the entity isn't busy, update their state based on input received.
         switch (key) {
             case undefined:    // No input.
                 if (entity.direction === 'up') setIdleState(entity,'Up');
