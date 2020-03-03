@@ -33,9 +33,9 @@ function GameEngine() {
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
-    this.levelCount = 2;
+    this.levelCount = 3;
     this.currentLevel = 0;
-    this.mapOrder = ['title', 'forest', 'desert'];
+    this.mapOrder = ['title', 'forest', 'desert', 'graveyard'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -303,6 +303,8 @@ GameEngine.prototype.update = function () {
         } else if (this.userInput.includes(' ')) { // Waiting for next level.
             this.currentLevel++;
             this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
+            playerX = (800 * 2.5) / 2;
+            playerY = (800 * 2.5) / 2;
         }
     }
     if (this.userInput.includes(' ')) {
@@ -322,7 +324,6 @@ GameEngine.prototype.update = function () {
     }
     for (let i = 0; i < this.projectiles.length; i++) {
         let projectile = this.projectiles[i];
-        console.log("entering projectile update");
         if(!projectile.removeFromWorld) {
             this.projectiles[i].update();
         }
@@ -336,14 +337,12 @@ GameEngine.prototype.update = function () {
     for (var i = this.enemies.length - 1; i >= 0; --i) {
         let enemy = this.enemies[i];
         if (enemy.removeFromWorld) {
-            console.log("removing enemy");
             this.enemies.splice(i, 1);
         }
     }
     for (var i = this.projectiles.length - 1; i >= 0; --i) {
         let projectile = this.projectiles[i];
         if (projectile.removeFromWorld) {
-            console.log("removing enemy");
             this.projectiles.splice(i, 1);
         }
     }

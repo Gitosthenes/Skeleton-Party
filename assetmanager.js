@@ -48,6 +48,7 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/map/LevelComplete.png");
     this.queueDownload("./res/map/forest.png");
     this.queueDownload("./res/map/desert.png");
+    this.queueDownload("./res/map/graveyard.png");
     // Character sprites
     this.queueDownload("./res/character/skeleton_sword.png");
     this.queueDownload("./res/character/skeletonbow.png");
@@ -83,6 +84,11 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/terrain/DesertSpikesDark.png");
     this.queueDownload("./res/terrain/DesertSpikesLight.png");
     this.queueDownload("./res/terrain/DesertRubble.png");
+    // Graveyard Terrain
+    this.queueDownload(crossPath);
+    this.queueDownload(headstonePath);
+    this.queueDownload(horizontalHedgePath);
+    this.queueDownload(verticalHedgePath);
 };
 
 AssetManager.prototype.downloadAndAttach = function () {
