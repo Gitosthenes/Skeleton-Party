@@ -303,8 +303,10 @@ GameEngine.prototype.update = function () {
         } else if (this.userInput.includes(' ')) { // Waiting for next level.
             this.currentLevel++;
             this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
-            playerX = (800 * 2.5) / 2;
-            playerY = (800 * 2.5) / 2;
+            
+            //TODO: figure out how to implement dynamic start location for player that doesn't break enemy AI
+            // playerX = (800 * 2.5) / 2;
+            // playerY = (800 * 2.5) / 2;
         }
     }
     if (this.userInput.includes(' ')) {
