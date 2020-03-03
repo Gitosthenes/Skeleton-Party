@@ -164,7 +164,7 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
             animations['attackLeft'] = new Animation(spritesheetSword, 0, 832, 62, 62, 6, entity.attAnimationSpeed, 6, true, 1);
             animations['attackRight'] = new Animation(spritesheetSword, 4, 960, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
             break;
-  }
+    }
 
   //dying animation
   animations['dying'] = new Animation(spritesheetSword, 0, 1290, 64, 62, 6, 0.2, 6, false, 1);
