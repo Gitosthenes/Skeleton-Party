@@ -103,8 +103,8 @@ function mapSetUp(game, assetManager, mapName) {
             game.clearEntities();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 0;
-            game.spawnMax = 0;
+            game.enemyCount = 6;
+            game.spawnMax = 6;
             break;
         case 'desert':
             game.clearEntities();
@@ -114,7 +114,6 @@ function mapSetUp(game, assetManager, mapName) {
             game.spawnMax = 6;
             break;
     }
-
     return map;
 }
 
