@@ -12,6 +12,8 @@ const desertWarriorDaggerPath = "./res/character/DesertWarriorDagger.png";
 const desertWarriorWarAxePath = "./res/character/DesertWarriorWarAxe.png";
 const zombieShovelPath = "./res/character/ZombieShovel.png";
 
+/* FX Image Paths */
+const fxPath = "./res/fx/weapon.png";
 
 /* Terrain Image Paths */
 const rock1Path = "./res/terrain/Rock1.png";
@@ -130,7 +132,7 @@ function mapSetUp(game, assetManager, mapName) {
 }
 
 function titleScreenInit(game, assetManager) {
-    game.enemies.push(new PlaceHolderEnemy(game, undefined));
+    game.enemies.push(new PlaceHolderEnemy(game, undefined, undefined));
     return new Map(game, assetManager.getAsset(titleScreenPath), 800, 800, 1, titleScreenPath, forestMapPath);
 }
 
@@ -156,10 +158,10 @@ function forestGenerateEnemy(game, assetManager) {
     let enemy = undefined;
     switch (Math.floor(Math.random() * 2)) {
         case 0:
-            enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath));
+            enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));
             break;
         case 1:
-            enemy = new MaleKnightMace(game, assetManager.getAsset(maceGuyPath));
+            enemy = new MaleKnightMace(game, assetManager.getAsset(maceGuyPath), assetManager.getAsset(fxPath));
             break;
     }
     game.addEnemy(enemy);
@@ -190,13 +192,13 @@ function desertGenerateEnemy(game, assetManager) {
     let enemy = undefined;
     switch (Math.floor(Math.random() * 3)) {
         case 0:
-            enemy = new DesertWarriorWarAxe(game, assetManager.getAsset(desertWarriorWarAxePath));
+            enemy = new DesertWarriorWarAxe(game, assetManager.getAsset(desertWarriorWarAxePath), assetManager.getAsset(fxPath));
             break;
         case 1:
-            enemy = new DesertWarriorDagger(game, assetManager.getAsset(desertWarriorDaggerPath));
+            enemy = new DesertWarriorDagger(game, assetManager.getAsset(desertWarriorDaggerPath), assetManager.getAsset(fxPath));
             break;
         case 2:
-            enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath));
+            enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath), assetManager.getAsset(fxPath));
             break;
 
     }
@@ -232,7 +234,7 @@ function graveyardGenerateEnemy(game, assetManager) {
     let enemy = undefined;
     switch (Math.floor(Math.random() * 0)) {
         case 0:
-            enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath));
+            enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath), assetManager.getAsset(fxPath));
             break;
 
     }

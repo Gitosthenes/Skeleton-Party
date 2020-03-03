@@ -1,4 +1,4 @@
-function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
+function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, SecondaryAnimType, speed, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
     this.removeFromWorld = false;
     this.game = game;
     let coords = [100, 1000, 1950];
@@ -19,7 +19,7 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     this.state = "walkDown";
     this.safeDist = 63;
     this.attAnimationSpeed = 0.07;
-    entityAnimationInit(this, spriteSheet, spriteSheet, animationType);
+    entityAnimationInit(this, spriteSheet, spriteSheet, primaryAnimType);
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
@@ -203,9 +203,10 @@ function PlaceHolderEnemy(game, spritesheet) {
 PlaceHolderEnemy.prototype.update = function () {};
 PlaceHolderEnemy.prototype.draw = function () {};
 
-function MaleKnightSpear(game,spritesheet) {
-    let animType = 2;
-    Enemy.call(this, game, spritesheet, 200, animType, 24, 14, 18, 34);
+function MaleKnightSpear(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 2;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 200, 24, 14, 18, 34);
     let hbHorWidth = 46;
     let hbHorHeight = 12;
     let hbVertWidth = 12;
@@ -230,9 +231,10 @@ MaleKnightSpear.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function MaleKnightMace(game, spritesheet) {
-    let animType = 1;
-    Enemy.call(this, game, spritesheet, 240, animType, 24, 14, 18, 34);
+function MaleKnightMace(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 1; //Large attk sprite
+    let secondaryAnimType = 1; // horizontal slash animation
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;
@@ -257,9 +259,10 @@ MaleKnightMace.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function DesertWarriorDagger(game, spriteSheet) {
-    let animType = 3;
-    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+function DesertWarriorDagger(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;
@@ -284,9 +287,10 @@ DesertWarriorDagger.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function DesertWarriorWarAxe(game, spriteSheet) {
-    let animType = 1;
-    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+function DesertWarriorWarAxe(game, spriteSheet, fxSpritesheet) {
+    let primaryAnimType = 1;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;
@@ -311,9 +315,10 @@ DesertWarriorWarAxe.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function ZombieShovel(game, spriteSheet) {
-    let animType = 3;
-    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+function ZombieShovel(game, spriteSheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;

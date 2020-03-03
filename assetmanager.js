@@ -58,6 +58,8 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/character/DesertWarriorWarAxe.png");
     this.queueDownload("./res/character/DesertWarriorDagger.png");
     this.queueDownload("./res/character/ZombieShovel.png");
+    //FX spritesheet
+    this.queueDownload("./res/fx/weapon.png");
     //Projectile assets
     this.queueDownload("./res/character/Arrow.png");
     // UI Assets
