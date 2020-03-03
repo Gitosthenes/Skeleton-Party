@@ -1,4 +1,4 @@
-function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, SecondaryAnimType, speed, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
+function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, speed, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
     this.removeFromWorld = false;
     this.game = game;
     let coords = [100, 1000, 1950];
@@ -20,6 +20,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, SecondaryAnimT
     this.safeDist = 63;
     this.attAnimationSpeed = 0.07;
     entityAnimationInit(this, spriteSheet, spriteSheet, primaryAnimType);
+    secondaryAnimationInit(this, fxSpritesheet, secondaryAnimType);
     this.currAnimation = this.animations[this.state];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
