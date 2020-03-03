@@ -4,6 +4,8 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     let coords = [100, 1000, 1950];
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
+    this.absX = this.relativeX - 445;
+    this.absY = this.relativeY - 324;
     this.ctx = game.ctx;
     this.enemyHP = 1000;
     this.isAttacking = false;
@@ -75,51 +77,49 @@ function updateEnemyPositionAndAnimation(enemy) {
     enemy.relativeX += (deltaX - playerDeltaX) / 2;
     enemy.relativeY += (deltaY - playerDeltaY) / 2;
 
-//Update distance again to reflect entity's movement;
-    let dx = enemy.x - enemy.game.player.x;
-    let dy = enemy.y - enemy.game.player.y;
+// Update distance again to reflect entity's movement
+    let dx = playerX - enemy.absX;
+    let dy = playerY - enemy.absY;
     if (!enemy.isRecoiling) {
         if (distance(enemy, enemy.game.player) > enemy.safeDist ) {
-            if(dx > 2) {
+            if(dx < 0) {
                 enemy.x -= (enemy.game.clockTick * enemy.baseSpeed);
-            } else if(dx < 0) {
+                enemy.absX -= Math.abs((deltaX - playerDeltaX) / 2);
+            } else if(dx > 2) {
                 enemy.x += (enemy.game.clockTick * enemy.baseSpeed);
+                enemy.absX += Math.abs((deltaX - playerDeltaX) / 2);
             }
-            if(dy > 2) {
+            if(dy < 0) {
                 enemy.y -= enemy.game.clockTick * enemy.baseSpeed;
-            } else if(dy < 0) {
+                enemy.absY -= Math.abs((deltaY - playerDeltaY) / 2);
+            } else if(dy > 2) {
                 enemy.y += enemy.game.clockTick * enemy.baseSpeed;
+                enemy.absY += Math.abs((deltaY - playerDeltaY) / 2);
             }
         }
     }
     else {
+        let xSign = enemy.xSpeed ? (enemy.xSpeed / Math.abs(enemy.xSpeed)) : 0; // -1 if xSpeed is negative, +1 is positive, 0 if falsey
+        let ySign = enemy.ySpeed ? (enemy.ySpeed / Math.abs(enemy.ySpeed)) : 0; // -1 if ySpeed is negative, +1 is positive, 0 if falsey
         enemy.x += enemy.game.clockTick * enemy.xSpeed;
         enemy.y += enemy.game.clockTick * enemy.ySpeed;
+        enemy.absX += Math.abs((deltaX - playerDeltaX) / 2) * xSign;
+        enemy.absY += Math.abs((deltaY - playerDeltaY) / 2) * ySign;
     }
 
-    updateEnemyAnimation(enemy, deltaX, deltaY);
+    updateEnemyAnimation(enemy);
 }
 
-function updateEnemyAnimation(enemy, deltaX, deltaY) {
+function updateEnemyAnimation(enemy) {
     let action, direction;
-    let deltaVariance = 2;
 
     if(!enemy.isAttacking || enemy.currAnimation.elapsedTime == 0) {
+        direction = getDirToFacePlayer(enemy);
         if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
             action = 'walk';
             enemy.isAttacking = false;
-            if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY < 0) {//is enemy moving straight up?
-                direction = 'Up';
-            } else if((deltaX > -deltaVariance && deltaX < deltaVariance) && deltaY > 0) {//is enemy moving straight down?
-                direction = 'Down';
-            } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX < 0) {//is the enemy moving straight left?
-                direction = 'Left';
-            } else if((deltaY > -deltaVariance && deltaY < deltaVariance) && deltaX > 0) {// is the enemy moving straight right?
-                direction = 'Right';
-            }
         } else { //else enemy should be attaking the player
             action = 'attack';
-            direction = enemy.direction;
             enemy.isAttacking = true;
         }
 
@@ -129,6 +129,23 @@ function updateEnemyAnimation(enemy, deltaX, deltaY) {
             enemy.currAnimation = enemy.animations[action+direction];
         }
     }
+}
+
+function getDirToFacePlayer(enemy) {
+    let UpDown_threshold = 1.5;
+    let leftRight_threshold = 0.8;
+    let direction = enemy.direction;
+    let dy = playerY - enemy.absY;
+    let dx = playerX - enemy.absX;
+    let m = dy / dx;
+
+    if(m > -leftRight_threshold && m < leftRight_threshold) {
+        direction = dx > 0 ? 'Right' : 'Left';
+    } else if(m < -UpDown_threshold || m > UpDown_threshold) {
+        direction = dy > 0 ? 'Down' : 'Up';
+    }
+
+    return direction;
 }
 
 function activateHurtbox(entity) {
