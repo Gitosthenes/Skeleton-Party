@@ -4,6 +4,10 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
 
     this.removeFromWorld = false;
     this.game = game;
+    this.hitboxOffsetX = hitboxOffsetX;
+    this.hitboxOffsetY = hitboxOffsetY;
+    this.baseSpeed = speed;
+
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
     this.absX = this.relativeX - 445;
@@ -12,20 +16,18 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.enemyHP = 1000;
     this.isAttacking = false;
     this.isRecoiling = false;
-    this.hitboxOffsetX = hitboxOffsetX;
-    this.hitboxOffsetY = hitboxOffsetY;
-    this.baseSpeed = speed;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.direction = 'Down';
-    this.attackFX = 'slash'
-    this.state = "walkDown";
     this.safeDist = 63;
+    this.direction = 'Down';
+    this.attkType = 'slash'
+    this.state = "walkDown";
+    
     this.animations = entityAnimationInit(attkAnimSpeed, spriteSheet, spriteSheet, primaryAnimType);
     this.altAnimations = altAnimationInit(attkAnimSpeed, fxSpritesheet, secondaryAnimType);
-    // this.FXoffsets = altAnimationOffsetsInit(this);
+    // this.fxOffsets = setupFXoffsets(this.attkType);
     this.currAnimation = this.animations[this.state];
-    this.currAltAnimation = this.altAnimations[this.attackFX + this.direction];
+    this.currAltAnimation = this.altAnimations[this.attkType + this.direction];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
 }
@@ -121,7 +123,7 @@ function updateEnemyAnimation(enemy) {
 
     if(!enemy.isAttacking || enemy.currAnimation.elapsedTime == 0) {
         direction = getDirToFacePlayer(enemy);
-        enemy.currAltAnimation = enemy.altAnimations[enemy.attackFX + direction];
+        enemy.currAltAnimation = enemy.altAnimations[enemy.attkType + direction];
         if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
             action = 'walk';
             enemy.isAttacking = false;
