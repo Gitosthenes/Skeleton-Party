@@ -16,12 +16,14 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.xSpeed = 0;
     this.ySpeed = 0;
     this.direction = 'Down';
+    this.attackFX = 'slash'
     this.state = "walkDown";
     this.safeDist = 63;
     this.attAnimationSpeed = 0.07;
     entityAnimationInit(this, spriteSheet, spriteSheet, primaryAnimType);
-    secondaryAnimationInit(this, fxSpritesheet, secondaryAnimType);
+    altAnimationInit(this, fxSpritesheet, secondaryAnimType);
     this.currAnimation = this.animations[this.state];
+    this.currAltAnimation = this.altAnimations[this.attackFX + this.direction];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
 }
@@ -52,6 +54,7 @@ Enemy.prototype.update = function() {
 Enemy.prototype.draw = function() {
     if(!this.game.onTitleScreen && !this.game.gameOver) {
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        if(this.currAltAnimation) this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         Entity.prototype.draw.call(this);
     }
 };
@@ -116,6 +119,7 @@ function updateEnemyAnimation(enemy) {
 
     if(!enemy.isAttacking || enemy.currAnimation.elapsedTime == 0) {
         direction = getDirToFacePlayer(enemy);
+        enemy.currAltAnimation = enemy.altAnimations[enemy.attackFX + direction];
         if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
             action = 'walk';
             enemy.isAttacking = false;

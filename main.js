@@ -173,7 +173,7 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
  * @param spritesheet weapon FX spritesheet
  * @param type determines which animation to attach to entity
  */
-function secondaryAnimationInit(entity, spritesheet, type) {
+function altAnimationInit(entity, spritesheet, type) {
     let animations = [];
     
     //Universal FX
@@ -181,10 +181,10 @@ function secondaryAnimationInit(entity, spritesheet, type) {
     
     switch(type) {
         case 1: //Slash animation
-            animations['slashRight'] = new Animation(spritesheet, 0, 0, 164, 69, 656, entity.attAnimationSpeed, 4, true, 1);
-            animations['slashLeft'] = new Animation(spritesheet, 0, 69, 164, 69, 656, entity.attAnimationSpeed, 4, true, 1);
-            animations['slashUp'] = new Animation(0, 138, 176, 50, 704, entity.attAnimationSpeed, 4, true, 1);
-            animations['slashDown'] = new Animation(0, 188, 176, 50, 704, entity.attAnimationSpeed, 4, true, 1);
+            animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, entity.attAnimationSpeed, 4, true, 1);
+            animations['slashLeft'] = new Animation(spritesheet, 0, 70, 165, 68, 660, entity.attAnimationSpeed, 4, true, 1);
+            animations['slashUp'] = new Animation(spritesheet, 0, 139, 176, 49, 704, entity.attAnimationSpeed, 4, true, 1);
+            animations['slashDown'] = new Animation(spritesheet, 0, 189, 176, 49, 704, entity.attAnimationSpeed, 4, true, 1);
             break;
     }
 
