@@ -134,3 +134,29 @@ function ArrowAnimationInit(entity, spritesheet) {
 
     entity.animations = animations;
 }
+
+/**
+ * Returns offsets used to draw weapon FX based on attak type
+ *
+ * @param type attack type of entity 
+ * @returns object that contains x and y offsets to use when drawing FX
+ */
+function setupFXoffsets(type) {
+    let uX = uY = dX = dY = lX = lY = rX = rY = 0;
+    let offsets = [];
+
+    switch(type) {
+        case 'slash':
+            uX = -45; uY = -30;
+            dX = -45; dY = 50;
+            lX = -90;
+
+            offsets['Up'] = {x: uX, y: uY };
+            offsets['Down'] = {x: dX, y: dY };
+            offsets['Left'] = {x: lX, y: lY };
+            offsets['Right'] = {x: rX, y: rY };
+            break;
+    }
+
+    return offsets;
+}

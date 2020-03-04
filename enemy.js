@@ -25,7 +25,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     
     this.animations = entityAnimationInit(attkAnimSpeed, spriteSheet, spriteSheet, primaryAnimType);
     this.altAnimations = altAnimationInit(attkAnimSpeed, fxSpritesheet, secondaryAnimType);
-    // this.fxOffsets = setupFXoffsets(this.attkType);
+    this.fxOffsets = setupFXoffsets(this.attkType);
     this.currAnimation = this.animations[this.state];
     this.currAltAnimation = this.altAnimations[this.attkType + this.direction];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
@@ -57,8 +57,14 @@ Enemy.prototype.update = function() {
 
 Enemy.prototype.draw = function() {
     if(!this.game.onTitleScreen && !this.game.gameOver) {
+        
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-        if(this.currAltAnimation) this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        
+        if(this.currAltAnimation && this.fxOffsets[this.direction]) {
+            let offsets = this.fxOffsets[this.direction];
+            this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, (this.x + offsets.x), (this.y + offsets.y));
+        }
+
         Entity.prototype.draw.call(this);
     }
 };
