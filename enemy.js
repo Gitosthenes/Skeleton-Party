@@ -1,7 +1,13 @@
-function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
+function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, speed, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
+    let coords = [100, 1000, 1950];
+    let attkAnimSpeed = 0.07;
+
     this.removeFromWorld = false;
     this.game = game;
-    let coords = [100, 1000, 1950];
+    this.hitboxOffsetX = hitboxOffsetX;
+    this.hitboxOffsetY = hitboxOffsetY;
+    this.baseSpeed = speed;
+
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
     this.absX = this.relativeX - 445;
@@ -10,17 +16,18 @@ function Enemy(game, spriteSheet, speed, animationType, hitboxOffsetX, hitboxOff
     this.enemyHP = 1000;
     this.isAttacking = false;
     this.isRecoiling = false;
-    this.hitboxOffsetX = hitboxOffsetX;
-    this.hitboxOffsetY = hitboxOffsetY;
-    this.baseSpeed = speed;
     this.xSpeed = 0;
     this.ySpeed = 0;
+    this.safeDist = 80;
     this.direction = 'Down';
+    this.attkType = 'slash'
     this.state = "walkDown";
-    this.safeDist = 63;
-    this.attAnimationSpeed = 0.07;
-    entityAnimationInit(this, spriteSheet, spriteSheet, animationType);
+    
+    this.animations = entityAnimationInit(attkAnimSpeed, spriteSheet, spriteSheet, primaryAnimType);
+    this.altAnimations = altAnimationInit(attkAnimSpeed, fxSpritesheet, secondaryAnimType);
+    this.fxOffsets = setupFXoffsets(this.attkType);
     this.currAnimation = this.animations[this.state];
+    this.currAltAnimation = this.altAnimations[this.attkType + this.direction];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
 }
@@ -50,7 +57,14 @@ Enemy.prototype.update = function() {
 
 Enemy.prototype.draw = function() {
     if(!this.game.onTitleScreen && !this.game.gameOver) {
+        
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        
+        if(this.currAltAnimation && this.fxOffsets[this.direction] && this.hurtbox.isActive) {
+            let offsets = this.fxOffsets[this.direction];
+            this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, (this.x + offsets.x), (this.y + offsets.y));
+        }
+
         Entity.prototype.draw.call(this);
     }
 };
@@ -115,6 +129,7 @@ function updateEnemyAnimation(enemy) {
 
     if(!enemy.isAttacking || enemy.currAnimation.elapsedTime == 0) {
         direction = getDirToFacePlayer(enemy);
+        enemy.currAltAnimation = enemy.altAnimations[enemy.attkType + direction];
         if(distance(enemy.game.player, enemy) > enemy.safeDist) {//should the enemy be walking towards the player?
             action = 'walk';
             enemy.isAttacking = false;
@@ -132,7 +147,7 @@ function updateEnemyAnimation(enemy) {
 }
 
 function getDirToFacePlayer(enemy) {
-    let UpDown_threshold = 1.5;
+    let UpDown_threshold = 1.1;
     let leftRight_threshold = 0.8;
     let direction = enemy.direction;
     let dy = playerY - enemy.absY;
@@ -203,9 +218,10 @@ function PlaceHolderEnemy(game, spritesheet) {
 PlaceHolderEnemy.prototype.update = function () {};
 PlaceHolderEnemy.prototype.draw = function () {};
 
-function MaleKnightSpear(game,spritesheet) {
-    let animType = 2;
-    Enemy.call(this, game, spritesheet, 200, animType, 24, 14, 18, 34);
+function MaleKnightSpear(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 2;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 200, 24, 14, 18, 34);
     let hbHorWidth = 46;
     let hbHorHeight = 12;
     let hbVertWidth = 12;
@@ -230,21 +246,26 @@ MaleKnightSpear.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function MaleKnightMace(game, spritesheet) {
-    let animType = 1;
-    Enemy.call(this, game, spritesheet, 240, animType, 24, 14, 18, 34);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+function MaleKnightMace(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 1; //Large attk sprite
+    let secondaryAnimType = 1; // slash animation
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
+    
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -257,9 +278,10 @@ MaleKnightMace.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function DesertWarriorDagger(game, spriteSheet) {
-    let animType = 3;
-    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+function DesertWarriorDagger(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;
@@ -284,9 +306,10 @@ DesertWarriorDagger.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function DesertWarriorWarAxe(game, spriteSheet) {
-    let animType = 1;
-    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+function DesertWarriorWarAxe(game, spriteSheet, fxSpritesheet) {
+    let primaryAnimType = 1;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;
@@ -311,9 +334,10 @@ DesertWarriorWarAxe.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
 
-function ZombieShovel(game, spriteSheet) {
-    let animType = 3;
-    Enemy.call(this, game, spriteSheet, 240, animType, 24, 14, 18, 34);
+function ZombieShovel(game, spriteSheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = 0; //N/A
+    Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
     let hbVertWidth = 40;
