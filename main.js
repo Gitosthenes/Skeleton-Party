@@ -9,7 +9,7 @@ function Arrow(game, spritesheet) {
     this.ctx = game.ctx;
     this.spritesheet = spritesheet;
     this.removeFromWorld = false;
-    this.speed = 500;
+    this.speed = 700;
     this.isRecoiling = false;
     this.hitByEnemy = false;
     this.direction = this.game.player.direction;
@@ -90,13 +90,11 @@ ASSET_MANAGER.downloadAll(function () {
 
     gameEngine.init(ctx);
     gameEngine.startInput();
-
-    gameEngine.setBackground(titleScreenInit(gameEngine, ASSET_MANAGER));
-    // gameEngine.setBackground(new Background(gameEngine, ASSET_MANAGER.getAsset("./res/map/titlescreen.jpg", 800, 800, 2.5)));
-    // forestMapGenTerrain(gameEngine, ASSET_MANAGER);
-    // forestMapGenEnemy(gameEngine, ASSET_MANAGER);
     gameEngine.setPlayer(new SkeletonDagger(gameEngine,
         ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png"), ASSET_MANAGER.getAsset("./res/character/skeletonbow.png")));
+
+    gameEngine.setBackground(titleScreenInit(gameEngine, ASSET_MANAGER));
+
     let volumeToggle = new VolumeToggle(gameEngine, ASSET_MANAGER.getAsset("./res/audio/volume_bgON.png"));
     gameEngine.setVolumeToggle(volumeToggle);
     gameEngine.addEntity(volumeToggle);

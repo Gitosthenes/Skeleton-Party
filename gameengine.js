@@ -303,7 +303,7 @@ GameEngine.prototype.update = function () {
         } else if (this.userInput.includes(' ')) { // Waiting for next level.
             this.currentLevel++;
             this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
-            
+
             //TODO: figure out how to implement dynamic start location for player that doesn't break enemy AI
             // playerX = (800 * 2.5) / 2;
             // playerY = (800 * 2.5) / 2;
@@ -362,12 +362,23 @@ GameEngine.prototype.loop = function () {
 GameEngine.prototype.clearEntities = function () {
     this.enemies = [];
     this.terrain = [];
+    this.enemies = [];
 };
 
 GameEngine.prototype.updateEnemyCount = function () {
     if (this.enemies.length < this.spawnMax && this.enemyCount >= this.spawnMax) {
         this.background.generateEnemy(this, ASSET_MANAGER);
     }
+};
+
+GameEngine.prototype.resetPlayerPosition = function () {
+    bgX = 0;
+    bgY = 0;
+    playerX = 0;
+    playerY = 0;
+    this.background.x = 0;
+    this.background.y = 0;
+    this.player.hitbox = new Hitbox(this.player.x, this.player.y, 35, 32, true);
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */
