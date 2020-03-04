@@ -60,7 +60,7 @@ Enemy.prototype.draw = function() {
         
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         
-        if(this.currAltAnimation && this.fxOffsets[this.direction]) {
+        if(this.currAltAnimation && this.fxOffsets[this.direction] && this.hurtbox.isActive) {
             let offsets = this.fxOffsets[this.direction];
             this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, (this.x + offsets.x), (this.y + offsets.y));
         }
