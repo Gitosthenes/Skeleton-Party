@@ -10,10 +10,10 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
 
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
-    this.absX = this.relativeX - 445;
-    this.absY = this.relativeY - 324;
+    this.absX = this.relativeX - 450;
+    this.absY = this.relativeY - 325;
     this.ctx = game.ctx;
-    this.enemyHP = 1000;
+    this.enemyHP = 500;
     this.isAttacking = false;
     this.isRecoiling = false;
     this.xSpeed = 0;
@@ -22,7 +22,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.direction = 'Down';
     this.attkType = 'slash'
     this.state = "walkDown";
-    
+
     this.animations = entityAnimationInit(attkAnimSpeed, spriteSheet, spriteSheet, primaryAnimType);
     this.altAnimations = altAnimationInit(attkAnimSpeed, fxSpritesheet, secondaryAnimType);
     this.fxOffsets = setupFXoffsets(this.attkType);
@@ -57,9 +57,9 @@ Enemy.prototype.update = function() {
 
 Enemy.prototype.draw = function() {
     if(!this.game.onTitleScreen && !this.game.gameOver) {
-        
+
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-        
+
         if(this.currAltAnimation && this.fxOffsets[this.direction] && this.hurtbox.isActive) {
             let offsets = this.fxOffsets[this.direction];
             this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, (this.x + offsets.x), (this.y + offsets.y));
@@ -250,7 +250,7 @@ function MaleKnightMace(game, spritesheet, fxSpritesheet) {
     let primaryAnimType = 1; //Large attk sprite
     let secondaryAnimType = 1; // slash animation
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
-    
+
     //For left/right hurtboxes
     let hbHorWidth = 75;
     let hbHorHeight = 60;
@@ -265,7 +265,7 @@ function MaleKnightMace(game, spritesheet, fxSpritesheet) {
     let hbUpYOff = 35;
     let hbDownXOff = -30;
     let hbDownYOff = 50;
-    
+
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }

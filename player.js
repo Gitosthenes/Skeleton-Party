@@ -22,8 +22,6 @@ let enemyAtk = 1;
 //time of countdown timer in seconds
 let time = 60;
 
-//enemy count
-let enemyCount = 0;
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
@@ -129,3 +127,4 @@ SkeletonDagger.prototype.draw = function () {
     }
 
 };
+
