@@ -252,9 +252,8 @@ function handleHitCollision(abuser, victim) {
 }
 
 function handleProjectileCollision(projectile, other) {
-    if (projectile.game.terrain.includes(other)) {
-        projectile.removeFromWorld = true;
-    } else {
+    projectile.removeFromWorld = true;
+    if (projectile.game.enemies.includes(other)) {
         other.isRecoiling = true;
         other.recoilFrames = 6;
         other.hitByEnemy = true;

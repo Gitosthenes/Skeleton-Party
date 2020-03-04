@@ -66,11 +66,12 @@ function entityAnimationInit(speed, spritesheetSword, spritesheetBow, type) {
             animations['attackLeft'] = new Animation(spritesheetSword, 66, 1603, 189, 121, 6, speed, 6, true, 1);
             animations['attackRight'] = new Animation(spritesheetSword, 66, 1985, 189, 121, 6, speed, 6, true, 1);
 
+// function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, sheetWidth, frameDuration, frames, loop, scale)
             //bow attack
             animations['attackBowUp'] = new Animation(spritesheetBow, 0, 1025, 64, 62, 13, speed, 13, true, 1);
             animations['attackBowLeft'] = new Animation(spritesheetBow, 0, 1089, 64, 60, 13, speed, 13, true, 1);
-            animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1149, 64, 62, 13, speed, 13, true, 1);
-            animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1215, 64, 60, 13, speed, 13, true, 1);
+            animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1150, 64, 62, 13, speed, 13, true, 1);
+            animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1217, 64, 60, 13, speed, 13, true, 1);
             break;
 
         case 2: //For small attack spritesheets w/o idle
@@ -97,17 +98,17 @@ function entityAnimationInit(speed, spritesheetSword, spritesheetBow, type) {
 
 /**
  * Attaches weapon FX animations to entity.
- * 
+ *
  * @param entity the entity to give FX animations to.
  * @param spritesheet weapon FX spritesheet
  * @param type determines which animation to attach to entity
  */
 function altAnimationInit(speed, spritesheet, type) {
     let animations = [];
-    
+
     //Universal FX
         /* none yet  */
-    
+
     switch(type) {
         case 1: //Slash animation
             animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, speed, 4, true, 0.7);
@@ -138,7 +139,7 @@ function ArrowAnimationInit(entity, spritesheet) {
 /**
  * Returns offsets used to draw weapon FX based on attak type
  *
- * @param type attack type of entity 
+ * @param type attack type of entity
  * @returns object that contains x and y offsets to use when drawing FX
  */
 function setupFXoffsets(type) {
