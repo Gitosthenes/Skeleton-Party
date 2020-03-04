@@ -98,7 +98,7 @@ SkeletonDagger.prototype.update = function () {
     playerDeltaY = playerY - oldY;
 
 
-    if (this.isRecoiling && this.hitByEnemy) {
+    if (this.isRecoiling && this.hitByEnemy && this.recoilFrames === 0) {
         hp = Math.max(0, hp-enemyAtk);
     }
 

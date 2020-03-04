@@ -110,8 +110,8 @@ function altAnimationInit(speed, spritesheet, type) {
     
     switch(type) {
         case 1: //Slash animation
-            animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, speed, 4, true, 1);
-            animations['slashLeft'] = new Animation(spritesheet, 0, 70, 165, 68, 660, speed, 4, true, 1);
+            animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, speed, 4, true, 0.7);
+            animations['slashLeft'] = new Animation(spritesheet, 0, 70, 165, 68, 660, speed, 4, true, 0.7);
             animations['slashUp'] = new Animation(spritesheet, 0, 139, 176, 49, 704, speed, 4, true, 1);
             animations['slashDown'] = new Animation(spritesheet, 0, 189, 176, 49, 704, speed, 4, true, 1);
             break;
@@ -147,9 +147,10 @@ function setupFXoffsets(type) {
 
     switch(type) {
         case 'slash':
-            uX = -45; uY = -30;
-            dX = -45; dY = 50;
-            lX = -90;
+            uX = -45; uY = -35;
+            dX = -45; dY =  50;
+            lX = -50; lY =  10;
+            rX =   0; rY =  10;
 
             offsets['Up'] = {x: uX, y: uY };
             offsets['Down'] = {x: dX, y: dY };

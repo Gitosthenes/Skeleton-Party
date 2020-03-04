@@ -156,7 +156,8 @@ function forestMapGenTerrain(game, assetManager) {
 
 function forestGenerateEnemy(game, assetManager) {
     let enemy = undefined;
-    // switch (Math.floor(Math.random() * 2)) {
+    //TODO set back
+    //switch (Math.floor(Math.random() * 2)) {
     switch (1) {
         case 0:
             enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));

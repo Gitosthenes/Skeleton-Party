@@ -18,7 +18,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.isRecoiling = false;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.safeDist = 63;
+    this.safeDist = 80;
     this.direction = 'Down';
     this.attkType = 'slash'
     this.state = "walkDown";
@@ -147,7 +147,7 @@ function updateEnemyAnimation(enemy) {
 }
 
 function getDirToFacePlayer(enemy) {
-    let UpDown_threshold = 1.5;
+    let UpDown_threshold = 1.1;
     let leftRight_threshold = 0.8;
     let direction = enemy.direction;
     let dy = playerY - enemy.absY;
@@ -248,20 +248,24 @@ MaleKnightSpear.prototype.draw = function() {
 
 function MaleKnightMace(game, spritesheet, fxSpritesheet) {
     let primaryAnimType = 1; //Large attk sprite
-    let secondaryAnimType = 1; // horizontal slash animation
+    let secondaryAnimType = 1; // slash animation
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
+    
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
