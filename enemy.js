@@ -1,7 +1,9 @@
 function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, speed, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight) {
+    let coords = [100, 1000, 1950];
+    let attkAnimSpeed = 0.07;
+
     this.removeFromWorld = false;
     this.game = game;
-    let coords = [100, 1000, 1950];
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
     this.absX = this.relativeX - 445;
@@ -19,9 +21,9 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.attackFX = 'slash'
     this.state = "walkDown";
     this.safeDist = 63;
-    this.attAnimationSpeed = 0.07;
-    entityAnimationInit(this, spriteSheet, spriteSheet, primaryAnimType);
-    altAnimationInit(this, fxSpritesheet, secondaryAnimType);
+    this.animations = entityAnimationInit(attkAnimSpeed, spriteSheet, spriteSheet, primaryAnimType);
+    this.altAnimations = altAnimationInit(attkAnimSpeed, fxSpritesheet, secondaryAnimType);
+    // this.FXoffsets = altAnimationOffsetsInit(this);
     this.currAnimation = this.animations[this.state];
     this.currAltAnimation = this.altAnimations[this.attackFX + this.direction];
     this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);

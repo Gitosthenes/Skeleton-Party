@@ -74,6 +74,8 @@ Animation.prototype.isDone = function () {
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
+    let attkAnimSpeed = 0.05;
+
     this.x = -250;
     this.y = -50;
     this.xSpeed = 0;
@@ -89,8 +91,7 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.isRecoiling = false;
     this.hitByEnemy = false;
     this.hitByTerrain = false;
-    this.attAnimationSpeed = 0.05;
-    entityAnimationInit(this, spritesheetSword, spritesheetBow,1);
+    this.animations = entityAnimationInit(attkAnimSpeed, spritesheetSword, spritesheetBow,1);
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtBoxInit();
@@ -114,7 +115,7 @@ SkeletonDagger.prototype.hurtBoxInit = function () {
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
 
-function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
+function entityAnimationInit(speed, spritesheetSword, spritesheetBow, type) {
     let animations = [];
 
     /* Walking animations. */
@@ -132,38 +133,38 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
             animations['idleRight'] = new Animation(spritesheetSword, 0, 192, 64, 62, 512, 0.6, 2, true, 1);
 
             /* Attack animations. */
-            animations['attackUp'] = new Animation(spritesheetSword, 62, 1411, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackDown'] = new Animation(spritesheetSword, 64, 1790, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackLeft'] = new Animation(spritesheetSword, 66, 1603, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackRight'] = new Animation(spritesheetSword, 66, 1985, 189, 121, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackUp'] = new Animation(spritesheetSword, 62, 1411, 189, 121, 6, speed, 6, true, 1);
+            animations['attackDown'] = new Animation(spritesheetSword, 64, 1790, 189, 121, 6, speed, 6, true, 1);
+            animations['attackLeft'] = new Animation(spritesheetSword, 66, 1603, 189, 121, 6, speed, 6, true, 1);
+            animations['attackRight'] = new Animation(spritesheetSword, 66, 1985, 189, 121, 6, speed, 6, true, 1);
 
             //bow attack
-            animations['attackBowUp'] = new Animation(spritesheetBow, 0, 1025, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-            animations['attackBowLeft'] = new Animation(spritesheetBow, 0, 1089, 64, 60, 13, entity.attAnimationSpeed, 13, true, 1);
-            animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1149, 64, 62, 13, entity.attAnimationSpeed, 13, true, 1);
-            animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1215, 64, 60, 13, entity.attAnimationSpeed, 13, true, 1);
+            animations['attackBowUp'] = new Animation(spritesheetBow, 0, 1025, 64, 62, 13, speed, 13, true, 1);
+            animations['attackBowLeft'] = new Animation(spritesheetBow, 0, 1089, 64, 60, 13, speed, 13, true, 1);
+            animations['attackBowDown'] = new Animation(spritesheetBow, 0, 1149, 64, 62, 13, speed, 13, true, 1);
+            animations['attackBowRight'] = new Animation(spritesheetBow, 0, 1215, 64, 60, 13, speed, 13, true, 1);
             break;
 
         case 2: //For small attack spritesheets w/o idle
             /* Attack animations. */
-            animations['attackUp'] = new Animation(spritesheetSword, 0, 258, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackDown'] = new Animation(spritesheetSword, 0, 387, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackLeft'] = new Animation(spritesheetSword, 0, 322, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackRight'] = new Animation(spritesheetSword, 0, 450, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackUp'] = new Animation(spritesheetSword, 0, 258, 64, 62, 6, speed, 6, true, 1);
+            animations['attackDown'] = new Animation(spritesheetSword, 0, 387, 64, 62, 6, speed, 6, true, 1);
+            animations['attackLeft'] = new Animation(spritesheetSword, 0, 322, 64, 62, 6, speed, 6, true, 1);
+            animations['attackRight'] = new Animation(spritesheetSword, 0, 450, 64, 62, 6, speed, 6, true, 1);
             break;
 
         case 3: // Small Dagger Attacks
-            animations['attackUp'] = new Animation(spritesheetSword, 0, 768, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackDown'] = new Animation(spritesheetSword, 0, 896, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackLeft'] = new Animation(spritesheetSword, 0, 832, 62, 62, 6, entity.attAnimationSpeed, 6, true, 1);
-            animations['attackRight'] = new Animation(spritesheetSword, 4, 960, 64, 62, 6, entity.attAnimationSpeed, 6, true, 1);
+            animations['attackUp'] = new Animation(spritesheetSword, 0, 768, 64, 62, 6, speed, 6, true, 1);
+            animations['attackDown'] = new Animation(spritesheetSword, 0, 896, 64, 62, 6, speed, 6, true, 1);
+            animations['attackLeft'] = new Animation(spritesheetSword, 0, 832, 62, 62, 6, speed, 6, true, 1);
+            animations['attackRight'] = new Animation(spritesheetSword, 4, 960, 64, 62, 6, speed, 6, true, 1);
             break;
     }
 
   //dying animation
   animations['dying'] = new Animation(spritesheetSword, 0, 1290, 64, 62, 6, 0.2, 6, false, 1);
 
-  entity.animations = animations;
+  return animations;
 }
 
 /**
@@ -173,7 +174,7 @@ function entityAnimationInit(entity, spritesheetSword, spritesheetBow, type) {
  * @param spritesheet weapon FX spritesheet
  * @param type determines which animation to attach to entity
  */
-function altAnimationInit(entity, spritesheet, type) {
+function altAnimationInit(speed, spritesheet, type) {
     let animations = [];
     
     //Universal FX
@@ -181,14 +182,14 @@ function altAnimationInit(entity, spritesheet, type) {
     
     switch(type) {
         case 1: //Slash animation
-            animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, entity.attAnimationSpeed, 4, true, 1);
-            animations['slashLeft'] = new Animation(spritesheet, 0, 70, 165, 68, 660, entity.attAnimationSpeed, 4, true, 1);
-            animations['slashUp'] = new Animation(spritesheet, 0, 139, 176, 49, 704, entity.attAnimationSpeed, 4, true, 1);
-            animations['slashDown'] = new Animation(spritesheet, 0, 189, 176, 49, 704, entity.attAnimationSpeed, 4, true, 1);
+            animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, speed, 4, true, 1);
+            animations['slashLeft'] = new Animation(spritesheet, 0, 70, 165, 68, 660, speed, 4, true, 1);
+            animations['slashUp'] = new Animation(spritesheet, 0, 139, 176, 49, 704, speed, 4, true, 1);
+            animations['slashDown'] = new Animation(spritesheet, 0, 189, 176, 49, 704, speed, 4, true, 1);
             break;
     }
 
-    entity.altAnimations = animations;
+    return animations;
 }
 
 SkeletonDagger.prototype.takeDamage = function(amount) {
