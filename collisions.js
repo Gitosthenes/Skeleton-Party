@@ -66,7 +66,27 @@ function checkForCollisions(entity) {
                 handleHitCollision(entity, otherEntity);
             }
         }
-    } else {//otherwise entity must be enemy
+    } else if (entity.game.projectiles.includes(entity)) {  // Is a projectile.
+        if (entity.isPlayerProjectile) {
+            for (let i = 0; i < entity.game.enemies.length; i++) {
+                otherEntity = entity.game.enemies[i];
+                if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
+                    handleProjectileCollision(entity, otherEntity);
+                }
+            }
+        } else {
+            otherEntity = entity.game.player;
+            if (hasHitEnemy(entity, otherEntity)) {
+                handleProjectileCollision(entity, otherEntity);
+            }
+        }
+        for (let i = 0; i < entity.game.terrain.length; i++) {
+            otherEntity = entity.game.terrain[i];
+            if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
+                handleProjectileCollision(entity, otherEntity);
+            }
+        }
+    } else { //otherwise entity must be enemy
         otherEntity = entity.game.player;
         if (hasHitEnemy(entity, otherEntity)) {
             handleHitCollision(entity, otherEntity);
@@ -208,7 +228,7 @@ function handleHitCollision(abuser, victim) {
     victim.recoilFrames = 6;
     victim.hitByEnemy = true;
 
-    if(victim === abuser.game.player) {
+    if(victim === abuser.game.player) {  //TODO: Remove this check for enemy knockback?
         let dirOfCollision = directionOfCollision(victim.hitbox, abuser.hurtbox);
         switch (dirOfCollision) {
             case 'top':
@@ -229,6 +249,31 @@ function handleHitCollision(abuser, victim) {
 
     //TODO damage calculation
     // takeDamage()
+}
+
+function handleProjectileCollision(projectile, other) {
+    if (projectile.game.terrain.includes(other)) {
+        projectile.removeFromWorld = true;
+    } else {
+        other.isRecoiling = true;
+        other.recoilFrames = 6;
+        other.hitByEnemy = true;
+        let dirOfCollision = directionOfCollision(other, projectile);
+        switch (dirOfCollision) {
+            case 'top':
+                other.ySpeed = -other.baseSpeed;
+                break;
+            case 'bottom':
+                other.ySpeed = other.baseSpeed;
+                break;
+            case 'left':
+                other.xSpeed = -other.baseSpeed;
+                break;
+            case 'right':
+                other.xSpeed = other.baseSpeed;
+                break;
+        }
+    }
 }
 
 /**

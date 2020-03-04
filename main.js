@@ -13,6 +13,7 @@ function Arrow(game, spritesheet) {
     this.isRecoiling = false;
     this.hitByEnemy = false;
     this.direction = this.game.player.direction;
+    this.isPlayerProjectile = true;
 
     switch (this.game.player.direction) {
         case "down" :
@@ -32,10 +33,7 @@ function Arrow(game, spritesheet) {
             this.y = this.relY = 325;
             break
     }
-    // console.log("arrow x " + this.x);
-    // console.log("arrow y " + this.y);
-    // console.log("player x " + playerX);
-    // console.log("player y " + playerY);
+
     ArrowAnimationInit(this, this.spritesheet);
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.currAnimation = this.animations[this.direction];

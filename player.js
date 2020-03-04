@@ -104,7 +104,7 @@ SkeletonDagger.prototype.update = function () {
 
     if(hp <= 0) {
         this.hitbox.isActive = false;
-        this.speed = 0;
+        this.baseSpeed = 0;
         this.isDead = true;
         this.currAnimation = this.animations['dying'];
 
