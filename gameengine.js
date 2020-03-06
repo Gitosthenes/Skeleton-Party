@@ -30,6 +30,7 @@ function GameEngine() {
     this.terrain = [];
     this.drawables = [];
     this.projectiles = [];
+    this.powerups = [];
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
@@ -235,7 +236,11 @@ GameEngine.prototype.addTerrain = function (entity) {
 
 GameEngine.prototype.addProjectile = function(entity) {
     this.projectiles.push(entity)
-}
+};
+
+GameEngine.prototype.addPowerUp = function(entity) {
+    this.powerups.push(entity)
+};
 
 GameEngine.prototype.setBackground = function (mapFunction) {
     this.background = mapFunction;
@@ -263,9 +268,12 @@ GameEngine.prototype.draw = function () {
         //this.enemies[i].draw(this.ctx);
         this.drawables.push(this.enemies[i]);
     }
-    for (let i = 0; i < this.projectiles.length; i++) {     // Draw all enemies.
+    for (let i = 0; i < this.projectiles.length; i++) {     // Draw all projectiles.
         //this.enemies[i].draw(this.ctx);
         this.drawables.push(this.projectiles[i]);
+    }
+    for (let i = 0; i < this.powerups.length; i++) {
+        this.drawables.push(this.powerups[i]);
     }
     this.drawables.sort( (a,b) => parseFloat(a.hitbox.y) - parseFloat(b.hitbox.y));
     for (let i = 0; i < this.drawables.length; i++) {
@@ -318,22 +326,28 @@ GameEngine.prototype.update = function () {
             this.levelCount++;
         }
     }
-    for (let i = 0; i < this.enemies.length; i++) {
+    for (let i = 0; i < this.enemies.length; i++) { //enemies
         let enemy = this.enemies[i];
         if(!enemy.removeFromWorld) {
             this.enemies[i].update();
         }
     }
-    for (let i = 0; i < this.projectiles.length; i++) {
+    for (let i = 0; i < this.projectiles.length; i++) { //projectiles
         let projectile = this.projectiles[i];
         if(!projectile.removeFromWorld) {
             this.projectiles[i].update();
         }
     }
-    for (let i = 0; i < this.terrain.length; i++) {
+    for (let i = 0; i < this.powerups.length; i++) {
+        let powerup = this.powerups[i];
+        if (!powerup.removeFromWorld) {
+            this.powerups[i].update();
+        }
+    }
+    for (let i = 0; i < this.terrain.length; i++) { //terrain
         this.terrain[i].update();
     }
-    for (let i = 0; i < this.entities.length; i++) {
+    for (let i = 0; i < this.entities.length; i++) { //entities
         this.entities[i].update();
     }
     for (var i = this.enemies.length - 1; i >= 0; --i) {
@@ -346,6 +360,12 @@ GameEngine.prototype.update = function () {
         let projectile = this.projectiles[i];
         if (projectile.removeFromWorld) {
             this.projectiles.splice(i, 1);
+        }
+    }
+    for (let i = this.powerups.length - 1; i >= 0; --i) {
+        let powerup = this.powerups[i];
+        if (powerup.removeFromWorld) {
+            this.powerups.splice(i, 1);
         }
     }
 };

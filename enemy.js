@@ -47,6 +47,7 @@ Enemy.prototype.update = function() {
         if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
+                chanceForPowerUp();
                 this.game.enemyCount--;
                 this.removeFromWorld = true;
             }
@@ -361,3 +362,4 @@ ZombieShovel.prototype.update = function() {
 ZombieShovel.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
+
