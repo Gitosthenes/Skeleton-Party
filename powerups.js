@@ -30,8 +30,8 @@ function chanceForPowerUp(entity) {
 
 
 function PowerUp(entity, spritesheet, type) {
-    this.x = this.spawnX = entity.relX;
-    this.y = this.spawnY = entity.relY;
+    this.x = this.spawnX = entity.relativeX;
+    this.y = this.spawnY = entity.relativeY;
     this.game = entity.game;
     this.ctx = entity.ctx;
     this.removeFromWorld = false;
