@@ -1,26 +1,28 @@
 function chanceForPowerUp(entity) {
     let randNum = getRndInteger(1,5);
     let tolerance = 5;
-    if (randNum <= tolerance) {
+    if (randNum) {
         randNum = getRndInteger(1,6);
         switch (randNum) {
             case 1:
-
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "atk");
                 break;
             case 2:
-                //def up
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "def");
                 break;
             case 3:
-                //hp up
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "hp");
                 break;
             case 4:
-                //arrows
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "arrows");
                 break;
             case 5:
                 //speedup
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "speed");
                 break;
             case 6:
                 //poison
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "poison");
                 break;
         }
     }
@@ -28,8 +30,8 @@ function chanceForPowerUp(entity) {
 
 
 function PowerUp(entity, spritesheet, type) {
-    this.x = this.spawnX = entity.x;
-    this.y = this.spawnY = entity.y;
+    this.x = this.spawnX = entity.relX;
+    this.y = this.spawnY = entity.relY;
     this.game = entity.game;
     this.ctx = entity.ctx;
     this.removeFromWorld = false;
@@ -58,19 +60,23 @@ PowerUp.prototype.update = function () {
                 break;
             case "def":
                 def++;
-                this.removeFromWorld = false;
+                this.removeFromWorld = true;
                 break;
             case "hp":
                 hp += 10;
-                this.removeFromWorld = false;
+                this.removeFromWorld = true;
                 break;
             case "speed":
                 //insert speed up line here
-                this.removeFromWorld = false;
+                this.removeFromWorld = true;
                 break;
             case "poison":
                 hp += 10;
-                this.removeFromWorld = false;
+                this.removeFromWorld = true;
+                break;
+            case "arrows":
+                //insert arrow counter line here
+                this.removeFromWorld = true;
                 break;
         }
     }

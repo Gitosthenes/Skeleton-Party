@@ -47,7 +47,8 @@ Enemy.prototype.update = function() {
         if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
-                chanceForPowerUp();
+                chanceForPowerUp(this);
+                console.log("died at x: " + this.x + "y: " + this.y);
                 this.game.enemyCount--;
                 this.removeFromWorld = true;
             }

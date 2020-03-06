@@ -383,6 +383,8 @@ GameEngine.prototype.clearEntities = function () {
     this.enemies = [];
     this.terrain = [];
     this.enemies = [];
+    this.powerups = [];
+    this.projectiles = [];
 };
 
 GameEngine.prototype.updateEnemyCount = function () {
