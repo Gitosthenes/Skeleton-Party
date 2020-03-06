@@ -62,6 +62,8 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/fx/weapon.png");
     //Projectile assets
     this.queueDownload("./res/character/Arrow.png");
+    //PowerUp Assets
+    this.queueDownload("./res/icon/placeholder.jpg");
     // UI Assets
     this.queueDownload("./res/character/def_ui.png");
     this.queueDownload("./res/character/sword_ui.png");

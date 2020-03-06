@@ -20,7 +20,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.ySpeed = 0;
     this.safeDist = 80;
     this.direction = 'Down';
-    this.attkType = 'slash'
+    this.attkType = 'slash';
     this.state = "walkDown";
 
     this.animations = entityAnimationInit(attkAnimSpeed, spriteSheet, spriteSheet, primaryAnimType);
@@ -43,10 +43,12 @@ Enemy.prototype.update = function() {
         if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
         checkForCollisions(this);
-
+        //console.log("x: " + this.x + "y: " + this.y);
         if (this.isRecoiling && this.hitByEnemy) {
             this.enemyHP -= atk;
             if(this.enemyHP <= 0) {
+                chanceForPowerUp(this);
+                console.log("died at x: " + this.x + "y: " + this.y);
                 this.game.enemyCount--;
                 this.removeFromWorld = true;
             }
@@ -361,3 +363,4 @@ ZombieShovel.prototype.update = function() {
 ZombieShovel.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
+
