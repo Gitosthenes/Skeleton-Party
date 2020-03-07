@@ -31,6 +31,7 @@ function GameEngine() {
     this.drawables = [];
     this.projectiles = [];
     this.powerups = [];
+    this.timerSpawns = 0;
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
@@ -305,6 +306,7 @@ GameEngine.prototype.update = function () {
 
     if (this.enemyCount <= 0) {
         this.levelComplete = true;
+        this.powerups = []; // Clear the powerups on level end so they don't draw over the transition screen.
         if (this.currentLevel + 1 >= this.levelCount) {
             // TODO: Add win splash screen here
             console.log('YOU WIN!');
@@ -317,6 +319,12 @@ GameEngine.prototype.update = function () {
             // playerY = (800 * 2.5) / 2;
         }
     }
+    if (!this.levelComplete) {
+        if (this.timerSpawns < 5) {
+            chanceSpawnTimer(this);
+        }
+    }
+
     if (this.userInput.includes(' ')) {
         if(this.onTitleScreen) {
             this.setBackground(mapSetUp(this, ASSET_MANAGER, 'forest'));
@@ -465,6 +473,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    // if (this.hitbox !== undefined) drawDebugHitbox(this);
+    if (this.hitbox !== undefined) drawDebugHitbox(this);
     // if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };

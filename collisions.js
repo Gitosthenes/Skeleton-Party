@@ -66,6 +66,13 @@ function checkForCollisions(entity) {
                 handleHitCollision(entity, otherEntity);
             }
         }
+
+        for (let i = 0; i < entity.game.powerups.length; i++) {
+            otherEntity = entity.game.powerups[i];
+            if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
+                handlePowerupCollision(entity, otherEntity);
+            }
+        }
     } else if (entity.game.projectiles.includes(entity)) {  // Is a projectile.
         if (entity.isPlayerProjectile) {
             for (let i = 0; i < entity.game.enemies.length; i++) {
@@ -273,6 +280,11 @@ function handleProjectileCollision(projectile, other) {
                 break;
         }
     }
+}
+
+function handlePowerupCollision(entity, powerUp) {
+    powerUp.applyPowerUp();
+    powerUp.removeFromWorld = true;
 }
 
 /**
