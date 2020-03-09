@@ -5,21 +5,21 @@ function chanceForPowerUp(entity) {
         randNum = getRndInteger(1,5);
         switch (randNum) {
             case 1:
-                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "atk");
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/character/sword_ui.png"), 'atk'));
                 break;
             case 2:
-                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "def");
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/character/def_ui.png"), "def"));
                 break;
             case 3:
-                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "hp");
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/heart.png"), "hp"));
                 break;
             case 4:
                 //speedup
-                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "speed");
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/boots.png"), "speed"));
                 break;
             case 5:
                 //poison
-                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/placeholder.jpg")), "poison");
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/poison_heart.png"),  "poison"));
                 break;
         }
     }
@@ -35,6 +35,8 @@ function PowerUp(entity, spritesheet, type) {
     this.type = type;
     this.isRecoiling = false;
     this.spritesheet = spritesheet;
+    this.width = 20;
+    this.height = 20;
     this.hitbox = new Hitbox(this.x, this.y, 40, 32, true);
 }
 
@@ -52,20 +54,28 @@ PowerUp.prototype.update = function () {
 };
 
 PowerUp.prototype.applyPowerUp = function () {
+    console.log('applying powerup...');
+    console.log(this.type);
+    console.log(this);
     switch (this.type) {
         case "atk":
+            console.log('applying attack up');
             atk++;
             break;
         case "def":
+            console.log('applying defence up');
             def++;
             break;
         case "hp":
+            console.log('applying hp up');
             hp += 25;
             break;
         case "speed":
+            console.log('applying speed up');
             //insert speed up line here
             break;
         case "poison":
+            console.log('applying poison');
             hp -= 25;
             break;
     }
