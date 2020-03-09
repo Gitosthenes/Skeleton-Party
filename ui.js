@@ -10,8 +10,6 @@ function SkeletonHealthUI(game, spritesheet) {
 
 SkeletonHealthUI.prototype.draw = function () {
     if(!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
-        // console.log("drawing ui 2")
-
         this.ctx.drawImage(this.spritesheet, this.x, this.y, 90, 90);
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';

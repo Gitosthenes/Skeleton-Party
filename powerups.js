@@ -27,8 +27,8 @@ function chanceForPowerUp(entity) {
 
 
 function PowerUp(entity, spritesheet, type) {
-    this.x = this.spawnX = entity.relativeX;
-    this.y = this.spawnY = entity.relativeY;
+    this.x = this.spawnX = entity.relativeX + 5;
+    this.y = this.spawnY = entity.relativeY + 8;
     this.game = entity.game;
     this.ctx = entity.ctx;
     this.removeFromWorld = false;
@@ -37,12 +37,12 @@ function PowerUp(entity, spritesheet, type) {
     this.spritesheet = spritesheet;
     this.width = 20;
     this.height = 20;
-    this.hitbox = new Hitbox(this.x, this.y, 40, 32, true);
+    this.hitbox = new Hitbox(this.x + 2, this.y + 2, 30, 30, true);
 }
 
 PowerUp.prototype.draw = function () {
     if(!this.game.onTitleScreen && !this.game.gameOver) {
-        this.ctx.drawImage(this.spritesheet, this.x, this.y);
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 32, 32);
         Entity.prototype.draw.call(this);
     }
 };
@@ -68,7 +68,8 @@ PowerUp.prototype.applyPowerUp = function () {
             break;
         case "hp":
             console.log('applying hp up');
-            hp += 25;
+            if (hp + 25 > 100) hp = 100;
+            else hp += 25;
             break;
         case "speed":
             console.log('applying speed up');
@@ -95,8 +96,7 @@ function TimePickup(game, spritesheet) {
     this.type = 'time';
     this.isRecoiling = false;
     this.spritesheet = spritesheet;
-    this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
-    console.log('x: ' + this.x + ' y: ' + this.y);
+    this.hitbox = new Hitbox(this.x, this.y, 32, 32, true);
 }
 
 TimePickup.prototype.update = function () {
@@ -107,7 +107,7 @@ TimePickup.prototype.update = function () {
 
 TimePickup.prototype.draw = function () {
     if(!this.game.onTitleScreen && !this.game.gameOver) {
-        this.ctx.drawImage(this.spritesheet, this.x, this.y);
+        this.ctx.drawImage(this.spritesheet, this.x, this.y, 32, 32);
         Entity.prototype.draw.call(this);
     }
 };
