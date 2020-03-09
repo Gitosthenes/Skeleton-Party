@@ -102,6 +102,11 @@ TimePickup.prototype.draw = function () {
     }
 };
 
+TimePickup.prototype.applyPowerUp = function () {
+    time += 15;
+    this.game.timerSpawns--;
+};
+
 function chanceSpawnTimer(game) {
     let chance = Math.floor((Math.random() * 100000) + 1);
     if (chance > 90000) {
