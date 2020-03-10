@@ -111,8 +111,8 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 10;
-            game.spawnMax = 10;
+            game.enemyCount = 100;
+            game.spawnMax = 1;
             break;
         case 'desert':
             game.clearEntities();
@@ -159,8 +159,8 @@ function forestMapGenTerrain(game, assetManager) {
 
 function forestGenerateEnemy(game, assetManager) {
     let enemy = undefined;
-    switch (Math.floor(Math.random() * 2)) {
-    // switch (0) { //for testing a specific enemy
+    // switch (Math.floor(Math.random() * 2)) {
+    switch (1) { //for testing a specific enemy
         case 0:
             enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));
             break;

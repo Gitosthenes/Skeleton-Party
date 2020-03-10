@@ -12,8 +12,10 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
     this.attkAnimTime = attkAnimTime;
     this.attkRange = attkRange;
 
-    this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
-    this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
+    // this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
+    // this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
+    this.x = this.relativeX = 100;
+    this.y = this.relativeY = 100;
     this.absX = this.relativeX - 450;
     this.absY = this.relativeY - 325;
     this.ctx = game.ctx;
@@ -22,7 +24,6 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
     this.isRecoiling = false;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    
     this.direction = 'Down';
     this.state = "walkDown";
 
@@ -37,6 +38,8 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
 
 Enemy.prototype.update = function() {
     if(!this.game.onTitleScreen) {
+        console.log("player: " + playerX + " " + playerY)
+        console.log("enemy: " + this.absX + " " + this.absY + "\n");
         let animationDelay = this.currAnimation.totalTime / ANIMATION_DELAY_FACTOR;
 
         updateEnemyPositionAndAnimation(this);
@@ -149,8 +152,8 @@ function updateEnemyAnimation(enemy) {
             action = 'walk';
             enemy.isAttacking = false;
         } else { //else enemy should be attaking the player
-            action = 'attack';
-            enemy.isAttacking = true;
+            // action = 'attack';
+            // enemy.isAttacking = true;
         }
     } else if(enemy.currAnimation.elapsedTime == 0) {
         if(enemy.currAltAnimation) enemy.currAltAnimation.elapsedTime = 0;
@@ -393,4 +396,3 @@ ZombieShovel.prototype.update = function() {
 ZombieShovel.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
-

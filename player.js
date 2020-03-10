@@ -1,11 +1,7 @@
 //For scrolling
 //storing both the canvas's coordinates and the player coordinates
-let bgX = 0;
-let bgY = 0;
-let playerX = 0;
-let playerY = 0;
-let playerDeltaX = 0;
-let playerDeltaY = 0;
+let bgX = playerX = playerDeltaX = 0;
+let bgY = playerY = playerDeltaY = 0;
 let boundHitLeft = false;
 let boundHitRight = false;
 let boundHitUp = false;
@@ -125,6 +121,4 @@ SkeletonDagger.prototype.draw = function () {
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         Entity.prototype.draw.call(this);
     }
-
 };
-
