@@ -72,6 +72,7 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
+    console.log('skele hitbox at x:' + this.hitbox.x + ' y:' + this.hitbox.y);
 
     //If attacking, activate hurtbox; Otherwise disable it
     if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
@@ -94,7 +95,6 @@ SkeletonDagger.prototype.update = function () {
     }
     playerDeltaX = playerX - oldX;
     playerDeltaY = playerY - oldY;
-
 
     if (this.isRecoiling && this.hitByEnemy && this.recoilFrames === 0) {
         hp = Math.max(0, hp-enemyAtk);

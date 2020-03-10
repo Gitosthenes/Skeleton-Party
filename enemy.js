@@ -7,11 +7,10 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.hitboxOffsetX = hitboxOffsetX;
     this.hitboxOffsetY = hitboxOffsetY;
     this.baseSpeed = speed;
-
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
-    this.absX = this.relativeX - 450;
-    this.absY = this.relativeY - 325;
+    this.absX = this.relativeX - (450 + playerX);
+    this.absY = this.relativeY - (325 + playerY);
     this.ctx = game.ctx;
     this.enemyHP = 100;
     this.isAttacking = false;
