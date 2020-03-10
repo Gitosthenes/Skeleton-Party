@@ -13,14 +13,14 @@ let boundHitDown = false;
 
 //Character Stats
 let hp = 100;
-let def = 10;
-let atk = 10;
+let def = 1;
+let atk = 1;
 
 //enemy stats
-let enemyAtk = 1;
+let enemyAtk = 8;
 
 //time of countdown timer in seconds
-let time = 60;
+let time = 40;
 
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
@@ -100,13 +100,13 @@ SkeletonDagger.prototype.update = function () {
         hp = Math.max(0, hp-enemyAtk);
     }
 
-    if(hp <= 0) {
+    if (hp <= 0) {
         this.hitbox.isActive = false;
         this.baseSpeed = 0;
-        this.isDead = true;
         this.currAnimation = this.animations['dying'];
 
         if (this.currAnimation.isDone()) {
+            this.isDead = true;
             this.removeFromWorld = true;
         }
     }

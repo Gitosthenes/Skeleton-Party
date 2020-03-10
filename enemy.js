@@ -13,7 +13,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimT
     this.absX = this.relativeX - 450;
     this.absY = this.relativeY - 325;
     this.ctx = game.ctx;
-    this.enemyHP = 500;
+    this.enemyHP = 100;
     this.isAttacking = false;
     this.isRecoiling = false;
     this.xSpeed = 0;

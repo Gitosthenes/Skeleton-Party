@@ -1,9 +1,9 @@
 function chanceForPowerUp(entity) {
-    let randNum = getRndInteger(1,5);
-    let tolerance = 5;
-    if (randNum) {
-        randNum = getRndInteger(1,5);
-        switch (randNum) {
+    let chance = getRndInteger(1,10);
+    let threshold = 6;
+    if (chance > threshold) {
+        let powerupSelect = getRndInteger(1,7);
+        switch (powerupSelect) {
             case 1:
                 entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/character/sword_ui.png"), 'atk'));
                 break;
@@ -21,6 +21,9 @@ function chanceForPowerUp(entity) {
                 //poison
                 entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset("./res/icon/poison_heart.png"),  "poison"));
                 break;
+            case 6 || 7:
+                // Extra time
+                entity.game.addPowerUp(new PowerUp(entity, ASSET_MANAGER.getAsset('./res/character/timer_ui.png'), 'time'));
         }
     }
 }
@@ -119,7 +122,7 @@ TimePickup.prototype.applyPowerUp = function () {
 
 function chanceSpawnTimer(game) {
     let chance = Math.floor((Math.random() * 100000) + 1);
-    if (chance > 90000) {
+    if (chance > 99800) {
         console.log('Spawned a timer on the map.');
         game.addPowerUp(new TimePickup(game, ASSET_MANAGER.getAsset("./res/character/timer_ui.png")));
         game.timerSpawns++;
