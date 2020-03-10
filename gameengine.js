@@ -473,6 +473,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    if (this.hitbox !== undefined) drawDebugHitbox(this);
+    // if (this.hitbox !== undefined) drawDebugHitbox(this);
     // if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };
