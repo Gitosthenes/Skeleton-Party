@@ -13,14 +13,14 @@ let boundHitDown = false;
 
 //Character Stats
 let hp = 100;
-let def = 10;
-let atk = 10;
+let def = 1;
+let atk = 1;
 
 //enemy stats
-let enemyAtk = 1;
+let enemyAtk = 8;
 
 //time of countdown timer in seconds
-let time = 60;
+let time = 40;
 
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
@@ -72,6 +72,7 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
+    console.log('skele hitbox at x:' + this.hitbox.x + ' y:' + this.hitbox.y);
 
     //If attacking, activate hurtbox; Otherwise disable it
     if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
@@ -95,18 +96,17 @@ SkeletonDagger.prototype.update = function () {
     playerDeltaX = playerX - oldX;
     playerDeltaY = playerY - oldY;
 
-
     if (this.isRecoiling && this.hitByEnemy && this.recoilFrames === 0) {
         hp = Math.max(0, hp-enemyAtk);
     }
 
-    if(hp <= 0) {
+    if (hp <= 0) {
         this.hitbox.isActive = false;
         this.baseSpeed = 0;
-        this.isDead = true;
         this.currAnimation = this.animations['dying'];
 
         if (this.currAnimation.isDone()) {
+            this.isDead = true;
             this.removeFromWorld = true;
         }
     }

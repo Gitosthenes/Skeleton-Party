@@ -393,6 +393,7 @@ GameEngine.prototype.clearEntities = function () {
     this.enemies = [];
     this.powerups = [];
     this.projectiles = [];
+    this.timerSpawns = 0;
 };
 
 GameEngine.prototype.updateEnemyCount = function () {
@@ -473,6 +474,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    // if (this.hitbox !== undefined) drawDebugHitbox(this);
-    // if (this.hurtbox !== undefined) drawDebugHurtbox(this);
+    if (this.hitbox !== undefined) drawDebugHitbox(this);
+    if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };

@@ -11,13 +11,12 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
     this.attkType = attkType;
     this.attkAnimTime = attkAnimTime;
     this.attkRange = attkRange;
-
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
-    this.absX = this.relativeX - 450;
-    this.absY = this.relativeY - 325;
+    this.absX = this.relativeX - (450 + playerX);
+    this.absY = this.relativeY - (325 + playerY);
     this.ctx = game.ctx;
-    this.enemyHP = 500;
+    this.enemyHP = 100;
     this.isAttacking = false;
     this.isRecoiling = false;
     this.xSpeed = 0;

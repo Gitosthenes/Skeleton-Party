@@ -54,15 +54,21 @@ Map.prototype.draw = function () {
             this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
         }
     }
-    if (time <= 0 || hp <= 0) {
-        if (this.game.player.currAnimation.isDone()) {
-            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-            this.ctx.font = "25px " + font;
-            this.ctx.fillStyle = 'white';
-            this.ctx.fillText("<GAME OVER>", 425, 350);
-            this.ctx.fillText("Refresh to start again!", 370, 450);
-            this.game.gameOver = true;
-        }
+    if (time <= 0) {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText("<You ran out of time!>", 372, 350);
+        this.ctx.fillText("Refresh to start again!", 370, 450);
+        this.game.gameOver = true;
+    }
+    if (hp <= 0 && this.game.player.isDead) {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText("<You died!>", 425, 350);
+        this.ctx.fillText("Refresh to start again!", 370, 450);
+        this.game.gameOver = true;
     }
 };
 
@@ -111,15 +117,15 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 10;
-            game.spawnMax = 10;
+            game.enemyCount = 20;
+            game.spawnMax = 5;
             break;
         case 'desert':
             game.clearEntities();
             game.resetPlayerPosition();
             desertMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension, desertGenerateEnemy);
-            game.enemyCount = 10;
+            game.enemyCount = 20;
             game.spawnMax = 10;
             break;
         case 'graveyard':
@@ -160,7 +166,6 @@ function forestMapGenTerrain(game, assetManager) {
 function forestGenerateEnemy(game, assetManager) {
     let enemy = undefined;
     switch (Math.floor(Math.random() * 2)) {
-    // switch (0) { //for testing a specific enemy
         case 0:
             enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));
             break;
