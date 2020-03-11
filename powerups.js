@@ -76,6 +76,8 @@ PowerUp.prototype.applyPowerUp = function () {
             break;
         case "speed":
             console.log('applying speed up');
+            this.game.player.speedUpFrames = 1000;
+            this.game.player.baseSpeed = 375;
             //insert speed up line here
             break;
         case "poison":

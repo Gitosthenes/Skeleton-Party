@@ -31,7 +31,7 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.y = -50;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.baseSpeed = 280;
+    this.baseSpeed = 300;
     this.changeX = false;
     this.changeY = false;
     this.game = game;
@@ -47,6 +47,7 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtBoxInit();
     this.recoilFrames = 0;
+    this.speedUpFrames = 0;
 }
 
 SkeletonDagger.prototype.hurtBoxInit = function () {
@@ -112,6 +113,11 @@ SkeletonDagger.prototype.update = function () {
     updatePlayerHitbox(this);
     checkForCollisions(this);
     updateRecoilFrames(this);
+
+    if (this.speedUpFrames > 0) {
+        this.speedUpFrames--;
+        if (this.speedUpFrames === 0) this.baseSpeed = 300;
+    }
 
     this.changeX = this.changeY = false;
 

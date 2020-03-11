@@ -52,7 +52,7 @@ Enemy.prototype.update = function() {
         checkForCollisions(this);
 
         if (this.isRecoiling && this.hitByEnemy) {
-            this.enemyHP -= atk;
+            this.enemyHP -= atk * 4;
             if(this.enemyHP <= 0) {
                 chanceForPowerUp(this);
                 console.log("died at x: " + this.x + "y: " + this.y);
