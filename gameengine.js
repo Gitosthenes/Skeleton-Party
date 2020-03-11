@@ -50,7 +50,7 @@ function GameEngine() {
     this.surfaceWidth = null;
     this.surfaceHeight = null;
     this.userInput = [];
-
+    // Enemy spawning variables.
     this.currentSpawnCount = 0;
     this.enemyCount = 0;
     this.spawnMax = 0;
@@ -136,6 +136,10 @@ GameEngine.prototype.startInput = function () {
             case ' ':
                 checkPressInput(' ');
                 break;
+
+            case 'p':
+                checkPressInput('p');
+                break;
         }
     }, true);
 
@@ -172,6 +176,10 @@ GameEngine.prototype.startInput = function () {
                 break;
 
             case ' ':
+                checkReleaseInput(key);
+                break;
+
+            case 'p':
                 checkReleaseInput(key);
                 break;
         }
@@ -317,7 +325,7 @@ GameEngine.prototype.update = function () {
         }
     }
     if (!this.levelComplete) {
-        if (this.timerSpawns < 5) {
+        if (this.timerSpawns < 6) {
             chanceSpawnTimer(this);
         }
     }
