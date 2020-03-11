@@ -14,7 +14,7 @@ let boundHitDown = false;
 //Character Stats
 let hp = 100;
 let def = 1;
-let atk = 1;
+let atk = 100;
 
 //enemy stats
 let enemyAtk = 8;
@@ -72,8 +72,6 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
-    console.log('skele hitbox at x:' + this.hitbox.x + ' y:' + this.hitbox.y);
-
     //If attacking, activate hurtbox; Otherwise disable it
     if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
     if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
