@@ -51,6 +51,7 @@ function GameEngine() {
     this.surfaceHeight = null;
     this.userInput = [];
 
+    this.currentSpawnCount = 0;
     this.enemyCount = 0;
     this.spawnMax = 0;
 }
@@ -313,10 +314,6 @@ GameEngine.prototype.update = function () {
         } else if (this.userInput.includes(' ')) { // Waiting for next level.
             this.currentLevel++;
             this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
-
-            //TODO: figure out how to implement dynamic start location for player that doesn't break enemy AI
-            // playerX = (800 * 2.5) / 2;
-            // playerY = (800 * 2.5) / 2;
         }
     }
     if (!this.levelComplete) {
@@ -397,8 +394,18 @@ GameEngine.prototype.clearEntities = function () {
 };
 
 GameEngine.prototype.updateEnemyCount = function () {
-    if (this.enemies.length < this.spawnMax && this.enemyCount >= this.spawnMax) {
-        this.background.generateEnemy(this, ASSET_MANAGER);
+    if (this.currentSpawnCount < this.spawnMax && this.enemyCount >= this.spawnMax) {
+        let enemy;
+        for (let i = 0; i < this.enemies.length; i++) {
+            enemy = this.enemies[i];
+            if (!enemy.isActive) {
+                enemy.isActive = true;
+                enemy.hitbox.isActive = true;
+                enemy.currRange = enemy.attkRange;
+                this.currentSpawnCount++;
+                break;
+            }
+        }
     }
 };
 

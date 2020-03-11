@@ -106,6 +106,7 @@ Map.prototype.update = function () {
 function mapSetUp(game, assetManager, mapName) {
     let map = undefined;
     let mapDimension = 800 * 2.5;
+    let i;
     game.levelComplete = false;
     switch (mapName) {
         case 'title':
@@ -118,7 +119,10 @@ function mapSetUp(game, assetManager, mapName) {
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
             game.enemyCount = 20;
-            game.spawnMax = 5;
+            game.spawnMax = 10;
+            for (i = 0; i < game.enemyCount; i++) {
+                forestGenerateEnemy(game, ASSET_MANAGER);
+            }
             break;
         case 'desert':
             game.clearEntities();
