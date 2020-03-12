@@ -19,6 +19,23 @@ function Hitbox(x, y, h, w, isActive) {
     this.isActive = isActive;
 }
 
+function Hurtbox(horWidth, horHeight, vertWidth, vertHeight, upXOffs, upYOffs,
+                 downXOffs, downYOffs, leftXOffs, leftYOffs, rightXOffs, rightYOffs) {
+    this.horizontalWidth = horWidth;
+    this.horizontalHeight = horHeight;
+    this.verticalWidth = vertWidth;
+    this.verticalHeight = vertHeight;
+    this.upXOffset = upXOffs;
+    this.upYOffset = upYOffs;
+    this.downXOffset = downXOffs;
+    this.downYOffset = downYOffs;
+    this.leftXOffset = leftXOffs;
+    this.leftYOffset = leftYOffs;
+    this.rightXOffset = rightXOffs;
+    this.rightYOffset = rightYOffs;
+    this.isActive = false;
+}
+
 /**
  * Calculates and returns the distance between two entities using their X and Y coordinate within the game.
  *
@@ -49,13 +66,39 @@ function checkForCollisions(entity) {
                 handleHitCollision(entity, otherEntity);
             }
         }
-    } else {//otherwise entity must be enemy
+
+        for (let i = 0; i < entity.game.powerups.length; i++) {
+            otherEntity = entity.game.powerups[i];
+            if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
+                handlePowerupCollision(entity, otherEntity);
+            }
+        }
+    } else if (entity.game.projectiles.includes(entity)) {  // Is a projectile.
+        if (entity.isPlayerProjectile) {
+            for (let i = 0; i < entity.game.enemies.length; i++) {
+                otherEntity = entity.game.enemies[i];
+                if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
+                    handleProjectileCollision(entity, otherEntity);
+                }
+            }
+        } else {
+            otherEntity = entity.game.player;
+            if (hasHitEnemy(entity, otherEntity)) {
+                handleProjectileCollision(entity, otherEntity);
+            }
+        }
+        for (let i = 0; i < entity.game.terrain.length; i++) {
+            otherEntity = entity.game.terrain[i];
+            if (hasCollided(entity, otherEntity) && entity !== otherEntity) {
+                handleProjectileCollision(entity, otherEntity);
+            }
+        }
+    } else { //otherwise entity must be enemy
         otherEntity = entity.game.player;
         if (hasHitEnemy(entity, otherEntity)) {
             handleHitCollision(entity, otherEntity);
         }
     }
-
 
     for (let i = 0; i < entity.game.terrain.length; i++) {
         let terrain = entity.game.terrain[i];
@@ -74,7 +117,7 @@ function checkForCollisions(entity) {
  */
 function hasCollided(a, b) {
     let result = false;
-    if (a.hitbox && b.hitbox) {
+    if (a.hitbox && a.hitbox.isActive && b.hitbox && b.hitbox.isActive) {
         result = a.hitbox.x < b.hitbox.x + b.hitbox.width
             && a.hitbox.x + a.hitbox.width > b.hitbox.x
             && a.hitbox.y < b.hitbox.y + b.hitbox.height
@@ -91,7 +134,7 @@ function hasCollided(a, b) {
  */
 function hasHitEnemy(abuser, victim) {
     let result = false;
-    if(abuser.hurtbox && victim.hitbox && abuser.hurtbox.isActive) {
+    if(abuser.hurtbox && abuser.hurtbox.isActive && victim.hitbox && victim.hitbox.isActive) {
         result = abuser.hurtbox.x < victim.hitbox.x + victim.hitbox.width
             && abuser.hurtbox.x + abuser.hurtbox.width > victim.hitbox.x
             && abuser.hurtbox.y < victim.hitbox.y + victim.hitbox.height
@@ -131,8 +174,10 @@ function directionOfCollision(hitboxA, hitboxB) {
 
 function handleTerrainCollision(entity, terrain) {
     entity.isRecoiling = true;
-    entity.invincibilityFrames = 2;
     entity.hitByTerrain = true;
+
+    if (entity === entity.game.player) entity.recoilFrames = 2;
+    else entity.recoilFrames = 4;
 
     switch (directionOfCollision(entity.hitbox, terrain.hitbox)) {
         case 'top':
@@ -159,7 +204,7 @@ function handleTerrainCollision(entity, terrain) {
  */
 function handleEnemyCollision(you, them) {
     you.isRecoiling = true;
-    you.invincibilityFrames = 6;
+    you.recoilFrames = 6;
     you.hitByEnemy = true;
     let dirOfCollision = directionOfCollision(you.hitbox, them.hitbox);
 
@@ -187,10 +232,10 @@ function handleEnemyCollision(you, them) {
  */
 function handleHitCollision(abuser, victim) {
     victim.isRecoiling = true;
-    victim.invincibilityFrames = 6;
+    victim.recoilFrames = 6;
     victim.hitByEnemy = true;
 
-    if(victim === abuser.game.player) {
+    if(victim === abuser.game.player) {  //TODO: Remove this check for enemy knockback?
         let dirOfCollision = directionOfCollision(victim.hitbox, abuser.hurtbox);
         switch (dirOfCollision) {
             case 'top':
@@ -213,16 +258,46 @@ function handleHitCollision(abuser, victim) {
     // takeDamage()
 }
 
+function handleProjectileCollision(projectile, other) {
+    projectile.removeFromWorld = true;
+    if (projectile.game.enemies.includes(other)) {
+        other.isRecoiling = true;
+        other.recoilFrames = 6;
+        other.hitByEnemy = true;
+        let dirOfCollision = directionOfCollision(other, projectile);
+        switch (dirOfCollision) {
+            case 'top':
+                other.ySpeed = -other.baseSpeed;
+                break;
+            case 'bottom':
+                other.ySpeed = other.baseSpeed;
+                break;
+            case 'left':
+                other.xSpeed = -other.baseSpeed;
+                break;
+            case 'right':
+                other.xSpeed = other.baseSpeed;
+                break;
+        }
+    }
+}
+
+function handlePowerupCollision(entity, powerUp) {
+    powerUp.applyPowerUp();
+    powerUp.removeFromWorld = true;
+}
+
 /**
  * Reduces the number of invincibility frames an entity has left after being hit by an enemy or
  * puts the entity back to a regular state if the amount of frames left is zero.
  *
  * @param entity The entity to update.
  */
-function updateInvincibilityFrames(entity) {
-    if (entity.invincibilityFrames > 0) {
-        entity.invincibilityFrames--;
+function updateRecoilFrames(entity) {
+    if (entity.recoilFrames > 0) {
+        entity.recoilFrames--;
     } else {
+
         entity.xSpeed = 0;
         entity.ySpeed = 0;
         entity.isRecoiling = false;
@@ -301,150 +376,4 @@ function updateTerrainHitbox(entity, xOffset, yOffset, width, height) {
     entity.hitbox.bottom = entity.hitbox.y + entity.hitbox.height;
     entity.hitbox.left = entity.hitbox.x;
     entity.hitbox.right = entity.hitbox.x + entity.hitbox.width;
-}
-
-/**
- * Activates an entity's hurtbox to be used in collision dettection
- *
- * @param entity the entity whose hurtbox is being activated.
- */
-function activateHurtbox(entity) {
-    entity.hurtbox.isActive = true;
-    switch(entity.constructor) {
-        //!--------------------------SkeletonDagger--------------------------------
-        case SkeletonDagger:
-            switch(entity.direction) {
-                case 'down':
-                    entity.hurtbox.x = (entity.x - 5);
-                    entity.hurtbox.y = (entity.y + 45);
-                    entity.hurtbox.height = 38;
-                    entity.hurtbox.width = 115;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'up':
-                    entity.hurtbox.x = (entity.x - 5);
-                    entity.hurtbox.y = entity.y;
-                    entity.hurtbox.height = 38;
-                    entity.hurtbox.width = 115;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'left':
-                    entity.hurtbox.x = entity.x - 52;
-                    entity.hurtbox.y = entity.y + 17;
-                    entity.hurtbox.height = 38;
-                    entity.hurtbox.width = 80;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'right':
-                    entity.hurtbox.x = entity.x + 40;
-                    entity.hurtbox.y = entity.y + 17;
-                    entity.hurtbox.height = 38;
-                    entity.hurtbox.width = 80;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-            }
-            break;
-        //!--------------------------MaleKnightSpear--------------------------------
-        case MaleKnightSpear:
-            switch(entity.direction) {
-                case 'Down':
-                    entity.hurtbox.x = (entity.x + entity.hitboxOffsetX + 5);
-                    entity.hurtbox.y = (entity.y + entity.hitboxOffsetY + 45);
-                    entity.hurtbox.height = 40;
-                    entity.hurtbox.width = 20;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'Up':
-                    entity.hurtbox.x = (entity.x + entity.hitboxOffsetX + 5);
-                    entity.hurtbox.y = (entity.y + entity.hitboxOffsetY - 30);
-                    entity.hurtbox.height = 30;
-                    entity.hurtbox.width = 20;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'Left':
-                    entity.hurtbox.x = entity.x - 22;
-                    entity.hurtbox.y = entity.y + 23;
-                    entity.hurtbox.height = 30;
-                    entity.hurtbox.width = 50;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'Right':
-                    entity.hurtbox.x = entity.x + 40;
-                    entity.hurtbox.y = entity.y + 23;
-                    entity.hurtbox.height = 30;
-                    entity.hurtbox.width = 50;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-            }
-            break;
-            //!--------------------------MaleKnightMace--------------------------------
-        case MaleKnightMace:
-            switch(entity.direction) {
-                case 'Down':
-                    entity.hurtbox.x = entity.x + 10;
-                    entity.hurtbox.y = (entity.y + entity.hitboxOffsetY + 45);
-                    entity.hurtbox.height = 35;
-                    entity.hurtbox.width = 75;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'Up':
-                    entity.hurtbox.x = entity.x + 10;
-                    entity.hurtbox.y = entity.y - 15;
-                    entity.hurtbox.height = 35;
-                    entity.hurtbox.width = 75;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'Left':
-                    entity.hurtbox.x = entity.x - 20;
-                    entity.hurtbox.y = entity.y + 10;
-                    entity.hurtbox.height = 50;
-                    entity.hurtbox.width = 50;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-                case 'Right':
-                    entity.hurtbox.x = entity.x + 40;
-                    entity.hurtbox.y = entity.y + 10;
-                    entity.hurtbox.height = 50;
-                    entity.hurtbox.width = 50;
-                    entity.hurtbox.top = entity.hurtbox.y;
-                    entity.hurtbox.bottom = entity.hurtbox.y + entity.hurtbox.height;
-                    entity.hurtbox.left = entity.hurtbox.x;
-                    entity.hurtbox.right = entity.hurtbox.x + entity.hurtbox.width;
-                    break;
-            }
-            break;
-        }
 }

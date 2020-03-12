@@ -29,6 +29,15 @@ function GameEngine() {
     this.enemies = [];
     this.terrain = [];
     this.drawables = [];
+    this.projectiles = [];
+    this.powerups = [];
+    this.timerSpawns = 0;
+    this.onTitleScreen = true;
+    this.levelComplete = false;
+    this.gameOver = false;
+    this.levelCount = 4;
+    this.currentLevel = 0;
+    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -41,6 +50,10 @@ function GameEngine() {
     this.surfaceWidth = null;
     this.surfaceHeight = null;
     this.userInput = [];
+    // Enemy spawning variables.
+    this.currentSpawnCount = 0;
+    this.enemyCount = 0;
+    this.spawnMax = 0;
 }
 
 /**
@@ -53,7 +66,6 @@ GameEngine.prototype.init = function (ctx) {
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
     this.timer = new Timer();
-    //console.log('game initialized');
 };
 
 /**
@@ -73,7 +85,7 @@ GameEngine.prototype.start = function () {
  * to receive user input and react accordingly.
  */
 GameEngine.prototype.startInput = function () {
-    //console.log('Starting User Input');
+    console.log('Starting User Input');
     let that = this;
 
     let checkPressInput = function (key) {
@@ -113,12 +125,20 @@ GameEngine.prototype.startInput = function () {
                 checkPressInput('j');
                 break;
 
+            case 'k':
+                checkPressInput('k');
+                break;
+
             case 'm':
                 checkPressInput('m');
                 break;
 
             case ' ':
                 checkPressInput(' ');
+                break;
+
+            case 'p':
+                checkPressInput('p');
                 break;
         }
     }, true);
@@ -147,11 +167,19 @@ GameEngine.prototype.startInput = function () {
                 checkReleaseInput(key);
                 break;
 
+            case 'k':
+                checkReleaseInput(key);
+                break;
+
             case 'm':
                 checkReleaseInput(key);
                 break;
 
             case ' ':
+                checkReleaseInput(key);
+                break;
+
+            case 'p':
                 checkReleaseInput(key);
                 break;
         }
@@ -169,27 +197,6 @@ GameEngine.prototype.startInput = function () {
                 that.volumeToggle.flipVolume();
         }
     }, false);
-
-    this.ctx.canvas.addEventListener('mousedown', function (e) {
-        const rect = that.ctx.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        let adjX = x + (x - that.background.x);
-        let adjY = y + (y - that.background.y);
-        if (x > that.player.hitbox.x) {
-            adjX = x + (x - that.background.x);
-        } else {
-            adjX = x - (x - that.background.x);
-        }
-        if (y > that.player.hitbox.y) {
-            adjY = y + (y - that.background.y);
-        } else {
-            adjY = y - (y - that.background.y);
-        }
-
-
-        console.log("x: " + adjX + " y: " + adjY);
-    });
 };
 
 /**
@@ -237,8 +244,16 @@ GameEngine.prototype.addTerrain = function (entity) {
     this.terrain.push(entity);
 };
 
-GameEngine.prototype.setBackground = function (entity) {
-    this.background = entity;
+GameEngine.prototype.addProjectile = function(entity) {
+    this.projectiles.push(entity)
+};
+
+GameEngine.prototype.addPowerUp = function(entity) {
+    this.powerups.push(entity)
+};
+
+GameEngine.prototype.setBackground = function (mapFunction) {
+    this.background = mapFunction;
 };
 
 GameEngine.prototype.setPlayer = function (entity) {
@@ -262,6 +277,13 @@ GameEngine.prototype.draw = function () {
     for (let i = 0; i < this.enemies.length; i++) {     // Draw all enemies.
         //this.enemies[i].draw(this.ctx);
         this.drawables.push(this.enemies[i]);
+    }
+    for (let i = 0; i < this.projectiles.length; i++) {     // Draw all projectiles.
+        //this.enemies[i].draw(this.ctx);
+        this.drawables.push(this.projectiles[i]);
+    }
+    for (let i = 0; i < this.powerups.length; i++) {
+        this.drawables.push(this.powerups[i]);
     }
     this.drawables.sort( (a,b) => parseFloat(a.hitbox.y) - parseFloat(b.hitbox.y));
     for (let i = 0; i < this.drawables.length; i++) {
@@ -289,24 +311,83 @@ GameEngine.prototype.update = function () {
     this.atkUI.update();
     this.enemyUI.update();
     this.timerUI.update();
-    for (let i = 0; i < this.enemies.length; i++) {
+    this.updateEnemyCount();
+
+    if (!this.levelComplete) {
+        if (this.timerSpawns < 6) {
+            chanceSpawnTimer(this);
+        }
+    }
+
+    if (this.userInput.includes(' ') && this.currentLevel === 0) {
+        if(this.onTitleScreen) {
+            this.setBackground(mapSetUp(this, ASSET_MANAGER, 'instructions'));
+            document.getElementById('audio').play();
+            document.getElementById('audio').volume = 0.5;
+            this.onTitleScreen = true;
+            this.currentLevel++;
+        }
+    }
+    else if (this.userInput.includes(' ') && this.currentLevel === 1) {
+        this.setBackground(mapSetUp(this, ASSET_MANAGER, 'forest'));
+        document.getElementById('audio').play();
+        document.getElementById('audio').volume = 0.5;
+        this.onTitleScreen = false;
+        this.currentLevel++;
+    }
+    else {
+        if (this.enemyCount <= 0 && this.currentLevel > 1) {
+            this.levelComplete = true;
+            this.powerups = []; // Clear the powerups on level end so they don't draw over the transition screen.
+            if (this.currentLevel + 1 >= this.levelCount) {
+                // TODO: Add win splash screen here
+                console.log('YOU WIN!');
+            } else if (this.userInput.includes(' ') && this.currentLevel > 1) { // Waiting for next level.
+                this.currentLevel++;
+                this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
+            }
+        }
+    }
+    for (let i = 0; i < this.enemies.length; i++) { //enemies
         let enemy = this.enemies[i];
         if(!enemy.removeFromWorld) {
             this.enemies[i].update();
         }
     }
-    for (let i = 0; i < this.terrain.length; i++) {
+    for (let i = 0; i < this.projectiles.length; i++) { //projectiles
+        let projectile = this.projectiles[i];
+        if(!projectile.removeFromWorld) {
+            this.projectiles[i].update();
+        }
+    }
+    for (let i = 0; i < this.powerups.length; i++) {
+        let powerup = this.powerups[i];
+        if (!powerup.removeFromWorld) {
+            this.powerups[i].update();
+        }
+    }
+    for (let i = 0; i < this.terrain.length; i++) { //terrain
         this.terrain[i].update();
     }
-    for (let i = 0; i < this.entities.length; i++) {
+    for (let i = 0; i < this.entities.length; i++) { //entities
         this.entities[i].update();
     }
-    //console.log(this.enemies.length);
     for (var i = this.enemies.length - 1; i >= 0; --i) {
         let enemy = this.enemies[i];
         if (enemy.removeFromWorld) {
-            console.log("removing enemy");
             this.enemies.splice(i, 1);
+        }
+    }
+    for (var i = this.projectiles.length - 1; i >= 0; --i) {
+        let projectile = this.projectiles[i];
+        if (projectile.removeFromWorld) {
+            this.projectiles.splice(i, 1);
+        }
+    }
+    for (let i = this.powerups.length - 1; i >= 0; --i) {
+        let powerup = this.powerups[i];
+        if (powerup.removeFromWorld) {
+            this.powerups.splice(i, 1);
         }
     }
 };
@@ -318,14 +399,41 @@ GameEngine.prototype.loop = function () {
     this.clockTick = this.timer.tick();
     this.update();
     this.draw();
-}
+};
 
-GameEngine.prototype.sortEnities = function () {
-    let sortFunction = function (entityA, entityB) {
-        return entityA.y - entityB.y;
+GameEngine.prototype.clearEntities = function () {
+    this.enemies = [];
+    this.terrain = [];
+    this.enemies = [];
+    this.powerups = [];
+    this.projectiles = [];
+    this.timerSpawns = 0;
+};
+
+GameEngine.prototype.updateEnemyCount = function () {
+    if (this.currentSpawnCount < this.spawnMax && this.enemyCount >= this.spawnMax) {
+        let enemy;
+        for (let i = 0; i < this.enemies.length; i++) {
+            enemy = this.enemies[i];
+            if (!enemy.isActive) {
+                enemy.isActive = true;
+                enemy.hitbox.isActive = true;
+                enemy.currRange = enemy.attkRange;
+                this.currentSpawnCount++;
+                break;
+            }
+        }
     }
+};
 
-
+GameEngine.prototype.resetPlayerPosition = function () {
+    bgX = 0;
+    bgY = 0;
+    playerX = 0;
+    playerY = 0;
+    this.background.x = 0;
+    this.background.y = 0;
+    this.player.hitbox = new Hitbox(this.player.x, this.player.y, 35, 32, true);
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -390,6 +498,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-//     drawDebugHitbox(this);
-//     drawDebugHurtbox(this);
+    // if (this.hitbox !== undefined) drawDebugHitbox(this);
+    // if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };

@@ -3,23 +3,39 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Press Start 2P', serif;
+            font-size: 20px;
+        }
+    </style>
+
     <title>Game Project Shell</title>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./assetmanager.js"></script>
-    <script type="text/javascript" src="./main.js"></script>
+    <script type="text/javascript" src="./animation.js"></script>
+    <script type="text/javascript" src="./maps.js"></script>
     <script type="text/javascript" src="./controls.js"></script>
     <script type="text/javascript" src="./collisions.js"></script>
     <script type="text/javascript" src="./terrain.js"></script>
-    <script type="text/javascript" src="./maps.js"></script>
-    <script type="text/javascript" src="./enemyLogic.js">
+    <script type="text/javascript" src="./player.js"></script>
+    <script type="text/javascript" src="./enemy.js"></script>
+    <script type="text/javascript" src="./ui.js"></script>
+    <script type="text/javascript" src="./util.js"></script>
+    <script type="text/javascript" src="./powerups.js"></script>
+    <script type="text/javascript" src="./main.js">
         window.addEventListener('load', function () {
             document.getElementById("gameWorld").focus();
-        }); </script>
+        });</script>
 </head>
 <body>
     <audio id="audio" controls loop style="display:none">
        <!--- <source src="./res/audio/megalovania.mp3" type="audio/mp3"> Your browser does not support the audio element. -->
       </audio>
     <canvas id="gameWorld" tabindex="1" width="950" height="700" style="border: 1px solid brown; background: black"></canvas>
+    <p style="font-weight: bolder; font-style: italic;">Objective:</p>
+    <p style="max-width: 950px;">Clear all humans before time runs out to move to the next stage.</p>
 </body>
 </html>
