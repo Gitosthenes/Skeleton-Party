@@ -84,6 +84,9 @@ PowerUp.prototype.applyPowerUp = function () {
             console.log('applying poison');
             hp -= 25;
             break;
+        case "time":
+            time += 15;
+            break;
     }
 };
 

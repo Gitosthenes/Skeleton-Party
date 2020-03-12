@@ -45,6 +45,7 @@ AssetManager.prototype.getAsset = function (path) {
 AssetManager.prototype.retrieveAllAssets = function () {
     // Background images
     this.queueDownload("./res/map/Titlescreen.png");
+    this.queueDownload("./res/map/Instructions.png");
     this.queueDownload("./res/map/LevelComplete.png");
     this.queueDownload("./res/map/forest.png");
     this.queueDownload("./res/map/desert.png");
