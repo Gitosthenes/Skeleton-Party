@@ -1,5 +1,6 @@
 /* Map Image Paths */
-const titleScreenPath = "./res/map/titlescreen.jpg";
+const titleScreenPath = "./res/map/Titlescreen.png";
+const instructionScreenPath = "./res/map/Instructions.png";
 const levelCompletePath = "./res/map/LevelComplete.png";
 const forestMapPath = "./res/map/forest.png";
 const desertMapPath = "./res/map/desert.png";
@@ -113,12 +114,17 @@ function mapSetUp(game, assetManager, mapName) {
             game.enemies.push(new PlaceHolderEnemy(game, undefined));
             map = new Map(game, assetManager.getAsset(titleScreenPath), 950, 700);
             break;
+        case 'instructions':
+            game.userInput = [];
+            game.enemies.push(new PlaceHolderEnemy(game, undefined));
+            map = new Map(game, assetManager.getAsset(instructionScreenPath), 950, 700);
+            break;
         case 'forest':
             game.clearEntities();
             game.resetPlayerPosition();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 20;
+            game.enemyCount = 30;
             game.spawnMax = 10;
             for (i = 0; i < game.enemyCount; i++) {
                 forestGenerateEnemy(game, ASSET_MANAGER);
@@ -129,16 +135,22 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             desertMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension, desertGenerateEnemy);
-            game.enemyCount = 20;
-            game.spawnMax = 10;
+            game.enemyCount = 40;
+            game.spawnMax = 14;
+            for (i = 0; i < game.enemyCount; i++) {
+                desertGenerateEnemy(game, ASSET_MANAGER);
+            }
             break;
         case 'graveyard':
             game.clearEntities();
             game.resetPlayerPosition();
             graveyardMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(graveyardMapPath), mapDimension, mapDimension, graveyardGenerateEnemy);
-            game.enemyCount = 6;
-            game.spawnMax = 6;
+            game.enemyCount = 50;
+            game.spawnMax = 20;
+            for (i = 0; i < game.enemyCount; i++) {
+                graveyardGenerateEnemy(game, ASSET_MANAGER);
+            }
             break;
     }
     return map;

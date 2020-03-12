@@ -76,11 +76,16 @@ PowerUp.prototype.applyPowerUp = function () {
             break;
         case "speed":
             console.log('applying speed up');
+            this.game.player.speedUpFrames = 1000;
+            this.game.player.baseSpeed = 375;
             //insert speed up line here
             break;
         case "poison":
             console.log('applying poison');
             hp -= 25;
+            break;
+        case "time":
+            time += 15;
             break;
     }
 };

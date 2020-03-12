@@ -11,7 +11,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
     this.attkType = attkType;
     this.attkAnimTime = attkAnimTime;
     this.attkRange = attkRange;
-    this.currRange = 1000;
+    this.currRange = 2000;
     // this.x = this.relativeX = 100;
     // this.y = this.relativeY = 100;
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
@@ -52,7 +52,7 @@ Enemy.prototype.update = function() {
         checkForCollisions(this);
 
         if (this.isRecoiling && this.hitByEnemy) {
-            this.enemyHP -= atk;
+            this.enemyHP -= atk * 4;
             if(this.enemyHP <= 0) {
                 chanceForPowerUp(this);
                 console.log("died at x: " + this.x + "y: " + this.y);

@@ -112,6 +112,10 @@ function handleInput(entity) {
                 entity.x = 450;
                 entity.y = 325;
                 break;
+
+            case 'p':   // God mode.
+                setGodMode();
+                break;
         }
     }
 }

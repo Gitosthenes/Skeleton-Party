@@ -35,9 +35,9 @@ function GameEngine() {
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
-    this.levelCount = 3;
+    this.levelCount = 4;
     this.currentLevel = 0;
-    this.mapOrder = ['title', 'forest', 'desert', 'graveyard'];
+    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -50,7 +50,7 @@ function GameEngine() {
     this.surfaceWidth = null;
     this.surfaceHeight = null;
     this.userInput = [];
-
+    // Enemy spawning variables.
     this.currentSpawnCount = 0;
     this.enemyCount = 0;
     this.spawnMax = 0;
@@ -136,6 +136,10 @@ GameEngine.prototype.startInput = function () {
             case ' ':
                 checkPressInput(' ');
                 break;
+
+            case 'p':
+                checkPressInput('p');
+                break;
         }
     }, true);
 
@@ -172,6 +176,10 @@ GameEngine.prototype.startInput = function () {
                 break;
 
             case ' ':
+                checkReleaseInput(key);
+                break;
+
+            case 'p':
                 checkReleaseInput(key);
                 break;
         }
@@ -305,30 +313,39 @@ GameEngine.prototype.update = function () {
     this.timerUI.update();
     this.updateEnemyCount();
 
-    if (this.enemyCount <= 0) {
-        this.levelComplete = true;
-        this.powerups = []; // Clear the powerups on level end so they don't draw over the transition screen.
-        if (this.currentLevel + 1 >= this.levelCount) {
-            // TODO: Add win splash screen here
-            console.log('YOU WIN!');
-        } else if (this.userInput.includes(' ')) { // Waiting for next level.
-            this.currentLevel++;
-            this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
-        }
-    }
     if (!this.levelComplete) {
-        if (this.timerSpawns < 5) {
+        if (this.timerSpawns < 6) {
             chanceSpawnTimer(this);
         }
     }
 
-    if (this.userInput.includes(' ')) {
+    if (this.userInput.includes(' ') && this.currentLevel === 0) {
         if(this.onTitleScreen) {
-            this.setBackground(mapSetUp(this, ASSET_MANAGER, 'forest'));
+            this.setBackground(mapSetUp(this, ASSET_MANAGER, 'instructions'));
             document.getElementById('audio').play();
             document.getElementById('audio').volume = 0.5;
-            this.onTitleScreen = false;
-            this.levelCount++;
+            this.onTitleScreen = true;
+            this.currentLevel++;
+        }
+    }
+    else if (this.userInput.includes(' ') && this.currentLevel === 1) {
+        this.setBackground(mapSetUp(this, ASSET_MANAGER, 'forest'));
+        document.getElementById('audio').play();
+        document.getElementById('audio').volume = 0.5;
+        this.onTitleScreen = false;
+        this.currentLevel++;
+    }
+    else {
+        if (this.enemyCount <= 0 && this.currentLevel > 1) {
+            this.levelComplete = true;
+            this.powerups = []; // Clear the powerups on level end so they don't draw over the transition screen.
+            if (this.currentLevel + 1 >= this.levelCount) {
+                // TODO: Add win splash screen here
+                console.log('YOU WIN!');
+            } else if (this.userInput.includes(' ') && this.currentLevel > 1) { // Waiting for next level.
+                this.currentLevel++;
+                this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
+            }
         }
     }
     for (let i = 0; i < this.enemies.length; i++) { //enemies
@@ -481,6 +498,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    if (this.hitbox !== undefined) drawDebugHitbox(this);
-    if (this.hurtbox !== undefined) drawDebugHurtbox(this);
+    // if (this.hitbox !== undefined) drawDebugHitbox(this);
+    // if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };
