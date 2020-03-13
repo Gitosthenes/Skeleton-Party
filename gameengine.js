@@ -429,6 +429,26 @@ GameEngine.prototype.updateEnemyCount = function () {
     }
 };
 
+GameEngine.prototype.setEnemyHealth = function () {
+    switch (this.mapOrder[this.currentLevel]) {
+        case 'forest':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 100; }
+            break;
+        case 'desert':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 120; }
+            break;
+        case 'graveyard':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 140; }
+            break;
+        case 'castle':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 160; }
+            break;
+        case 'cave':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 210; }
+            break;
+    }
+};
+
 GameEngine.prototype.resetPlayerPosition = function () {
     bgX = 0;
     bgY = 0;
