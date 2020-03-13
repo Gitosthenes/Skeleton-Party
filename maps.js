@@ -140,44 +140,48 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 1;
-            game.spawnMax = 1;
+            game.enemyCount = 30;
+            game.spawnMax = 12;
             for (i = 0; i < game.enemyCount; i++) {
                 forestGenerateEnemy(game, ASSET_MANAGER);
             }
+            game.setEnemyHealth();
             break;
         case 'desert':
             game.clearEntities();
             game.resetPlayerPosition();
             desertMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension, desertGenerateEnemy);
-            game.enemyCount = 1;
-            game.spawnMax = 1;
+            game.enemyCount = 45;
+            game.spawnMax = 16;
             for (i = 0; i < game.enemyCount; i++) {
                 desertGenerateEnemy(game, ASSET_MANAGER);
             }
+            game.setEnemyHealth();
             break;
         case 'graveyard':
             game.clearEntities();
             game.resetPlayerPosition();
             graveyardMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(graveyardMapPath), mapDimension, mapDimension, graveyardGenerateEnemy);
-            game.enemyCount = 1;
-            game.spawnMax = 1;
+            game.enemyCount = 50;
+            game.spawnMax = 22;
             for (i = 0; i < game.enemyCount; i++) {
                 graveyardGenerateEnemy(game, ASSET_MANAGER);
             }
+            game.setEnemyHealth();
             break;
         case 'cave':
             game.clearEntities();
             game.resetPlayerPosition();
             caveMapGenerateTerrain(game, ASSET_MANAGER);
             map = new Map(game, assetManager.getAsset(caveMapPath), mapDimension, mapDimension, caveGenerateEnemy);
+            game.enemyCount = 75;
+            game.spawnMax = 28;
             for (i = 0; i < game.enemyCount; i++) {
                 caveGenerateEnemy(game, ASSET_MANAGER);
             }
-            game.enemyCount = 75;
-            game.spawnMax = 28;
+            game.setEnemyHealth();
             break;
     }
     return map;
@@ -320,11 +324,13 @@ function caveMapGenerateTerrain(game, assetManager) {
 function caveGenerateEnemy(game, assetManager) {
     let enemy = undefined;
     // TODO: Add cave specific enemies and generate them here.
-    switch (Math.floor(Math.random() * 0)) {
+    switch (Math.floor(Math.random() * 2)) {
         case 0:
-            enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath), assetManager.getAsset(fxPath));
+            enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));
             break;
-
+        case 1:
+            enemy = new MaleKnightMace(game, assetManager.getAsset(maceGuyPath), assetManager.getAsset(fxPath));
+            break;
     }
     game.addEnemy(enemy);
 }
