@@ -629,3 +629,104 @@ VerticalLavaHole.prototype.update = function () {
 VerticalLavaHole.prototype.draw = function () {
     Terrain.prototype.draw(this);
 };
+
+//CASTLE TERRAIN
+function Chalice(game, spriteSheet) {
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spriteSheet = spriteSheet;
+    this.x = 0;
+    this.y = 0;
+    this.spawnX = 0;
+    this.spawnY = 0;
+    this.width = 32;
+    this.height = 64;
+    Entity.call(this, game, this.x, this.y, undefined);
+    setRandomLocation(this, 800 * 2.5, 800 * 2.5);
+    this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
+}
+
+Chalice.prototype.update = function () {
+    this.x = this.spawnX - playerX;
+    this.y = this.spawnY - playerY;
+    updateTerrainHitbox(this, 0, -1, 32, 64);
+};
+
+Chalice.prototype.draw = function () {
+    Terrain.prototype.draw(this)
+};
+
+function StonePiller(game, spriteSheet) {
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spriteSheet = spriteSheet;
+    this.x = 0;
+    this.y = 0;
+    this.spawnX = 0;
+    this.spawnY = 0;
+    this.width = 32;
+    this.height = 96;
+    Entity.call(this, game, this.x, this.y, undefined);
+    setRandomLocation(this, 800 * 2.5, 800 * 2.5);
+    this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
+}
+
+StonePiller.prototype.update = function () {
+    this.x = this.spawnX - playerX;
+    this.y = this.spawnY - playerY;
+    updateTerrainHitbox(this, 0, -1, 32, 96);
+};
+
+StonePiller.prototype.draw = function() {
+    Terrain.prototype.draw(this);
+};
+
+function Table(game, spriteSheet) {
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spriteSheet = spriteSheet;
+    this.x = 0;
+    this.y = 0;
+    this.spawnX = 0;
+    this.spawnY = 0;
+    this.width = 64;
+    this.height = 96;
+    Entity.call(this, game, this.x, this.y, undefined);
+    setRandomLocation(this, 800 * 2.5, 800 * 2.5);
+    this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
+}
+
+Table.prototype.update = function () {
+    this.x = this.spawnX - playerX;
+    this.y = this.spawnY - playerY;
+    updateTerrainHitbox(this, 0, -1, 64, 96);
+};
+
+Table.prototype.draw = function() {
+    Terrain.prototype.draw(this);
+};
+
+function Vase(game, spriteSheet) {
+    this.game = game;
+    this.ctx = game.ctx;
+    this.spriteSheet = spriteSheet;
+    this.x = 0;
+    this.y = 0;
+    this.spawnX = 0;
+    this.spawnY = 0;
+    this.width = 32;
+    this.height = 64;
+    Entity.call(this, game, this.x, this.y, undefined);
+    setRandomLocation(this, 800 * 2.5, 800 * 2.5);
+    this.hitbox = new Hitbox(this.x, this.y, this.height, this.width, true);
+}
+
+Vase.prototype.update = function () {
+    this.x = this.spawnX - playerX;
+    this.y = this.spawnY - playerY;
+    updateTerrainHitbox(this, 0, -1, 32, 64);
+};
+
+Vase.prototype.draw = function() {
+    Terrain.prototype.draw(this);
+};

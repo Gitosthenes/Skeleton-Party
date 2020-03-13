@@ -35,9 +35,9 @@ function GameEngine() {
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
-    this.levelCount = 6;
+    this.levelCount = 7;
     this.currentLevel = 0;
-    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard', 'cave'];
+    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard', 'cave','castle'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
