@@ -340,13 +340,16 @@ GameEngine.prototype.update = function () {
             this.levelComplete = true;
             this.powerups = []; // Clear the powerups on level end so they don't draw over the transition screen.
             if (this.currentLevel + 1 >= this.levelCount) {
+                if (this.userInput.includes(' ')) {
+                    this.resetGame();
+                }
                 // TODO: Add win splash screen here
-                console.log('YOU WIN!');
             } else if (this.userInput.includes(' ') && this.currentLevel > 1) { // Waiting for next level.
                 this.currentLevel++;
                 this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
             }
         }
+        else if (this.gameOver && this.userInput.includes(' ')) this.resetGame();
     }
     for (let i = 0; i < this.enemies.length; i++) { //enemies
         let enemy = this.enemies[i];
@@ -434,6 +437,22 @@ GameEngine.prototype.resetPlayerPosition = function () {
     this.background.x = 0;
     this.background.y = 0;
     this.player.hitbox = new Hitbox(this.player.x, this.player.y, 35, 32, true);
+};
+
+GameEngine.prototype.resetGame = function () {
+    console.log('resetting game');
+    let currMap = this.mapOrder[this.currentLevel];
+    this.enemyCount = 0;
+    this.spawnMax = 0;
+    this.currentSpawnCount = 0;
+    this.clearEntities();
+    this.levelComplete = false;
+    this.gameOver = false;
+    this.player.isDead = false;
+    this.player.baseSpeed = 300;
+    time = 40;
+    hp = 100;
+    this.setBackground(mapSetUp(this, ASSET_MANAGER, currMap));
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */
