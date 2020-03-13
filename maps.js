@@ -6,6 +6,8 @@ const forestMapPath = "./res/map/forest.png";
 const desertMapPath = "./res/map/desert.png";
 const graveyardMapPath = "./res/map/graveyard.png";
 
+const caveMapPath = "./res/map/cave.png";
+
 /* Enemy Image Paths */
 const spearGuyPath = "./res/character/male_knight_spear.png";
 const maceGuyPath = "./res/character/male_knight_mace.png";
@@ -17,21 +19,35 @@ const zombieShovelPath = "./res/character/ZombieShovel.png";
 const fxPath = "./res/fx/weapon.png";
 
 /* Terrain Image Paths */
+// Forest terrain.
 const rock1Path = "./res/terrain/Rock1.png";
 const rock2Path = "./res/terrain/Rock2.png";
 const dirtHolePath = "./res/terrain/DirtHole.png";
 const ivyColumnPath = "./res/terrain/IvyColumn.png";
 const coniferousTreePath = "./res/terrain/ConiferousTree.png";
+// Desert terrain.
 const desertRockSmallPath = "./res/terrain/DesertRockSmall.png";
 const desertRockLargePath = "./res/terrain/DesertRockLarge.png";
 const desertRubblePath = "./res/terrain/DesertRubble.png";
 const desertSpikesDarkPath = "./res/terrain/DesertSpikesDark.png";
 const desertSpikesLightPath = "./res/terrain/DesertSpikesLight.png";
 const bigCactusPath = "./res/terrain/BigCactus.png";
+// Graveyard terrain.
 const crossPath = "./res/terrain/Cross.png";
 const headstonePath = "./res/terrain/Headstone.png";
 const horizontalHedgePath = "./res/terrain/HorizontalHedge.png";
 const verticalHedgePath = "./res/terrain/VerticalHedge.png";
+// Castle terrain.
+
+// Cave terrain.
+const caveRockPath = "./res/terrain/caveRock.png";
+const caveSpikesPath = "./res/terrain/caveSpikes.png";
+const horizontalLavaHolePath = "./res/terrain/horizontalLavaHole.png";
+const lavaHolePath = "./res/terrain/lavaHole.png";
+const smallLavaHolePath = "./res/terrain/smallLavaHole.png";
+const tinyLavaHolePath = "./res/terrain/tinyLavaHole.png";
+const verticalLavaHolePath = "./res/terrain/verticalLavaHole.png";
+
 
 
 function Map(game, spritesheet, width, height, enemyGenFunction) {
@@ -124,8 +140,8 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 30;
-            game.spawnMax = 10;
+            game.enemyCount = 1;
+            game.spawnMax = 1;
             for (i = 0; i < game.enemyCount; i++) {
                 forestGenerateEnemy(game, ASSET_MANAGER);
             }
@@ -135,8 +151,8 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             desertMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension, desertGenerateEnemy);
-            game.enemyCount = 40;
-            game.spawnMax = 14;
+            game.enemyCount = 1;
+            game.spawnMax = 1;
             for (i = 0; i < game.enemyCount; i++) {
                 desertGenerateEnemy(game, ASSET_MANAGER);
             }
@@ -146,11 +162,22 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             graveyardMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(graveyardMapPath), mapDimension, mapDimension, graveyardGenerateEnemy);
-            game.enemyCount = 50;
-            game.spawnMax = 20;
+            game.enemyCount = 1;
+            game.spawnMax = 1;
             for (i = 0; i < game.enemyCount; i++) {
                 graveyardGenerateEnemy(game, ASSET_MANAGER);
             }
+            break;
+        case 'cave':
+            game.clearEntities();
+            game.resetPlayerPosition();
+            caveMapGenerateTerrain(game, ASSET_MANAGER);
+            map = new Map(game, assetManager.getAsset(caveMapPath), mapDimension, mapDimension, caveGenerateEnemy);
+            for (i = 0; i < game.enemyCount; i++) {
+                caveGenerateEnemy(game, ASSET_MANAGER);
+            }
+            game.enemyCount = 75;
+            game.spawnMax = 28;
             break;
     }
     return map;
@@ -252,11 +279,47 @@ function graveyardMapGenerateTerrain(game, assetManager) {
     for (let i = 0; i < 6; i++) {
         game.addTerrain(new HorizontalHedge(game, assetManager.getAsset(horizontalHedgePath)));
     }
-    // TODO: Add graveyard specific terrain.
 }
 
 function graveyardGenerateEnemy(game, assetManager) {
     let enemy = undefined;
+    switch (Math.floor(Math.random() * 0)) {
+        case 0:
+            enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath), assetManager.getAsset(fxPath));
+            break;
+
+    }
+    game.addEnemy(enemy);
+}
+
+function caveMapGenerateTerrain(game, assetManager) {
+    let i;
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new CaveRock(game, assetManager.getAsset(caveRockPath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new CaveSpikes(game, assetManager.getAsset(caveSpikesPath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new HorizontalLavaHole(game, assetManager.getAsset(horizontalLavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new LavaHole(game, assetManager.getAsset(lavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new SmallLavaHole(game, assetManager.getAsset(smallLavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new TinyLavaHole(game, assetManager.getAsset(tinyLavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new VerticalLavaHole(game, assetManager.getAsset(verticalLavaHolePath)));
+    }
+}
+
+function caveGenerateEnemy(game, assetManager) {
+    let enemy = undefined;
+    // TODO: Add cave specific enemies and generate them here.
     switch (Math.floor(Math.random() * 0)) {
         case 0:
             enemy = new ZombieShovel(game, assetManager.getAsset(zombieShovelPath), assetManager.getAsset(fxPath));
