@@ -76,7 +76,7 @@ Map.prototype.draw = function () {
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
         this.ctx.fillText("<You ran out of time!>", 372, 350);
-        this.ctx.fillText("Refresh to start again!", 370, 450);
+        this.ctx.fillText("Press space to start again!", 350, 450);
         this.game.gameOver = true;
     }
     if (hp <= 0 && this.game.player.isDead) {
@@ -84,7 +84,7 @@ Map.prototype.draw = function () {
         this.ctx.font = "25px " + font;
         this.ctx.fillStyle = 'white';
         this.ctx.fillText("<You died!>", 425, 350);
-        this.ctx.fillText("Refresh to start again!", 370, 450);
+        this.ctx.fillText("Press space to start again!", 350, 450);
         this.game.gameOver = true;
     }
 };
