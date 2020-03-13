@@ -5,8 +5,8 @@ const levelCompletePath = "./res/map/LevelComplete.png";
 const forestMapPath = "./res/map/forest.png";
 const desertMapPath = "./res/map/desert.png";
 const graveyardMapPath = "./res/map/graveyard.png";
-
 const caveMapPath = "./res/map/cave.png";
+const castleMapPath = "./res/map/castle.png";
 
 /* Enemy Image Paths */
 const spearGuyPath = "./res/character/male_knight_spear.png";
@@ -38,7 +38,10 @@ const headstonePath = "./res/terrain/Headstone.png";
 const horizontalHedgePath = "./res/terrain/HorizontalHedge.png";
 const verticalHedgePath = "./res/terrain/VerticalHedge.png";
 // Castle terrain.
-
+const chalicePath = "./res/terrain/Chalice.png";
+const stonePillerPath = "./res/terrain/Stone_Piller.png";
+const tablePath = "./res/terrain/Table.png";
+const vasePath = "./res/terrain/vase.png";
 // Cave terrain.
 const caveRockPath = "./res/terrain/caveRock.png";
 const caveSpikesPath = "./res/terrain/caveSpikes.png";
@@ -176,6 +179,19 @@ function mapSetUp(game, assetManager, mapName) {
             game.resetPlayerPosition();
             caveMapGenerateTerrain(game, ASSET_MANAGER);
             map = new Map(game, assetManager.getAsset(caveMapPath), mapDimension, mapDimension, caveGenerateEnemy);
+            game.enemyCount = 75;
+            game.spawnMax = 28;
+            for (i = 0; i < game.enemyCount; i++) {
+                caveGenerateEnemy(game, ASSET_MANAGER);
+            }
+            game.setEnemyHealth();
+            break;
+
+        case 'castle':
+            game.clearEntities();
+            game.resetPlayerPosition();
+            castleMapGenerateTerrain(game, ASSET_MANAGER);
+            map = new Map(game, assetManager.getAsset(castleMapPath), mapDimension, mapDimension, caveGenerateEnemy);
             game.enemyCount = 75;
             game.spawnMax = 28;
             for (i = 0; i < game.enemyCount; i++) {
@@ -335,3 +351,22 @@ function caveGenerateEnemy(game, assetManager) {
     game.addEnemy(enemy);
 }
 
+function castleMapGenerateTerrain(game, assetManager) {
+    let i;
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new Vase(game, assetManager.getAsset(vasePath)));
+    }
+
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new StonePiller(game, assetManager.getAsset(stonePillerPath)));
+    }
+
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new Table(game, assetManager.getAsset(tablePath)));
+    }
+
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new Chalice(game, assetManager.getAsset(chalicePath)));
+    }
+
+}

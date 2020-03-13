@@ -35,9 +35,9 @@ function GameEngine() {
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
-    this.levelCount = 6;
+    this.levelCount = 7;
     this.currentLevel = 0;
-    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard', 'cave'];
+    this.mapOrder = ['title', 'instructions', 'castle', 'desert', 'graveyard', 'cave','castle'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -329,7 +329,7 @@ GameEngine.prototype.update = function () {
         }
     }
     else if (this.userInput.includes(' ') && this.currentLevel === 1) {
-        this.setBackground(mapSetUp(this, ASSET_MANAGER, 'forest'));
+        this.setBackground(mapSetUp(this, ASSET_MANAGER, 'castle'));
         document.getElementById('audio').play();
         document.getElementById('audio').volume = 0.5;
         this.onTitleScreen = false;
