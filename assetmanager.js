@@ -50,6 +50,7 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/map/forest.png");
     this.queueDownload("./res/map/desert.png");
     this.queueDownload("./res/map/graveyard.png");
+    this.queueDownload("./res/map/cave.png");
     // Character sprites
     this.queueDownload("./res/character/skeleton_sword.png");
     this.queueDownload("./res/character/skeletonbow.png");
@@ -98,6 +99,16 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload(headstonePath);
     this.queueDownload(horizontalHedgePath);
     this.queueDownload(verticalHedgePath);
+    // Castle Terrain
+
+    // Cave Terrain
+    this.queueDownload(caveRockPath);
+    this.queueDownload(caveSpikesPath);
+    this.queueDownload(horizontalLavaHolePath);
+    this.queueDownload(lavaHolePath);
+    this.queueDownload(smallLavaHolePath);
+    this.queueDownload(tinyLavaHolePath);
+    this.queueDownload(verticalLavaHolePath);
 };
 
 AssetManager.prototype.downloadAndAttach = function () {

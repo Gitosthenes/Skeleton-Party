@@ -35,9 +35,9 @@ function GameEngine() {
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
-    this.levelCount = 4;
+    this.levelCount = 6;
     this.currentLevel = 0;
-    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard'];
+    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard', 'cave'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -498,6 +498,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    // if (this.hitbox !== undefined) drawDebugHitbox(this);
-    // if (this.hurtbox !== undefined) drawDebugHurtbox(this);
+    if (this.hitbox !== undefined) drawDebugHitbox(this);
+    if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };
