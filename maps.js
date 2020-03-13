@@ -1,9 +1,12 @@
 /* Map Image Paths */
-const titleScreenPath = "./res/map/titlescreen.jpg";
+const titleScreenPath = "./res/map/Titlescreen.png";
+const instructionScreenPath = "./res/map/Instructions.png";
 const levelCompletePath = "./res/map/LevelComplete.png";
 const forestMapPath = "./res/map/forest.png";
 const desertMapPath = "./res/map/desert.png";
 const graveyardMapPath = "./res/map/graveyard.png";
+const caveMapPath = "./res/map/cave.png";
+const castleMapPath = "./res/map/castle.png";
 
 /* Enemy Image Paths */
 const spearGuyPath = "./res/character/male_knight_spear.png";
@@ -16,21 +19,38 @@ const zombieShovelPath = "./res/character/ZombieShovel.png";
 const fxPath = "./res/fx/weapon.png";
 
 /* Terrain Image Paths */
+// Forest terrain.
 const rock1Path = "./res/terrain/Rock1.png";
 const rock2Path = "./res/terrain/Rock2.png";
 const dirtHolePath = "./res/terrain/DirtHole.png";
 const ivyColumnPath = "./res/terrain/IvyColumn.png";
 const coniferousTreePath = "./res/terrain/ConiferousTree.png";
+// Desert terrain.
 const desertRockSmallPath = "./res/terrain/DesertRockSmall.png";
 const desertRockLargePath = "./res/terrain/DesertRockLarge.png";
 const desertRubblePath = "./res/terrain/DesertRubble.png";
 const desertSpikesDarkPath = "./res/terrain/DesertSpikesDark.png";
 const desertSpikesLightPath = "./res/terrain/DesertSpikesLight.png";
 const bigCactusPath = "./res/terrain/BigCactus.png";
+// Graveyard terrain.
 const crossPath = "./res/terrain/Cross.png";
 const headstonePath = "./res/terrain/Headstone.png";
 const horizontalHedgePath = "./res/terrain/HorizontalHedge.png";
 const verticalHedgePath = "./res/terrain/VerticalHedge.png";
+// Castle terrain.
+const chalicePath = "./res/terrain/Chalice.png";
+const stonePillerPath = "./res/terrain/Stone_Piller.png";
+const tablePath = "./res/terrain/Table.png";
+const vasePath = "./res/terrain/vase.png";
+// Cave terrain.
+const caveRockPath = "./res/terrain/caveRock.png";
+const caveSpikesPath = "./res/terrain/caveSpikes.png";
+const horizontalLavaHolePath = "./res/terrain/horizontalLavaHole.png";
+const lavaHolePath = "./res/terrain/lavaHole.png";
+const smallLavaHolePath = "./res/terrain/smallLavaHole.png";
+const tinyLavaHolePath = "./res/terrain/tinyLavaHole.png";
+const verticalLavaHolePath = "./res/terrain/verticalLavaHole.png";
+
 
 
 function Map(game, spritesheet, width, height, enemyGenFunction) {
@@ -54,15 +74,21 @@ Map.prototype.draw = function () {
             this.ctx.drawImage(this.spritesheet, this.x, this.y, 800 * 2.5, 800 * 2.5);
         }
     }
-    if (time <= 0 || hp <= 0) {
-        if (this.game.player.currAnimation.isDone()) {
-            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-            this.ctx.font = "25px " + font;
-            this.ctx.fillStyle = 'white';
-            this.ctx.fillText("<GAME OVER>", 425, 350);
-            this.ctx.fillText("Refresh to start again!", 370, 450);
-            this.game.gameOver = true;
-        }
+    if (time <= 0) {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText("<You ran out of time!>", 372, 350);
+        this.ctx.fillText("Press space to start again!", 350, 450);
+        this.game.gameOver = true;
+    }
+    if (hp <= 0 && this.game.player.isDead) {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+        this.ctx.font = "25px " + font;
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillText("<You died!>", 425, 350);
+        this.ctx.fillText("Press space to start again!", 350, 450);
+        this.game.gameOver = true;
     }
 };
 
@@ -100,35 +126,78 @@ Map.prototype.update = function () {
 function mapSetUp(game, assetManager, mapName) {
     let map = undefined;
     let mapDimension = 800 * 2.5;
+    let i;
     game.levelComplete = false;
     switch (mapName) {
         case 'title':
             game.enemies.push(new PlaceHolderEnemy(game, undefined));
             map = new Map(game, assetManager.getAsset(titleScreenPath), 950, 700);
             break;
+        case 'instructions':
+            game.userInput = [];
+            game.enemies.push(new PlaceHolderEnemy(game, undefined));
+            map = new Map(game, assetManager.getAsset(instructionScreenPath), 950, 700);
+            break;
         case 'forest':
             game.clearEntities();
             game.resetPlayerPosition();
             forestMapGenTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(forestMapPath), mapDimension, mapDimension, forestGenerateEnemy);
-            game.enemyCount = 100;
-            game.spawnMax = 1;
+            game.enemyCount = 30;
+            game.spawnMax = 12;
+            for (i = 0; i < game.enemyCount; i++) {
+                forestGenerateEnemy(game, ASSET_MANAGER);
+            }
+            game.setEnemyHealth();
             break;
         case 'desert':
             game.clearEntities();
             game.resetPlayerPosition();
             desertMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(desertMapPath), mapDimension, mapDimension, desertGenerateEnemy);
-            game.enemyCount = 10;
-            game.spawnMax = 10;
+            game.enemyCount = 45;
+            game.spawnMax = 16;
+            for (i = 0; i < game.enemyCount; i++) {
+                desertGenerateEnemy(game, ASSET_MANAGER);
+            }
+            game.setEnemyHealth();
             break;
         case 'graveyard':
             game.clearEntities();
             game.resetPlayerPosition();
             graveyardMapGenerateTerrain(game, assetManager);
             map = new Map(game, assetManager.getAsset(graveyardMapPath), mapDimension, mapDimension, graveyardGenerateEnemy);
-            game.enemyCount = 6;
-            game.spawnMax = 6;
+            game.enemyCount = 50;
+            game.spawnMax = 22;
+            for (i = 0; i < game.enemyCount; i++) {
+                graveyardGenerateEnemy(game, ASSET_MANAGER);
+            }
+            game.setEnemyHealth();
+            break;
+        case 'cave':
+            game.clearEntities();
+            game.resetPlayerPosition();
+            caveMapGenerateTerrain(game, ASSET_MANAGER);
+            map = new Map(game, assetManager.getAsset(caveMapPath), mapDimension, mapDimension, caveGenerateEnemy);
+            game.enemyCount = 75;
+            game.spawnMax = 28;
+            for (i = 0; i < game.enemyCount; i++) {
+                caveGenerateEnemy(game, ASSET_MANAGER);
+            }
+            game.setEnemyHealth();
+            break;
+
+        case 'castle':
+            game.clearEntities();
+            game.resetPlayerPosition();
+            castleMapGenerateTerrain(game, ASSET_MANAGER);
+            map = new Map(game, assetManager.getAsset(castleMapPath), mapDimension, mapDimension, caveGenerateEnemy);
+            game.enemyCount = 75;
+            game.spawnMax = 28;
+            for (i = 0; i < game.enemyCount; i++) {
+                caveGenerateEnemy(game, ASSET_MANAGER);
+            }
+            game.setEnemyHealth();
             break;
     }
     return map;
@@ -159,8 +228,7 @@ function forestMapGenTerrain(game, assetManager) {
 
 function forestGenerateEnemy(game, assetManager) {
     let enemy = undefined;
-    // switch (Math.floor(Math.random() * 2)) {
-    switch (1) { //for testing a specific enemy
+    switch (Math.floor(Math.random() * 2)) {
         case 0:
             enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));
             break;
@@ -231,7 +299,6 @@ function graveyardMapGenerateTerrain(game, assetManager) {
     for (let i = 0; i < 6; i++) {
         game.addTerrain(new HorizontalHedge(game, assetManager.getAsset(horizontalHedgePath)));
     }
-    // TODO: Add graveyard specific terrain.
 }
 
 function graveyardGenerateEnemy(game, assetManager) {
@@ -245,3 +312,61 @@ function graveyardGenerateEnemy(game, assetManager) {
     game.addEnemy(enemy);
 }
 
+function caveMapGenerateTerrain(game, assetManager) {
+    let i;
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new CaveRock(game, assetManager.getAsset(caveRockPath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new CaveSpikes(game, assetManager.getAsset(caveSpikesPath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new HorizontalLavaHole(game, assetManager.getAsset(horizontalLavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new LavaHole(game, assetManager.getAsset(lavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new SmallLavaHole(game, assetManager.getAsset(smallLavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new TinyLavaHole(game, assetManager.getAsset(tinyLavaHolePath)));
+    }
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new VerticalLavaHole(game, assetManager.getAsset(verticalLavaHolePath)));
+    }
+}
+
+function caveGenerateEnemy(game, assetManager) {
+    let enemy = undefined;
+    // TODO: Add cave specific enemies and generate them here.
+    switch (Math.floor(Math.random() * 2)) {
+        case 0:
+            enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));
+            break;
+        case 1:
+            enemy = new MaleKnightMace(game, assetManager.getAsset(maceGuyPath), assetManager.getAsset(fxPath));
+            break;
+    }
+    game.addEnemy(enemy);
+}
+
+function castleMapGenerateTerrain(game, assetManager) {
+    let i;
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new Vase(game, assetManager.getAsset(vasePath)));
+    }
+
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new StonePiller(game, assetManager.getAsset(stonePillerPath)));
+    }
+
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new Table(game, assetManager.getAsset(tablePath)));
+    }
+
+    for (i = 0; i < 5; i++) {
+        game.addTerrain(new Chalice(game, assetManager.getAsset(chalicePath)));
+    }
+
+}

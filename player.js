@@ -9,14 +9,14 @@ let boundHitDown = false;
 
 //Character Stats
 let hp = 100;
-let def = 10;
-let atk = 10;
+let def = 1;
+let atk = 1;
 
 //enemy stats
-let enemyAtk = 1;
+let enemyAtk = 8;
 
 //time of countdown timer in seconds
-let time = 60;
+let time = 40;
 
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
@@ -27,7 +27,7 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.y = -50;
     this.xSpeed = 0;
     this.ySpeed = 0;
-    this.baseSpeed = 280;
+    this.baseSpeed = 300;
     this.changeX = false;
     this.changeY = false;
     this.game = game;
@@ -43,15 +43,16 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtBoxInit();
     this.recoilFrames = 0;
+    this.speedUpFrames = 0;
 }
 
 SkeletonDagger.prototype.hurtBoxInit = function () {
-    let hbHorWidth = 80;
+    let hbHorWidth = 74;
     let hbHorHeight = 38;
     let hbVertWidth = 115;
-    let hbVertHeight = 38;
+    let hbVertHeight = 45;
     let hbUpXOff = 5;
-    let hbUpYOff = 0;
+    let hbUpYOff = 6;
     let hbDownXOff = 5;
     let hbDownYOff = 45;
     let hbLeftXOff = 52;
@@ -68,7 +69,6 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
-
     //If attacking, activate hurtbox; Otherwise disable it
     if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
     if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
@@ -91,18 +91,17 @@ SkeletonDagger.prototype.update = function () {
     playerDeltaX = playerX - oldX;
     playerDeltaY = playerY - oldY;
 
-
     if (this.isRecoiling && this.hitByEnemy && this.recoilFrames === 0) {
         hp = Math.max(0, hp-enemyAtk);
     }
 
-    if(hp <= 0) {
+    if (hp <= 0) {
         this.hitbox.isActive = false;
         this.baseSpeed = 0;
-        this.isDead = true;
         this.currAnimation = this.animations['dying'];
 
         if (this.currAnimation.isDone()) {
+            this.isDead = true;
             this.removeFromWorld = true;
         }
     }
@@ -110,6 +109,11 @@ SkeletonDagger.prototype.update = function () {
     updatePlayerHitbox(this);
     checkForCollisions(this);
     updateRecoilFrames(this);
+
+    if (this.speedUpFrames > 0) {
+        this.speedUpFrames--;
+        if (this.speedUpFrames === 0) this.baseSpeed = 300;
+    }
 
     this.changeX = this.changeY = false;
 
@@ -122,3 +126,10 @@ SkeletonDagger.prototype.draw = function () {
         Entity.prototype.draw.call(this);
     }
 };
+
+function setGodMode() {
+    atk += 100;
+    time += 999;
+    hp = 10000;
+}
+

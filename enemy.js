@@ -2,7 +2,7 @@ let ANIMATION_DELAY_FACTOR = 1.9;
 
 function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, speed, hitboxOffsetX, hitboxOffsetY, hitboxWidth, hitboxHeight, attkAnimTime, attkRange) {
     let coords = [100, 1000, 1950];
-
+    this.isActive = false;
     this.removeFromWorld = false;
     this.game = game;
     this.hitboxOffsetX = hitboxOffsetX;
@@ -11,15 +11,17 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
     this.attkType = attkType;
     this.attkAnimTime = attkAnimTime;
     this.attkRange = attkRange;
-
-    // this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
-    // this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
-    this.x = this.relativeX = 100;
-    this.y = this.relativeY = 100;
-    this.absX = this.relativeX - 450;
-    this.absY = this.relativeY - 325;
+    this.currRange = 2000;
+    // this.x = this.relativeX = 100;
+    // this.y = this.relativeY = 100;
+    this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
+    this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
+    this.absX = this.relativeX - (450 + playerX);
+    this.absY = this.relativeY - (325 + playerY);
+    this.spawnX = this.x;
+    this.spawnY = this.y;
     this.ctx = game.ctx;
-    this.enemyHP = 500;
+    this.enemyHP = 100;
     this.isAttacking = false;
     this.isRecoiling = false;
     this.xSpeed = 0;
@@ -32,7 +34,7 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
     this.fxOffsets = setupFXoffsets(attkType);
     this.currAnimation = this.animations[this.state];
     this.currAltAnimation = this.altAnimations[attkType + this.direction];
-    this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, true);
+    this.hitbox = new Hitbox(this.x, this.y, hitboxHeight, hitboxWidth, false);
     this.hurtbox = new Hitbox(0, 0, 0, 0, false);
 }
 
@@ -49,13 +51,14 @@ Enemy.prototype.update = function() {
         if(this.isAttacking && this.currAnimation.elapsedTime > animationDelay) activateHurtbox(this);
         if(!this.isAttacking) this.hurtbox.isActive = false;
         checkForCollisions(this);
-        
+
         if (this.isRecoiling && this.hitByEnemy) {
-            this.enemyHP -= atk;
+            this.enemyHP -= atk * 4;
             if(this.enemyHP <= 0) {
                 chanceForPowerUp(this);
                 console.log("died at x: " + this.x + "y: " + this.y);
                 this.game.enemyCount--;
+                this.game.currentSpawnCount --;
                 this.removeFromWorld = true;
             }
         }
@@ -64,14 +67,14 @@ Enemy.prototype.update = function() {
 };
 
 Enemy.prototype.draw = function() {
-    if(!this.game.onTitleScreen && !this.game.gameOver) {
+    if(!this.game.onTitleScreen && !this.game.gameOver && this.isActive) {
 
-        if(this.direction == 'Up') {
+        if(this.direction === 'Up') {
             if(this.currAltAnimation && this.fxOffsets[this.direction] && this.hurtbox.isActive) {
                 let offsets = this.fxOffsets[this.direction];
                 this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, (this.x + offsets.x), (this.y + offsets.y));
             }
-            
+
             this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
         } else {
             this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
@@ -112,7 +115,7 @@ function updateEnemyPositionAndAnimation(enemy) {
     let dx = playerX - enemy.absX;
     let dy = playerY - enemy.absY;
     if (!enemy.isRecoiling) {
-        if (distance(enemy, enemy.game.player) > enemy.attkRange ) {
+        if (distance(enemy, enemy.game.player) > enemy.currRange ) {
             if(dx < 0) {
                 enemy.x -= (enemy.game.clockTick * enemy.baseSpeed);
                 enemy.absX -= Math.abs((deltaX - playerDeltaX) / 2);
@@ -141,6 +144,7 @@ function updateEnemyPositionAndAnimation(enemy) {
     updateEnemyAnimation(enemy);
 }
 
+
 function updateEnemyAnimation(enemy) {
     let action, direction;
 
@@ -148,14 +152,14 @@ function updateEnemyAnimation(enemy) {
         // if(enemy.currAltAnimation) enemy.currAltAnimation.elapsedTime = 0;
         direction = getDirToFacePlayer(enemy);
         enemy.currAltAnimation = enemy.altAnimations[enemy.attkType + direction];
-        if(distance(enemy.game.player, enemy) > enemy.attkRange) {//should the enemy be walking towards the player?
+        if(distance(enemy.game.player, enemy) > enemy.currRange) {//should the enemy be walking towards the player?
             action = 'walk';
             enemy.isAttacking = false;
         } else { //else enemy should be attaking the player
             // action = 'attack';
             // enemy.isAttacking = true;
         }
-    } else if(enemy.currAnimation.elapsedTime == 0) {
+    } else if(enemy.currAnimation.elapsedTime === 0) {
         if(enemy.currAltAnimation) enemy.currAltAnimation.elapsedTime = 0;
         enemy.isAttacking = false;
     }
@@ -245,7 +249,7 @@ function MaleKnightSpear(game, spritesheet, fxSpritesheet) {
     let attkAnimTime = 0.1;
     let attkRange = 100;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 200, 24, 14, 18, 34, attkAnimTime, attkRange);
-    
+
     //For left/right hurtboxes
     let hbHorWidth = 90;
     let hbHorHeight = 35;
@@ -260,7 +264,7 @@ function MaleKnightSpear(game, spritesheet, fxSpritesheet) {
     let hbUpYOff = 60;
     let hbDownXOff = 15;
     let hbDownYOff = 50;
-    
+
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
                                 hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
