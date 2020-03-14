@@ -61,6 +61,12 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/character/DesertWarriorWarAxe.png");
     this.queueDownload("./res/character/DesertWarriorDagger.png");
     this.queueDownload("./res/character/ZombieShovel.png");
+    this.queueDownload("./res/character/CaveOrc.png");
+    this.queueDownload("./res/character/CaveSkeleton.png");
+    this.queueDownload("./res/character/RedReptile.png");
+    this.queueDownload("./res/character/NobleMale.png");
+    this.queueDownload("./res/character/NobleWoman.png");
+    this.queueDownload("./res/character/GoldenKnight.png");
     //FX spritesheet
     this.queueDownload("./res/fx/weapon.png");
     //Projectile assets

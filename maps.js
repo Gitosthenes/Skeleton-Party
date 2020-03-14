@@ -14,6 +14,12 @@ const maceGuyPath = "./res/character/male_knight_mace.png";
 const desertWarriorDaggerPath = "./res/character/DesertWarriorDagger.png";
 const desertWarriorWarAxePath = "./res/character/DesertWarriorWarAxe.png";
 const zombieShovelPath = "./res/character/ZombieShovel.png";
+const caveOrcPath = "./res/character/CaveOrc.png";
+const caveSkeletonPath = "./res/character/CaveSkeleton.png";
+const redReptilePath = "./res/character/RedReptile.png";
+const nobleMalePath = "./res/character/NobleMale.png";
+const nobleWomanPath = "./res/character/NobleWoman.png";
+const goldenKnightPath = "./res/character/GoldenKnight.png";
 
 /* FX Image Paths */
 const fxPath = "./res/fx/weapon.png";
@@ -174,6 +180,7 @@ function mapSetUp(game, assetManager, mapName) {
             }
             game.setEnemyHealth();
             break;
+
         case 'cave':
             game.clearEntities();
             game.resetPlayerPosition();
@@ -191,11 +198,11 @@ function mapSetUp(game, assetManager, mapName) {
             game.clearEntities();
             game.resetPlayerPosition();
             castleMapGenerateTerrain(game, ASSET_MANAGER);
-            map = new Map(game, assetManager.getAsset(castleMapPath), mapDimension, mapDimension, caveGenerateEnemy);
+            map = new Map(game, assetManager.getAsset(castleMapPath), mapDimension, mapDimension, castleGenerateEnemy);
             game.enemyCount = 75;
             game.spawnMax = 28;
             for (i = 0; i < game.enemyCount; i++) {
-                caveGenerateEnemy(game, ASSET_MANAGER);
+                castleGenerateEnemy(game, ASSET_MANAGER);
             }
             game.setEnemyHealth();
             break;
@@ -314,22 +321,22 @@ function graveyardGenerateEnemy(game, assetManager) {
 
 function caveMapGenerateTerrain(game, assetManager) {
     let i;
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 7; i++) {
         game.addTerrain(new CaveRock(game, assetManager.getAsset(caveRockPath)));
     }
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 8; i++) {
         game.addTerrain(new CaveSpikes(game, assetManager.getAsset(caveSpikesPath)));
     }
     for (i = 0; i < 5; i++) {
         game.addTerrain(new HorizontalLavaHole(game, assetManager.getAsset(horizontalLavaHolePath)));
     }
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 8; i++) {
         game.addTerrain(new LavaHole(game, assetManager.getAsset(lavaHolePath)));
     }
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 7; i++) {
         game.addTerrain(new SmallLavaHole(game, assetManager.getAsset(smallLavaHolePath)));
     }
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 7; i++) {
         game.addTerrain(new TinyLavaHole(game, assetManager.getAsset(tinyLavaHolePath)));
     }
     for (i = 0; i < 5; i++) {
@@ -340,12 +347,15 @@ function caveMapGenerateTerrain(game, assetManager) {
 function caveGenerateEnemy(game, assetManager) {
     let enemy = undefined;
     // TODO: Add cave specific enemies and generate them here.
-    switch (Math.floor(Math.random() * 2)) {
+    switch (Math.floor(Math.random() * 3)) {
         case 0:
-            enemy = new MaleKnightSpear(game, assetManager.getAsset(spearGuyPath), assetManager.getAsset(fxPath));
+            enemy = new CaveOrc(game, assetManager.getAsset(caveOrcPath), assetManager.getAsset(fxPath));
             break;
         case 1:
-            enemy = new MaleKnightMace(game, assetManager.getAsset(maceGuyPath), assetManager.getAsset(fxPath));
+            enemy = new CaveSkeleton(game, assetManager.getAsset(caveSkeletonPath), assetManager.getAsset(fxPath));
+            break;
+        case 2:
+            enemy = new RedReptile(game, assetManager.getAsset(redReptilePath), assetManager.getAsset(fxPath));
             break;
     }
     game.addEnemy(enemy);
@@ -353,20 +363,37 @@ function caveGenerateEnemy(game, assetManager) {
 
 function castleMapGenerateTerrain(game, assetManager) {
     let i;
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 15; i++) {
         game.addTerrain(new Vase(game, assetManager.getAsset(vasePath)));
     }
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 24; i++) {
         game.addTerrain(new StonePiller(game, assetManager.getAsset(stonePillerPath)));
     }
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 13; i++) {
         game.addTerrain(new Table(game, assetManager.getAsset(tablePath)));
     }
 
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < 12; i++) {
         game.addTerrain(new Chalice(game, assetManager.getAsset(chalicePath)));
     }
 
+}
+
+function castleGenerateEnemy(game, assetManager) {
+    let enemy = undefined;
+    // TODO: Add cave specific enemies and generate them here.
+    switch (Math.floor(Math.random() * 3)) {
+        case 0:
+            enemy = new NobleMale(game, assetManager.getAsset(nobleMalePath), assetManager.getAsset(fxPath));
+            break;
+        case 1:
+            enemy = new NobleWoman(game, assetManager.getAsset(nobleWomanPath), assetManager.getAsset(fxPath));
+            break;
+        case 2:
+            enemy = new GoldenKnight(game, assetManager.getAsset(goldenKnightPath), assetManager.getAsset(fxPath));
+            break;
+    }
+    game.addEnemy(enemy);
 }
