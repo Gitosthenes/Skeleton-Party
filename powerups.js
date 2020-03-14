@@ -57,34 +57,43 @@ PowerUp.prototype.update = function () {
 };
 
 PowerUp.prototype.applyPowerUp = function () {
+    //sound effect for powerup here
+    let powerupSound = document.getElementById("powerupAudio");
+    let poisonSound = document.getElementById("poisonAudio");
     console.log('applying powerup...');
     console.log(this.type);
     console.log(this);
     switch (this.type) {
         case "atk":
+            powerupSound.play();
             console.log('applying attack up');
             atk++;
             break;
         case "def":
+            powerupSound.play();
             console.log('applying defence up');
             def++;
             break;
         case "hp":
+            powerupSound.play();
             console.log('applying hp up');
             if (hp + 25 > 100) hp = 100;
             else hp += 25;
             break;
         case "speed":
+            powerupSound.play();
             console.log('applying speed up');
             this.game.player.speedUpFrames = 1000;
             this.game.player.baseSpeed = 375;
             //insert speed up line here
             break;
         case "poison":
+            poisonSound.play();
             console.log('applying poison');
             hp -= 25;
             break;
         case "time":
+            powerupSound.play();
             time += 15;
             break;
     }

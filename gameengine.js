@@ -35,9 +35,9 @@ function GameEngine() {
     this.onTitleScreen = true;
     this.levelComplete = false;
     this.gameOver = false;
-    this.levelCount = 4;
+    this.levelCount = 7;
     this.currentLevel = 0;
-    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard'];
+    this.mapOrder = ['title', 'instructions', 'forest', 'desert', 'graveyard', 'cave','castle'];
     //begin ui stuff
     this.volumeToggle = null;
     this.healthUI = null;
@@ -188,12 +188,10 @@ GameEngine.prototype.startInput = function () {
     /* Mouse Listeners*/
     this.ctx.canvas.addEventListener('mouseup', function (e) {
         //volume icon bounds
-        let top_left = 15;
-        let bot_right = 45;
-        if (e.clientX > top_left
-            && e.clientX < bot_right
-            && e.clientY > top_left
-            && e.clientY < bot_right) {
+        console.log("click x = " + e.clientX + "click y = " + e.clientY);
+        let top_left = 907;
+        let bot_right = 688;
+        if (e.clientX > 907 && e.clientY > 600) {
                 that.volumeToggle.flipVolume();
         }
     }, false);
@@ -340,13 +338,16 @@ GameEngine.prototype.update = function () {
             this.levelComplete = true;
             this.powerups = []; // Clear the powerups on level end so they don't draw over the transition screen.
             if (this.currentLevel + 1 >= this.levelCount) {
+                if (this.userInput.includes(' ')) {
+                    this.resetGame();
+                }
                 // TODO: Add win splash screen here
-                console.log('YOU WIN!');
             } else if (this.userInput.includes(' ') && this.currentLevel > 1) { // Waiting for next level.
                 this.currentLevel++;
                 this.setBackground(mapSetUp(this, ASSET_MANAGER, this.mapOrder[this.currentLevel]));
             }
         }
+        else if (this.gameOver && this.userInput.includes(' ')) this.resetGame();
     }
     for (let i = 0; i < this.enemies.length; i++) { //enemies
         let enemy = this.enemies[i];
@@ -426,6 +427,26 @@ GameEngine.prototype.updateEnemyCount = function () {
     }
 };
 
+GameEngine.prototype.setEnemyHealth = function () {
+    switch (this.mapOrder[this.currentLevel]) {
+        case 'forest':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 100; }
+            break;
+        case 'desert':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 120; }
+            break;
+        case 'graveyard':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 140; }
+            break;
+        case 'cave':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 160; }
+            break;
+        case 'castle':
+            for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 210; }
+            break;
+    }
+};
+
 GameEngine.prototype.resetPlayerPosition = function () {
     bgX = 0;
     bgY = 0;
@@ -434,6 +455,22 @@ GameEngine.prototype.resetPlayerPosition = function () {
     this.background.x = 0;
     this.background.y = 0;
     this.player.hitbox = new Hitbox(this.player.x, this.player.y, 35, 32, true);
+};
+
+GameEngine.prototype.resetGame = function () {
+    console.log('resetting game');
+    let currMap = this.mapOrder[this.currentLevel];
+    this.enemyCount = 0;
+    this.spawnMax = 0;
+    this.currentSpawnCount = 0;
+    this.clearEntities();
+    this.levelComplete = false;
+    this.gameOver = false;
+    this.player.isDead = false;
+    this.player.baseSpeed = 300;
+    time = 40;
+    hp = 100;
+    this.setBackground(mapSetUp(this, ASSET_MANAGER, currMap));
 };
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~ */

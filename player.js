@@ -74,9 +74,15 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) activateHurtbox(this);
+    if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) {
+        activateHurtbox(this);
+        let swordSound = document.getElementById("swordAudio");
+        swordSound.play();
+    }
     if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
         this.game.addProjectile(new Arrow(this.game, ASSET_MANAGER.getAsset("./res/character/Arrow.png")));
+        let bowSound = document.getElementById("bowAudio");
+        bowSound.play();
     }
     if(!this.isAttackingSword) this.hurtbox.isActive = false;
 
@@ -96,6 +102,8 @@ SkeletonDagger.prototype.update = function () {
     playerDeltaY = playerY - oldY;
 
     if (this.isRecoiling && this.hitByEnemy && this.recoilFrames === 0) {
+        let playerHurtAudio = document.getElementById("playerHurtAudio");
+        playerHurtAudio.play();
         hp = Math.max(0, hp-enemyAtk);
     }
 
@@ -103,8 +111,12 @@ SkeletonDagger.prototype.update = function () {
         this.hitbox.isActive = false;
         this.baseSpeed = 0;
         this.currAnimation = this.animations['dying'];
-
+        if (hp === 0) {
+            let playerDyingAudio = document.getElementById("playerDyingAudio");
+            playerDyingAudio.play();
+        }
         if (this.currAnimation.isDone()) {
+            playerDyingAudio.pause();
             this.isDead = true;
             this.removeFromWorld = true;
         }

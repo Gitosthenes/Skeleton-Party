@@ -31,9 +31,30 @@
         });</script>
 </head>
 <body>
-    <audio id="audio" controls loop style="display:none">
-       <!--- <source src="./res/audio/megalovania.mp3" type="audio/mp3"> Your browser does not support the audio element. -->
-      </audio>
+    <audio preload="auto" id="audio" controls loop style="display:none">
+        <source src="./res/audio/music2.mp3" type="audio/mp3"> Your browser does not support the audio element.
+    </audio>
+    <audio preload="auto" id="swordAudio">
+        <source src="./res/audio/LA_Sword_Slash1.wav" type="audio/wav"> Your browser does not support the audio element.
+    </audio>
+    <audio preload="auto" id="bowAudio">
+        <source src="./res/audio/LA_BowArrow.wav" type="audio/wav"> Your browser does not support this audio element.
+    </audio>
+    <audio preload="auto" id="powerupAudio">
+        <source src="./res/audio/LA_Get_Item2.wav" type="audio/wav">;
+    </audio>
+    <audio preload="auto" id="poisonAudio">
+        <source src="./res/audio/LA_Error.wav" type="audio/wav">
+    </audio>
+    <audio preload="auto" id="playerHurtAudio">
+        <source src="./res/audio/LA_Link_Hurt.wav" type="audio/wav">
+    </audio>
+    <audio preload="auto" id="playerDyingAudio">
+        <source src="./res/audio/LA_Link_Dying.wav" type="audio/wav">
+    </audio>
+    <audio preload="auto" id="enemyHurtAudio">
+        <source src="./res/audio/LA_Enemy_Hit.wav" type="audio/wav">
+    </audio>
     <canvas id="gameWorld" tabindex="1" width="950" height="700" style="border: 1px solid brown; background: black"></canvas>
 <!--    <p style="font-weight: bolder; font-style: italic;">Objective:</p>-->
 <!--    <p style="max-width: 950px;">Clear all humans before time runs out to move to the next stage.</p>-->
