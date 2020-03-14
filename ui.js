@@ -143,8 +143,8 @@ VolumeToggle.prototype.flipVolume = function () {
             this.audio.pause();
             this.audio.currentTime = 0;
         } else {
-            this.state = 'on'
+            this.state = 'on';
             this.audio.play();
         }
     }
-}
+};
