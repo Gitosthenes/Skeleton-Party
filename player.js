@@ -11,6 +11,7 @@ let boundHitDown = false;
 let hp = 100;
 let def = 1;
 let atk = 1;
+let attkAnimDelayFactor = 2;
 
 //enemy stats
 let enemyAtk = 8;
@@ -21,7 +22,7 @@ let time = 40;
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheetSword, spritesheetBow, spritesheetFX) {
-    let attkAnimSpeed = 0.05;
+    let attkAnimSpeed = 0.07;
 
     this.x = -250;
     this.y = -50;
@@ -42,7 +43,6 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow, spritesheetFX) {
     this.altAnimations = altAnimationInit(attkAnimSpeed, spritesheetFX, 'slice');
     this.fxOffsets = setupFXoffsets('slice');
     this.currAnimation = this.animations['idleDown'];
-    // this.currAltAnimation = this.altAnimations['slice' + this.direction];
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtBoxInit();
     this.recoilFrames = 0;
@@ -75,19 +75,26 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
+    let animationDelay = this.currAnimation.totalTime / attkAnimDelayFactor;
+
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) {
+    if(this.isAttackingSword && this.currAnimation.elapsedTime > animationDelay) {
         activateHurtbox(this);
         let swordSound = document.getElementById("swordAudio");
         swordSound.play();
+    } else if(!this.isAttackingSword) {
+        this.hurtbox.isActive = false;
+        if(this.cooldown) this.cooldown--;
     }
+
+    //if attacking with bow, generate arrow
     if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
         this.game.addProjectile(new Arrow(this.game, ASSET_MANAGER.getAsset("./res/character/Arrow.png")));
         let bowSound = document.getElementById("bowAudio");
         bowSound.play();
     }
-    if(!this.isAttackingSword) this.hurtbox.isActive = false;
-
+    
+    //Player movement calculations
     let oldX = playerX;
     let oldY = playerY;
     if (this.changeX) {
@@ -103,12 +110,14 @@ SkeletonDagger.prototype.update = function () {
     playerDeltaX = playerX - oldX;
     playerDeltaY = playerY - oldY;
 
+    //Damage calculations
     if (this.isRecoiling && this.hitByEnemy && this.recoilFrames === 0) {
         let playerHurtAudio = document.getElementById("playerHurtAudio");
         playerHurtAudio.play();
         hp = Math.max(0, hp-enemyAtk);
     }
 
+    //If dead, go through death sequence
     if (hp <= 0) {
         this.hitbox.isActive = false;
         this.baseSpeed = 0;

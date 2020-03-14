@@ -38,8 +38,6 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
 
 Enemy.prototype.update = function() {
     if(!this.game.onTitleScreen) {
-        console.log("player: " + playerX + " " + playerY)
-        console.log("enemy: " + this.absX + " " + this.absY + "\n");
         let animationDelay = this.currAnimation.totalTime / ANIMATION_DELAY_FACTOR;
 
         updateEnemyPositionAndAnimation(this);
