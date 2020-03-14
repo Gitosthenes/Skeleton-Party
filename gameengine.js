@@ -438,10 +438,10 @@ GameEngine.prototype.setEnemyHealth = function () {
         case 'graveyard':
             for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 140; }
             break;
-        case 'castle':
+        case 'cave':
             for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 160; }
             break;
-        case 'cave':
+        case 'castle':
             for (let i = 0; i < this.enemies.length; i++) { this.enemies[i].enemyHP = 210; }
             break;
     }
@@ -535,6 +535,6 @@ Entity.prototype.update = function () {
 };
 
 Entity.prototype.draw = function (ctx) {
-    if (this.hitbox !== undefined) drawDebugHitbox(this);
-    if (this.hurtbox !== undefined) drawDebugHurtbox(this);
+    // if (this.hitbox !== undefined) drawDebugHitbox(this);
+    // if (this.hurtbox !== undefined) drawDebugHurtbox(this);
 };

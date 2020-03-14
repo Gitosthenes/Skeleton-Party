@@ -403,3 +403,191 @@ ZombieShovel.prototype.update = function() {
 ZombieShovel.prototype.draw = function() {
     Enemy.prototype.draw.call(this);
 };
+
+function CaveOrc(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 2;
+    let secondaryAnimType = 'thrust';
+    let attkAnimTime = 0.1;
+    let attkRange = 100;
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 200, 24, 14, 18, 34, attkAnimTime, attkRange);
+
+    //For left/right hurtboxes
+    let hbHorWidth = 90;
+    let hbHorHeight = 35;
+    let hbLeftXOff = 60;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 20;
+    //For up/down hurtboxes
+    let hbVertWidth = 30;
+    let hbVertHeight = 80;
+    let hbUpXOff = 20;
+    let hbUpYOff = 60;
+    let hbDownXOff = 15;
+    let hbDownYOff = 50;
+
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+CaveOrc.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+CaveOrc.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
+
+function CaveSkeleton(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = ''; //N/A
+    let attkAnimTime = 0.1;
+    let attkRange = 50;
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 23;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+CaveSkeleton.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+CaveSkeleton.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
+
+function RedReptile(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = ''; //N/A
+    let attkAnimTime = 0.1;
+    let attkRange = 50;
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 23;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+RedReptile.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+RedReptile.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
+
+function NobleMale(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = ''; //N/A
+    let attkAnimTime = 0.1;
+    let attkRange = 50;
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 23;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+NobleMale.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+NobleMale.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
+
+function NobleWoman(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 3;
+    let secondaryAnimType = ''; //N/A
+    let attkAnimTime = 0.1;
+    let attkRange = 50;
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
+    let hbHorWidth = 35;
+    let hbHorHeight = 20;
+    let hbVertWidth = 40;
+    let hbVertHeight = 25;
+    let hbUpXOff = 12;
+    let hbUpYOff = 18;
+    let hbDownXOff = 12;
+    let hbDownYOff = 55;
+    let hbLeftXOff = 10;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 23;
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+NobleWoman.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+NobleWoman.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
+
+function GoldenKnight(game, spritesheet, fxSpritesheet) {
+    let primaryAnimType = 2;
+    let secondaryAnimType = 'thrust';
+    let attkAnimTime = 0.1;
+    let attkRange = 100;
+    Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 200, 24, 14, 18, 34, attkAnimTime, attkRange);
+
+    //For left/right hurtboxes
+    let hbHorWidth = 90;
+    let hbHorHeight = 35;
+    let hbLeftXOff = 60;
+    let hbLeftYOff = 20;
+    let hbRightXOff = 40;
+    let hbRightYOff = 20;
+    //For up/down hurtboxes
+    let hbVertWidth = 30;
+    let hbVertHeight = 80;
+    let hbUpXOff = 20;
+    let hbUpYOff = 60;
+    let hbDownXOff = 15;
+    let hbDownYOff = 50;
+
+    this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
+        hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
+}
+
+GoldenKnight.prototype.update = function() {
+    Enemy.prototype.update.call(this);
+};
+
+GoldenKnight.prototype.draw = function() {
+    Enemy.prototype.draw.call(this);
+};
