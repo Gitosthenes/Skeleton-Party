@@ -649,7 +649,7 @@ function Chalice(game, spriteSheet) {
 Chalice.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, -1, 32, 64);
+    updateTerrainHitbox(this, 5, 40, 22, 4);
 };
 
 Chalice.prototype.draw = function () {
@@ -674,7 +674,7 @@ function StonePiller(game, spriteSheet) {
 StonePiller.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, -1, 32, 96);
+    updateTerrainHitbox(this, 0, 66, 32, 3);
 };
 
 StonePiller.prototype.draw = function() {
@@ -699,7 +699,7 @@ function Table(game, spriteSheet) {
 Table.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, -1, 64, 96);
+    updateTerrainHitbox(this, 15, 14, 34, 60);
 };
 
 Table.prototype.draw = function() {
@@ -724,7 +724,7 @@ function Vase(game, spriteSheet) {
 Vase.prototype.update = function () {
     this.x = this.spawnX - playerX;
     this.y = this.spawnY - playerY;
-    updateTerrainHitbox(this, 0, -1, 32, 64);
+    updateTerrainHitbox(this, 2, 20, 28, 6);
 };
 
 Vase.prototype.draw = function() {
