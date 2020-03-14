@@ -246,6 +246,7 @@ function MaleKnightSpear(game, spritesheet, fxSpritesheet) {
     let secondaryAnimType = 'thrust';
     let attkAnimTime = 0.1;
     let attkRange = 100;
+    let health = 100;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 200, 24, 14, 18, 34, attkAnimTime, attkRange);
 
     //For left/right hurtboxes
@@ -280,6 +281,7 @@ function MaleKnightMace(game, spritesheet, fxSpritesheet) {
     let secondaryAnimType = 'slash'; // slash animation
     let attkAnimTime = 0.07;
     let attkRange = 80;
+    let health = 100;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
 
     //For left/right hurtboxes
@@ -314,6 +316,7 @@ function DesertWarriorDagger(game, spritesheet, fxSpritesheet) {
     let secondaryAnimType = ''; //N/A
     let attkAnimTime = 0.1;
     let attkRange = 50;
+    let health = 100;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
@@ -344,6 +347,7 @@ function DesertWarriorWarAxe(game, spriteSheet, fxSpritesheet) {
     let secondaryAnimType = ''; //N/A
     let attkAnimTime = 0.1;
     let attkRange = 80;
+    let health = 100;
     Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
@@ -374,6 +378,7 @@ function ZombieShovel(game, spriteSheet, fxSpritesheet) {
     let secondaryAnimType = ''; //N/A
     let attkAnimTime = 0.1;
     let attkRange = 80;
+    let health = 100;
     Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
     let hbHorWidth = 35;
     let hbHorHeight = 20;
