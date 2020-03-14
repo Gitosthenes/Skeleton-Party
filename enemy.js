@@ -12,8 +12,6 @@ function Enemy(game, spriteSheet, fxSpritesheet, primaryAnimType, attkType, spee
     this.attkAnimTime = attkAnimTime;
     this.attkRange = attkRange;
     this.currRange = 2000;
-    // this.x = this.relativeX = 100;
-    // this.y = this.relativeY = 100;
     this.x = this.relativeX = coords[Math.floor(Math.random() * 3)];
     this.y = this.relativeY = coords[Math.floor(Math.random() * 3)];
     this.absX = this.relativeX - (450 + playerX);
@@ -156,8 +154,8 @@ function updateEnemyAnimation(enemy) {
             action = 'walk';
             enemy.isAttacking = false;
         } else { //else enemy should be attaking the player
-            // action = 'attack';
-            // enemy.isAttacking = true;
+            action = 'attack';
+            enemy.isAttacking = true;
         }
     } else if(enemy.currAnimation.elapsedTime === 0) {
         if(enemy.currAltAnimation) enemy.currAltAnimation.elapsedTime = 0;

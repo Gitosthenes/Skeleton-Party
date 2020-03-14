@@ -141,17 +141,19 @@ function updateEntitySpeed(entity, xVal, yVal) {
  */
 function setBattleState(entity, weapon, direction) {
     let animationName = 'attack' + weapon + direction;
+    let altAnimationName = 'slice' + direction;
     console.log("weapon " + weapon);
     console.log("direction" + direction);
     updateEntitySpeed(entity, 0, 0);
     entity.direction = direction.toLowerCase();
     entity.currAnimation = entity.animations[animationName];
+    entity.currAltAnimation = entity.altAnimations[altAnimationName];
+    entity.currAltAnimation.elapsedTime = 0;
     if (weapon === "Bow") {
         entity.isAttackingBow = true;
     } else {
         entity.isAttackingSword = true;
     }
-
 }
 
 /**

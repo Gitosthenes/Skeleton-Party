@@ -20,7 +20,7 @@ let time = 40;
 
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
-function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
+function SkeletonDagger(game, spritesheetSword, spritesheetBow, spritesheetFX) {
     let attkAnimSpeed = 0.05;
 
     this.x = -250;
@@ -39,7 +39,10 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.hitByEnemy = false;
     this.hitByTerrain = false;
     this.animations = entityAnimationInit(attkAnimSpeed, spritesheetSword, spritesheetBow,1);
+    this.altAnimations = altAnimationInit(attkAnimSpeed, spritesheetFX, 'slice');
+    this.fxOffsets = setupFXoffsets('slice');
     this.currAnimation = this.animations['idleDown'];
+    // this.currAltAnimation = this.altAnimations['slice' + this.direction];
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtBoxInit();
     this.recoilFrames = 0;
@@ -47,18 +50,21 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
 }
 
 SkeletonDagger.prototype.hurtBoxInit = function () {
-    let hbHorWidth = 74;
-    let hbHorHeight = 38;
-    let hbVertWidth = 115;
-    let hbVertHeight = 45;
-    let hbUpXOff = 5;
-    let hbUpYOff = 6;
-    let hbDownXOff = 5;
+    //Sizes and offsets for Left/Right attacks 
+    let hbHorWidth = 100;
+    let hbHorHeight = 55;
+    let hbLeftXOff = 58;
+    let hbLeftYOff = 0;
+    let hbRightXOff = 30;
+    let hbRightYOff = 0
+    //Sizes and offsets for Up/Down attacks
+    let hbVertWidth = 120
+    let hbVertHeight = 70;
+    let hbUpXOff = -7;
+    let hbUpYOff = 55;
+    let hbDownXOff = -7;
     let hbDownYOff = 45;
-    let hbLeftXOff = 52;
-    let hbLeftYOff = 17;
-    let hbRightXOff = 40;
-    let hbRightYOff = 17;
+    
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -122,7 +128,14 @@ SkeletonDagger.prototype.update = function () {
 
 SkeletonDagger.prototype.draw = function () {
     if (!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
+        //Render attack FX first
+        if(this.currAltAnimation && this.fxOffsets[this.direction] && this.hurtbox.isActive) {
+            let offsets = this.fxOffsets[this.direction];
+            this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, (this.x + offsets.x), (this.y + offsets.y));
+        }
+        //Render character
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        
         Entity.prototype.draw.call(this);
     }
 };
@@ -132,4 +145,3 @@ function setGodMode() {
     time += 999;
     hp = 10000;
 }
-

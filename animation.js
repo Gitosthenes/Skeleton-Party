@@ -104,20 +104,28 @@ function entityAnimationInit(speed, spritesheetSword, spritesheetBow, type) {
  * @param type determines which animation to attach to entity
  */
 function altAnimationInit(totAttkTime, spritesheet, type) {
+    let speed;
     let animations = [];
 
     //Universal FX
         /* none yet  */
 
     switch(type) {
-        case 'slash': //Slash animation
+        case 'slice':
+            speed = totAttkTime * 2;
+            animations['sliceRight'] = new Animation(spritesheet, 0, 646, 75, 29, 450, speed, 6, true, 1.75);
+            animations['sliceLeft'] = new Animation(spritesheet, 0, 675, 75, 29, 450, speed, 6, true, 1.75);
+            animations['sliceUp'] = new Animation(spritesheet, 0, 704, 62, 43, 310, speed, 5, true, 2);
+            animations['sliceDown'] = new Animation(spritesheet, 0, 747, 62, 43, 310, speed, 5, true, 2);
+            break;
+        case 'slash':
             animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, totAttkTime, 4, true, 0.7);
             animations['slashLeft'] = new Animation(spritesheet, 0, 70, 165, 68, 660, totAttkTime, 4, true, 0.7);
             animations['slashUp'] = new Animation(spritesheet, 0, 139, 176, 49, 704, totAttkTime, 4, true, 1);
             animations['slashDown'] = new Animation(spritesheet, 0, 189, 176, 49, 704, totAttkTime, 4, true, 1);
             break;
         case 'thrust':
-            let speed = totAttkTime - (totAttkTime / ANIMATION_DELAY_FACTOR);
+            speed = totAttkTime - (totAttkTime / ANIMATION_DELAY_FACTOR);
             animations['thrustRight'] = new Animation(spritesheet, 0, 240, 152, 48, 1216, speed, 8, true, 0.85);
             animations['thrustLeft'] = new Animation(spritesheet, 0, 288, 152, 48, 1216, speed, 8, true, 0.85);
             animations['thrustUp'] = new Animation(spritesheet, 0, 336, 48, 152, 384, speed, 8, true, 0.6);
@@ -154,6 +162,18 @@ function setupFXoffsets(type) {
     let offsets = [];
 
     switch(type) {
+        case 'slice':
+            uX =  -5; uY = -55;
+            dX =  -5; dY =  30;
+            lX = -55; lY =   0;
+            rX =  -5; rY =   0;
+
+            offsets['up'] = {x: uX, y: uY };
+            offsets['down'] = {x: dX, y: dY };
+            offsets['left'] = {x: lX, y: lY };
+            offsets['right'] = {x: rX, y: rY };
+            break;
+
         case 'slash':
             uX = -45; uY = -35;
             dX = -45; dY =  50;

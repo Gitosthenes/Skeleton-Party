@@ -91,7 +91,9 @@ ASSET_MANAGER.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.startInput();
     gameEngine.setPlayer(new SkeletonDagger(gameEngine,
-        ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png"), ASSET_MANAGER.getAsset("./res/character/skeletonbow.png")));
+        ASSET_MANAGER.getAsset("./res/character/skeleton_sword.png"), 
+        ASSET_MANAGER.getAsset("./res/character/skeletonbow.png"),
+        ASSET_MANAGER.getAsset("./res/fx/weapon.png")));
 
     gameEngine.setBackground(titleScreenInit(gameEngine, ASSET_MANAGER));
 
