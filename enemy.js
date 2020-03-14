@@ -52,6 +52,8 @@ Enemy.prototype.update = function() {
         checkForCollisions(this);
 
         if (this.isRecoiling && this.hitByEnemy) {
+            let enemyHurtAudio = document.getElementById("enemyHurtAudio");
+            enemyHurtAudio.play();
             this.enemyHP -= atk * 4;
             if(this.enemyHP <= 0) {
                 chanceForPowerUp(this);
