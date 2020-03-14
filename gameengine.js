@@ -188,12 +188,10 @@ GameEngine.prototype.startInput = function () {
     /* Mouse Listeners*/
     this.ctx.canvas.addEventListener('mouseup', function (e) {
         //volume icon bounds
-        let top_left = 15;
-        let bot_right = 45;
-        if (e.clientX > top_left
-            && e.clientX < bot_right
-            && e.clientY > top_left
-            && e.clientY < bot_right) {
+        console.log("click x = " + e.clientX + "click y = " + e.clientY);
+        let top_left = 907;
+        let bot_right = 688;
+        if (e.clientX > 907 && e.clientY > 600) {
                 that.volumeToggle.flipVolume();
         }
     }, false);
