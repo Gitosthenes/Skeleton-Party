@@ -14,7 +14,7 @@ let atk = 1;
 let attkAnimDelayFactor = 2;
 
 //enemy stats
-let enemyAtk = 8;
+let enemyAtk = 1;
 
 //time of countdown timer in seconds
 let time = 40;
@@ -22,7 +22,7 @@ let time = 40;
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheetSword, spritesheetBow, spritesheetFX) {
-    let attkAnimSpeed = 0.07;
+    let attkAnimSpeed = 0.06;
 
     this.x = -250;
     this.y = -50;
