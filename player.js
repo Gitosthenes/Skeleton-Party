@@ -14,7 +14,7 @@ let atk = 1;
 let attkAnimDelayFactor = 2;
 
 //enemy stats
-let enemyAtk = 1;
+let enemyAtk = 5;
 
 //time of countdown timer in seconds
 let time = 40;

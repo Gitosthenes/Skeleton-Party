@@ -246,7 +246,6 @@ function MaleKnightSpear(game, spritesheet, fxSpritesheet) {
     let secondaryAnimType = 'thrust';
     let attkAnimTime = 0.1;
     let attkRange = 100;
-    let health = 100;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 200, 24, 14, 18, 34, attkAnimTime, attkRange);
 
     //For left/right hurtboxes
@@ -281,7 +280,6 @@ function MaleKnightMace(game, spritesheet, fxSpritesheet) {
     let secondaryAnimType = 'slash'; // slash animation
     let attkAnimTime = 0.07;
     let attkRange = 80;
-    let health = 100;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
 
     //For left/right hurtboxes
@@ -313,23 +311,25 @@ MaleKnightMace.prototype.draw = function() {
 
 function DesertWarriorDagger(game, spritesheet, fxSpritesheet) {
     let primaryAnimType = 3;
-    let secondaryAnimType = ''; //N/A
-    let attkAnimTime = 0.1;
-    let attkRange = 50;
-    let health = 100;
+    let secondaryAnimType = 'slash'; //N/A
+    let attkAnimTime = 0.07;
+    let attkRange = 80;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -344,23 +344,25 @@ DesertWarriorDagger.prototype.draw = function() {
 
 function DesertWarriorWarAxe(game, spriteSheet, fxSpritesheet) {
     let primaryAnimType = 1;
-    let secondaryAnimType = ''; //N/A
-    let attkAnimTime = 0.1;
+    let secondaryAnimType = 'slash'; //N/A
+    let attkAnimTime = 0.07;
     let attkRange = 80;
-    let health = 100;
     Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -375,23 +377,25 @@ DesertWarriorWarAxe.prototype.draw = function() {
 
 function ZombieShovel(game, spriteSheet, fxSpritesheet) {
     let primaryAnimType = 3;
-    let secondaryAnimType = ''; //N/A
+    let secondaryAnimType = 'slash'; //N/A
     let attkAnimTime = 0.1;
     let attkRange = 80;
-    let health = 100;
     Enemy.call(this, game, spriteSheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -440,22 +444,25 @@ CaveOrc.prototype.draw = function() {
 
 function CaveSkeleton(game, spritesheet, fxSpritesheet) {
     let primaryAnimType = 3;
-    let secondaryAnimType = ''; //N/A
-    let attkAnimTime = 0.1;
-    let attkRange = 50;
+    let secondaryAnimType = 'slash'; //N/A
+    let attkAnimTime = 0.065;
+    let attkRange = 80;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -470,22 +477,25 @@ CaveSkeleton.prototype.draw = function() {
 
 function RedReptile(game, spritesheet, fxSpritesheet) {
     let primaryAnimType = 3;
-    let secondaryAnimType = ''; //N/A
-    let attkAnimTime = 0.1;
-    let attkRange = 50;
+    let secondaryAnimType = 'slash'; //N/A
+    let attkAnimTime = 0.08;
+    let attkRange = 75;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -500,22 +510,25 @@ RedReptile.prototype.draw = function() {
 
 function NobleMale(game, spritesheet, fxSpritesheet) {
     let primaryAnimType = 3;
-    let secondaryAnimType = ''; //N/A
-    let attkAnimTime = 0.1;
+    let secondaryAnimType = 'slash'; //N/A
+    let attkAnimTime = 0.075;
     let attkRange = 50;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -530,22 +543,25 @@ NobleMale.prototype.draw = function() {
 
 function NobleWoman(game, spritesheet, fxSpritesheet) {
     let primaryAnimType = 3;
-    let secondaryAnimType = ''; //N/A
-    let attkAnimTime = 0.1;
+    let secondaryAnimType = 'slash'; //N/A
+    let attkAnimTime = 0.07;
     let attkRange = 50;
     Enemy.call(this, game, spritesheet, fxSpritesheet, primaryAnimType, secondaryAnimType, 240, 24, 14, 18, 34, attkAnimTime, attkRange);
-    let hbHorWidth = 35;
-    let hbHorHeight = 20;
-    let hbVertWidth = 40;
-    let hbVertHeight = 25;
-    let hbUpXOff = 12;
-    let hbUpYOff = 18;
-    let hbDownXOff = 12;
-    let hbDownYOff = 55;
-    let hbLeftXOff = 10;
-    let hbLeftYOff = 20;
+    
+    //For left/right hurtboxes
+    let hbHorWidth = 75;
+    let hbHorHeight = 60;
+    let hbLeftXOff = 50;
+    let hbLeftYOff = 5;
     let hbRightXOff = 40;
-    let hbRightYOff = 23;
+    let hbRightYOff = 5;
+    //For up/down hurtboxes
+    let hbVertWidth = 150;
+    let hbVertHeight = 50;
+    let hbUpXOff = -30;
+    let hbUpYOff = 35;
+    let hbDownXOff = -30;
+    let hbDownYOff = 50;
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
