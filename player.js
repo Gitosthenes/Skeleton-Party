@@ -1,11 +1,7 @@
 //For scrolling
 //storing both the canvas's coordinates and the player coordinates
-let bgX = 0;
-let bgY = 0;
-let playerX = 0;
-let playerY = 0;
-let playerDeltaX = 0;
-let playerDeltaY = 0;
+let bgX = playerX = playerDeltaX = 0;
+let bgY = playerY = playerDeltaY = 0;
 let boundHitLeft = false;
 let boundHitRight = false;
 let boundHitUp = false;
@@ -15,17 +11,18 @@ let boundHitDown = false;
 let hp = 100;
 let def = 1;
 let atk = 1;
+let attkAnimDelayFactor = 2;
 
 //enemy stats
-let enemyAtk = 8;
+let enemyAtk = 5;
 
 //time of countdown timer in seconds
 let time = 40;
 
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
-function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
-    let attkAnimSpeed = 0.05;
+function SkeletonDagger(game, spritesheetSword, spritesheetBow, spritesheetFX) {
+    let attkAnimSpeed = 0.065;
 
     this.x = -250;
     this.y = -50;
@@ -43,6 +40,8 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
     this.hitByEnemy = false;
     this.hitByTerrain = false;
     this.animations = entityAnimationInit(attkAnimSpeed, spritesheetSword, spritesheetBow,1);
+    this.altAnimations = altAnimationInit(attkAnimSpeed, spritesheetFX, 'slice');
+    this.fxOffsets = setupFXoffsets('slice');
     this.currAnimation = this.animations['idleDown'];
     this.hitbox = new Hitbox(this.x, this.y, 35, 32, true);
     this.hurtBoxInit();
@@ -51,18 +50,21 @@ function SkeletonDagger(game, spritesheetSword, spritesheetBow) {
 }
 
 SkeletonDagger.prototype.hurtBoxInit = function () {
-    let hbHorWidth = 74;
-    let hbHorHeight = 38;
-    let hbVertWidth = 115;
-    let hbVertHeight = 45;
-    let hbUpXOff = 5;
-    let hbUpYOff = 6;
-    let hbDownXOff = 5;
+    //Sizes and offsets for Left/Right attacks 
+    let hbHorWidth = 100;
+    let hbHorHeight = 55;
+    let hbLeftXOff = 58;
+    let hbLeftYOff = 0;
+    let hbRightXOff = 28;
+    let hbRightYOff = 0
+    //Sizes and offsets for Up/Down attacks
+    let hbVertWidth = 110
+    let hbVertHeight = 70;
+    let hbUpXOff = 0;
+    let hbUpYOff = 52;
+    let hbDownXOff = 0;
     let hbDownYOff = 45;
-    let hbLeftXOff = 52;
-    let hbLeftYOff = 17;
-    let hbRightXOff = 40;
-    let hbRightYOff = 17;
+    
     this.hurtbox = new Hurtbox(hbHorWidth, hbHorHeight, hbVertWidth, hbVertHeight, hbUpXOff, hbUpYOff,
         hbDownXOff, hbDownYOff, hbLeftXOff, hbLeftYOff, hbRightXOff, hbRightYOff);
 }
@@ -73,19 +75,26 @@ SkeletonDagger.prototype.takeDamage = function(amount) {
 
 SkeletonDagger.prototype.update = function () {
     handleInput(this);
+    let animationDelay = this.currAnimation.totalTime / attkAnimDelayFactor;
+
     //If attacking, activate hurtbox; Otherwise disable it
-    if(this.isAttackingSword && this.currAnimation.elapsedTime === 0) {
+    if(this.isAttackingSword && this.currAnimation.elapsedTime > animationDelay) {
         activateHurtbox(this);
         let swordSound = document.getElementById("swordAudio");
         swordSound.play();
+    } else if(!this.isAttackingSword) {
+        this.hurtbox.isActive = false;
+        if(this.cooldown) this.cooldown--;
     }
+
+    //if attacking with bow, generate arrow
     if(this.isAttackingBow && this.currAnimation.elapsedTime === 0) {
         this.game.addProjectile(new Arrow(this.game, ASSET_MANAGER.getAsset("./res/character/Arrow.png")));
         let bowSound = document.getElementById("bowAudio");
         bowSound.play();
     }
-    if(!this.isAttackingSword) this.hurtbox.isActive = false;
-
+    
+    //Player movement calculations
     let oldX = playerX;
     let oldY = playerY;
     if (this.changeX) {
@@ -101,12 +110,14 @@ SkeletonDagger.prototype.update = function () {
     playerDeltaX = playerX - oldX;
     playerDeltaY = playerY - oldY;
 
+    //Damage calculations
     if (this.isRecoiling && this.hitByEnemy && this.recoilFrames === 0) {
         let playerHurtAudio = document.getElementById("playerHurtAudio");
         playerHurtAudio.play();
         hp = Math.max(0, hp-enemyAtk);
     }
 
+    //If dead, go through death sequence
     if (hp <= 0) {
         this.hitbox.isActive = false;
         this.baseSpeed = 0;
@@ -138,7 +149,14 @@ SkeletonDagger.prototype.update = function () {
 
 SkeletonDagger.prototype.draw = function () {
     if (!this.game.onTitleScreen && !this.game.gameOver && !this.game.levelComplete) {
+        //Render attack FX first
+        if(this.currAltAnimation && this.fxOffsets[this.direction] && this.hurtbox.isActive) {
+            let offsets = this.fxOffsets[this.direction];
+            this.currAltAnimation.drawFrame(this.game.clockTick, this.ctx, (this.x + offsets.x), (this.y + offsets.y));
+        }
+        //Render character
         this.currAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+        
         Entity.prototype.draw.call(this);
     }
 };
@@ -148,4 +166,3 @@ function setGodMode() {
     time += 999;
     hp = 10000;
 }
-

@@ -30,7 +30,8 @@ function handleInput(entity) {
                 break;
 
             case 'j':   // Attack input.
-                if (entity.direction === 'up') setBattleState(entity, "",'Up');
+                if(entity.cooldown) entity.cooldown--;
+                else if (entity.direction === 'up') setBattleState(entity, "",'Up');
                 else if (entity.direction === 'down') setBattleState(entity, "",'Down');
                 else if (entity.direction === 'left') setBattleState(entity, "",'Left');
                 else if (entity.direction === 'right') setBattleState(entity, "",'Right');
@@ -51,9 +52,11 @@ function handleInput(entity) {
                 } else if (entity.game.userInput.includes('d')) {   // Up - Right case.
                     setDiagonalState(entity, 'Up', spd, -spd);
                 } else if (entity.game.userInput.includes('j')) {     // Up - Attack case.
-                    setBattleState(entity, "",'Up');
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity, "",'Up');
                 } else if (entity.game.userInput.includes("k")) {
-                    setBattleState(entity, "Bow", "Up");
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity, "Bow", "Up");
                 } else {  // Up case.
                     setMovementState(entity, 'Up', 0, -spd);
                 }
@@ -67,9 +70,11 @@ function handleInput(entity) {
                 } else if (entity.game.userInput.includes('d')) {   // Down - Right case.
                     setDiagonalState(entity, 'Down', spd, spd);
                 } else if (entity.game.userInput.includes('j')) {     // Down - Attack case.
-                    setBattleState(entity, "",'Down');
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity, "",'Down');
                 } else if (entity.game.userInput.includes("k")) {
-                    setBattleState(entity,"Bow","Down");
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity,"Bow","Down");
                 }
                 else {  // Down case.
                     setMovementState(entity, 'Down', 0, spd);
@@ -84,9 +89,11 @@ function handleInput(entity) {
                 } else if (entity.game.userInput.includes('d')) {   // Left - Right case
                     setIdleState(entity, 'Left');
                 } else if (entity.game.userInput.includes('j')) {     // Left - Attack case.
-                    setBattleState(entity, "",'Left');
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity, "",'Left');
                 } else if (entity.game.userInput.includes('k')) {
-                    setBattleState(entity, "Bow", "Left");
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity, "Bow", "Left");
                 } else {  // Left case.
                     setMovementState(entity, 'Left', -spd, 0);
                 }
@@ -100,9 +107,11 @@ function handleInput(entity) {
                 } else if (entity.game.userInput.includes('a')) {   // Right - Left case.
                     setIdleState(entity, 'Right');
                 } else if (entity.game.userInput.includes('j')) {     // Right - Attack case.
-                    setBattleState(entity, "",'Right');
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity, "",'Right');
                 } else if (entity.game.userInput.includes("k")) {
-                    setBattleState(entity,"Bow", "Right");
+                    if(entity.cooldown) entity.cooldown--;
+                    else setBattleState(entity,"Bow", "Right");
                 } else {  // Right case.
                     setMovementState(entity, 'Right', spd, 0);
                 }
@@ -141,17 +150,21 @@ function updateEntitySpeed(entity, xVal, yVal) {
  */
 function setBattleState(entity, weapon, direction) {
     let animationName = 'attack' + weapon + direction;
+    let altAnimationName = 'slice' + direction;
     console.log("weapon " + weapon);
     console.log("direction" + direction);
     updateEntitySpeed(entity, 0, 0);
     entity.direction = direction.toLowerCase();
     entity.currAnimation = entity.animations[animationName];
+    entity.currAltAnimation = entity.altAnimations[altAnimationName];
+    entity.currAltAnimation.elapsedTime = 0;
     if (weapon === "Bow") {
         entity.isAttackingBow = true;
     } else {
         entity.isAttackingSword = true;
     }
 
+    entity.cooldown = 15;
 }
 
 /**

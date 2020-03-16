@@ -110,7 +110,13 @@ function altAnimationInit(totAttkTime, spritesheet, type) {
         /* none yet  */
 
     switch(type) {
-        case 'slash': //Slash animation
+        case 'slice':
+            animations['sliceRight'] = new Animation(spritesheet, 0, 646, 75, 28, 450, totAttkTime, 6, true, 1.75);
+            animations['sliceLeft'] = new Animation(spritesheet, 0, 675, 75, 28, 450, totAttkTime, 6, true, 1.75);
+            animations['sliceUp'] = new Animation(spritesheet, 0, 704, 62, 42, 310, totAttkTime, 5, true, 2);
+            animations['sliceDown'] = new Animation(spritesheet, 0, 747, 62, 42, 310, totAttkTime, 5, true, 2);
+            break;
+        case 'slash':
             animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, totAttkTime, 4, true, 0.7);
             animations['slashLeft'] = new Animation(spritesheet, 0, 70, 165, 68, 660, totAttkTime, 4, true, 0.7);
             animations['slashUp'] = new Animation(spritesheet, 0, 139, 176, 49, 704, totAttkTime, 4, true, 1);
@@ -154,6 +160,18 @@ function setupFXoffsets(type) {
     let offsets = [];
 
     switch(type) {
+        case 'slice':
+            uX =  -5; uY = -55;
+            dX =  -5; dY =  30;
+            lX = -55; lY =   0;
+            rX =  -5; rY =   0;
+
+            offsets['up'] = {x: uX, y: uY };
+            offsets['down'] = {x: dX, y: dY };
+            offsets['left'] = {x: lX, y: lY };
+            offsets['right'] = {x: rX, y: rY };
+            break;
+
         case 'slash':
             uX = -45; uY = -35;
             dX = -45; dY =  50;
