@@ -111,10 +111,10 @@ function altAnimationInit(totAttkTime, spritesheet, type) {
 
     switch(type) {
         case 'slice':
-            animations['sliceRight'] = new Animation(spritesheet, 0, 646, 75, 29, 450, totAttkTime, 6, true, 1.75);
-            animations['sliceLeft'] = new Animation(spritesheet, 0, 675, 75, 29, 450, totAttkTime, 6, true, 1.75);
-            animations['sliceUp'] = new Animation(spritesheet, 0, 704, 62, 43, 310, totAttkTime, 5, true, 2);
-            animations['sliceDown'] = new Animation(spritesheet, 0, 747, 62, 43, 310, totAttkTime, 5, true, 2);
+            animations['sliceRight'] = new Animation(spritesheet, 0, 646, 75, 28, 450, totAttkTime, 6, true, 1.75);
+            animations['sliceLeft'] = new Animation(spritesheet, 0, 675, 75, 28, 450, totAttkTime, 6, true, 1.75);
+            animations['sliceUp'] = new Animation(spritesheet, 0, 704, 62, 42, 310, totAttkTime, 5, true, 2);
+            animations['sliceDown'] = new Animation(spritesheet, 0, 747, 62, 42, 310, totAttkTime, 5, true, 2);
             break;
         case 'slash':
             animations['slashRight'] = new Animation(spritesheet, 0, 0, 165, 68, 660, totAttkTime, 4, true, 0.7);

@@ -22,7 +22,7 @@ let time = 40;
 
 //! ******** Skeleton Dagger Sprite Definition ******** */
 function SkeletonDagger(game, spritesheetSword, spritesheetBow, spritesheetFX) {
-    let attkAnimSpeed = 0.06;
+    let attkAnimSpeed = 0.065;
 
     this.x = -250;
     this.y = -50;
