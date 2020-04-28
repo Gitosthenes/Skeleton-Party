@@ -1,1 +1,1 @@
-https://bbMorris.github.io/CompWorldsBLU3/
+https://gitosthenes.github.io/SkeletonParty/
