@@ -137,7 +137,7 @@ TimePickup.prototype.applyPowerUp = function () {
 function chanceSpawnTimer(game) {
     let chance = Math.floor((Math.random() * 100000) + 1);
     if (chance > 99800) {
-        console.log('Spawned a timer on the map.');
+        // console.log('Spawned a timer on the map.');
         game.addPowerUp(new TimePickup(game, ASSET_MANAGER.getAsset("./res/character/timer_ui.png")));
         game.timerSpawns++;
     }
