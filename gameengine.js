@@ -23,6 +23,7 @@ window.requestAnimFrame = (function () {
  * @constructor
  */
 function GameEngine() {
+    this.paused = false;
     this.entities = [];
     this.player = null;
     this.background = undefined;
@@ -78,6 +79,14 @@ GameEngine.prototype.start = function () {
         that.loop();
         requestAnimFrame(gameLoop, that.ctx.canvas);
     })();
+}
+
+GameEngine.prototype.pauseResumeEngine = function () {
+    if (this.paused) {
+        this.paused = false;
+    } else {
+        this.paused = true;
+    }
 }
 
 /**
@@ -139,6 +148,10 @@ GameEngine.prototype.startInput = function () {
 
             case 'p':
                 checkPressInput('p');
+                break;
+            
+            case 'enter':
+                that.pauseResumeEngine();
                 break;
         }
     }, true);
@@ -397,9 +410,11 @@ GameEngine.prototype.update = function () {
  * Main game loop for the engine. Perpetually calls for entities to update and draw.
  */
 GameEngine.prototype.loop = function () {
-    this.clockTick = this.timer.tick();
-    this.update();
-    this.draw();
+    if(!this.paused) {
+        this.clockTick = this.timer.tick();
+        this.update();
+        this.draw();
+    }
 };
 
 GameEngine.prototype.clearEntities = function () {
