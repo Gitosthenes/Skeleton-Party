@@ -76,7 +76,6 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/icon/heart.png");
     this.queueDownload("./res/icon/poison_heart.png");
     this.queueDownload("./res/icon/boots.png");
-    this.queueDownload("./res/icon/.png");
     // UI Assets
     this.queueDownload("./res/character/def_ui.png");
     this.queueDownload("./res/character/sword_ui.png");
