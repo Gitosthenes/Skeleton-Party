@@ -6,7 +6,7 @@ function AssetManager() {
 }
 
 AssetManager.prototype.queueDownload = function (path) {
-    console.log("Queueing " + path);
+    // console.log("Queueing " + path);
     this.downloadQueue.push(path);
 };
 
@@ -20,7 +20,7 @@ AssetManager.prototype.downloadAll = function (callback) {
         var that = this;
 
         var path = this.downloadQueue[i];
-        console.log(path);
+        // console.log(path);
 
         img.addEventListener("load", function () {
             that.successCount++;
@@ -82,7 +82,7 @@ AssetManager.prototype.retrieveAllAssets = function () {
     this.queueDownload("./res/character/enemy_ui.png");
     this.queueDownload("./res/character/timer_ui.png");
     // Audio assets
-    this.queueDownload("./res/audio/megalovania.mp3");
+    // this.queueDownload("./res/audio/megalovania.mp3");
     this.queueDownload("./res/audio/volume_bgON.png");
     this.queueDownload("./res/audio/volume_bgOFF.png");
     // Terrain assets.
